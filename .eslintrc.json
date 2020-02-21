@@ -5,12 +5,10 @@
         "node": true
     },
     "plugins": [
-        "prettier",
         "security"
     ],
     "extends": [
         "standard",
-        "plugin:prettier/recommended",
         "plugin:security/recommended",
         "plugin:node/recommended"
     ],
@@ -22,7 +20,6 @@
         "ecmaVersion": 2018
     },
     "rules": {
-        "prettier/prettier": "error",
         "node/exports-style": ["error", "module.exports"],
         "node/file-extension-in-import": ["error", "always"],
         "node/prefer-global/buffer": ["error", "always"],

@@ -4,16 +4,24 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www --exec 'yarn lint && node'",
-    "lint": "eslint ./"
+    "lint": "eslint ./",
+    "console": "node bin/console",
+    "migrate": "knex migrate:latest",
+    "rollback": "knex migrate:rollback",
+    "make:migration": "knex migrate:make"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "dotenv": "^8.2.0",
     "express": "~4.16.1",
+    "knex": "^0.20.10",
     "morgan": "~1.9.1",
+    "mysql": "^2.18.1",
     "mysql2": "^2.1.0",
     "nodemon": "^2.0.2",
     "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
     "sequelize": "^5.21.4"
   },
   "devDependencies": {
@@ -26,6 +34,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-standard": "^4.0.1",
-    "prettier": "1.19.1"
+    "prettier": "1.19.1",
+    "sequelize-cli": "^5.5.1"
   }
 }
