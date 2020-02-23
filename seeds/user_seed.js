@@ -1,18 +1,19 @@
+require('dotenv').config()
+const { userService } = require('../components/user')
 
-// const seed = function(knex) {
-//   return knex('users').insert([
-//     {
-//       full_name: '',
-//       rank: '',
-//       role: '',
-//       is_on_contract: '',
-//       is_official: '',
-//       attachment_id: '',
-//       phone: '',
-//       email: '',
-//       password: ''
-//     }
-//   ])
-// }
+const seed = function () {
+  return userService.reqisterUser({
+    fullName: 'Адміністратор',
+    rank: 4,
+    role: 0,
+    isOnContract: true,
+    isOfficial: true,
+    attachmentId: null,
+    phone: null,
+    email: 'admin@admin.com',
+    password: process.env.ADMIN_PASSWORD
+  })
+    .then(r => console.log(r))
+}
 
-// module.exports = { seed }
+module.exports = { seed }

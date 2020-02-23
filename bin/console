@@ -9,3 +9,4 @@ require('dotenv').config()
 
 consoleProcess.context.knex = require('knex')(dbConfig)
 consoleProcess.context.userService = require('../components/user/userService')
+consoleProcess.context.User = require('../components/user/user')

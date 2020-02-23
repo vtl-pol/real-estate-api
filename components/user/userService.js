@@ -1,18 +1,39 @@
-const { adapter, Entity } = require('../../config/db')
-/**
- * user = {
- *   full_name: String,
- *   rank: Number,
- *   role: Number,
- *   is_on_contract: Boolean,
- *   is_official: Boolean,
- *   attachment_id: Number,
- *   phone: Number,
- *   email: String,
- *   password: String
- * }
- */
-class UserService extends Entity {
+const bcrypt = require('bcrypt')
+const User = require('./user')
+
+class UserService {
+  async generateHash (entry) {
+    return new Promise((resolve, reject) => {
+      bcrypt.hash(entry, 5, (err, hash) => {
+        if (err) reject(err)
+        resolve(hash)
+      })
+    })
+  }
+
+  async reqisterUser (payload) {
+    try {
+      payload.password = await this.generateHash(payload.password)
+    } catch (err) {
+      console.error(err)
+      return err
+    }
+
+    return User.create(payload)
+  }
+
+  async getCurrentUser (req, res) {
+    res.send({
+      email: req.user.email,
+      fullName: req.user.fullName,
+      rank: req.user.rank,
+      role: req.user.role,
+      isOnContract: req.user.isOnContract,
+      isOfficial: req.user.isOfficial,
+      attachmentId: req.user.attachmentId,
+      phone: req.user.phone
+    })
+  }
 }
 
-module.exports = new UserService(adapter, 'users')
+module.exports = new UserService()

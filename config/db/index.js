@@ -1,4 +1,4 @@
 module.exports = {
-  Entity: require('./Entity'),
+  Entity: require('./entity'),
   adapter: require('./adapter')
 }
