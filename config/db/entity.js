@@ -1,27 +1,49 @@
+const moment = require('moment')
+
 class Entity {
   constructor (db, tableName) {
     this.db = db
     this.tableName = tableName
   }
 
+  defaultFilter () {
+    return null
+  }
+
   table () {
-    return this.db(this.tableName)
+    let builder = this.db(this.tableName)
+    if (this.defaultFilter()) {
+      builder = builder.where(this.defaultFilter())
+    }
+    return builder
+  }
+
+  withPagination (currentPage, perPage) {
+    return this.table().paginate({ perPage, currentPage })
   }
 
   async all () {
     const records = await this.table()
-      .select('*')
 
     return records
   }
 
   async find (id) {
     const result = await this.table()
-      .select('*')
       .where({ id })
       .first()
 
     return result
+  }
+
+  async findBy (payload) {
+    return this.table().where(payload)
+  }
+
+  async recordExists (filter, id = null) {
+    const result = await this.table().where(filter).whereNot({ id }).limit(1).select('id').first()
+
+    return (result !== undefined)
   }
 
   async delete (id) {
@@ -34,6 +56,8 @@ class Entity {
 
   async create (payload) {
     try {
+      payload.created_at = moment().format()
+      payload.updated_at = moment().format()
       const result = await this.table().insert(payload)
       return result
     } catch (err) {
@@ -42,9 +66,9 @@ class Entity {
     }
   }
 
-  async update (payload) {
+  async update (id, payload) {
     try {
-      const result = await this.table().update(payload)
+      const result = await this.table().update(payload).where({ id })
       return result
     } catch (err) {
       console.log(err)

@@ -1,0 +1,28 @@
+const express = require('express')
+const router = express.Router()
+const houseService = require('./houseService')
+const passport = require('passport')
+require('../auth/authMiddleware')
+const houseValidator = require('./houseValidator')
+
+router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
+  houseService.getHouses(req, res)
+})
+
+router.get('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+  houseService.getHouse(req, res)
+})
+
+router.post('/', passport.authenticate('jwt', { session: false }), houseValidator.house, houseValidator.uniqe, (req, res) => {
+  houseService.createHouse(req, res)
+})
+
+router.put('/:id', passport.authenticate('jwt', { session: false }), houseValidator.house, houseValidator.uniqe, (req, res) => {
+  houseService.updateHouse(req, res)
+})
+
+router.delete('/:id', passport.authenticate('jwt', { session: false }), houseValidator.house, (req, res) => {
+  houseService.deleteHouse(req, res)
+})
+
+module.exports = router
