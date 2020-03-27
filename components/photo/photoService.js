@@ -30,22 +30,24 @@ const storage = multer.diskStorage({
 const upload = multer({ storage }).array('photos')
 
 class PhotoService {
-  async uploadPhotos (req, res) {
+  async uploadPhotos (req, res, callback) {
     upload(req, res, (error) => {
       if (error) {
-        res.status(500).send({
+        const result = {
           success: false,
           error
-        })
+        }
+        callback(result)
       }
       req.files.forEach(file => {
         this.createPhoto(file, req.params.id)
       })
-      console.log(req.files)
-      res.send({
+      const result = {
         success: true,
-        photos: req.files.map(f => `${process.env.APP_URL}/${f.path.replace('public/', '')}`)
-      })
+        photos: req.files.map(f => `${process.env.APP_URL}/${f.path.replace('public/', '')}`),
+        error: null
+      }
+      callback(result)
     })
   }
 

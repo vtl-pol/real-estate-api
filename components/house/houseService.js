@@ -59,11 +59,9 @@ class HouseService {
   }
 
   async uploadPhotos (req, res) {
-    const house = await House.find(req.params.id)
-
-    const results = await photoService.uploadPhotos(req, res, house)
-
-    res.status(results.errors.length ? 422 : 200).send(results)
+    photoService.uploadPhotos(req, res, (result) => {
+      res.status(result.error ? 422 : 200).send(result)
+    })
   }
 
   async deleteHouse (req, res) {
