@@ -55,25 +55,15 @@ class Entity {
   }
 
   async create (payload) {
-    try {
-      payload.created_at = moment().format()
-      payload.updated_at = moment().format()
-      const result = await this.table().insert(payload)
-      return result
-    } catch (err) {
-      console.log(err)
-      return err
-    }
+    payload.created_at = moment().format()
+    payload.updated_at = moment().format()
+    const result = await this.table().insert(payload)
+    return result
   }
 
   async update (id, payload) {
-    try {
-      const result = await this.table().update(payload).where({ id })
-      return result
-    } catch (err) {
-      console.log(err)
-      return err
-    }
+    const result = await this.table().update(payload).where({ id })
+    return result
   }
 
   async count () {

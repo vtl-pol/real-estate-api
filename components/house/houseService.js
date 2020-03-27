@@ -1,5 +1,6 @@
 const House = require('./house')
 const houseResource = require('./resource')
+const { photoService } = require('../photo')
 
 class HouseService {
   async getHouses (req, res) {
@@ -10,7 +11,7 @@ class HouseService {
 
       res.send({ success: true, houses: data.map(h => houseResource.brief(h)), pagination })
     } catch (error) {
-      console.log(error)
+      console.error(error)
       res.status(500).json({ success: false, error: error.message })
     }
   }
@@ -21,7 +22,7 @@ class HouseService {
 
       res.send({ success: true, house })
     } catch (error) {
-      console.log(error)
+      console.error(error)
       res.status(500).json({ success: false, error: error.message })
     }
   }
@@ -34,7 +35,7 @@ class HouseService {
       const result = await House.create(payload)
       res.send({ success: true, house: (await House.find(result)) })
     } catch (error) {
-      console.log(error)
+      console.error(error)
       res.status(500).json({ success: false, error: error.message })
     }
   }
@@ -52,9 +53,17 @@ class HouseService {
         res.status(404).send({ success: false, error: `Запису #${id} не існує` })
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
       res.status(500).json({ success: false, error: error.message })
     }
+  }
+
+  async uploadPhotos (req, res) {
+    const house = await House.find(req.params.id)
+
+    const results = await photoService.uploadPhotos(req, res, house)
+
+    res.status(results.errors.length ? 422 : 200).send(results)
   }
 
   async deleteHouse (req, res) {
@@ -67,7 +76,7 @@ class HouseService {
         res.status(404).send({ success: false, error: `Запису #${req.params.id} не існує` })
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
       res.status(500).json({ success: false, error: error.message })
     }
   }

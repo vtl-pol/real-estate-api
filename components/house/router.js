@@ -25,4 +25,8 @@ router.delete('/:id', passport.authenticate('jwt', { session: false }), houseVal
   houseService.deleteHouse(req, res)
 })
 
+router.post('/:id/photos', passport.authenticate('jwt', { session: false }), (req, res) => {
+  houseService.uploadPhotos(req, res)
+})
+
 module.exports = router
