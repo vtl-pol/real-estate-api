@@ -40,4 +40,58 @@ const brief = function (house) {
   }))(house)
 }
 
-module.exports = { brief }
+const full = function (house) {
+  return (({
+    id,
+    title,
+    noOfRooms,
+    districtId,
+    street,
+    houseNo,
+    price,
+    material,
+    floors,
+    buildingType,
+    squareTotal,
+    squareLiving,
+    squareKitchen,
+    squareLand,
+    registrationNo,
+    renovated,
+    garage,
+    builtAt,
+    description,
+    type,
+    /* eslint-disable camelcase */
+    created_at,
+    /* eslint-disable camelcase */
+    updated_at
+  }) => ({
+    id,
+    title,
+    noOfRooms,
+    districtId,
+    street,
+    houseNo,
+    price,
+    material,
+    floors,
+    buildingType,
+    squareTotal,
+    squareLiving,
+    squareKitchen,
+    squareLand,
+    registrationNo,
+    renovated,
+    garage,
+    builtAt,
+    description,
+    type,
+    /* eslint-disable camelcase */
+    created_at,
+    /* eslint-disable camelcase */
+    updated_at
+  }))(house)
+}
+
+module.exports = { brief, full }

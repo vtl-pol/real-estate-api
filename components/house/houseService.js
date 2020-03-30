@@ -33,7 +33,17 @@ class HouseService {
       payload.type = 'House'
 
       const result = await House.create(payload)
-      res.send({ success: true, house: (await House.find(result)) })
+      if (req.body.photos && req.body.photos.length) {
+        photoService.uploadPhotos(req, res, async (result) => {
+          res.status(result.error ? 422 : 200).send({
+            success: true,
+            house: houseResource.full(await House.find(result)),
+            error: result.error
+          })
+        })
+      } else {
+        res.send({ success: true, house: houseResource.full(await House.find(result)) })
+      }
     } catch (error) {
       console.error(error)
       res.status(500).json({ success: false, error: error.message })
