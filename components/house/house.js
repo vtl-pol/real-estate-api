@@ -1,38 +1,61 @@
-const { adapter, Entity } = require('../../config/db')
+const { attributes } = require('structure')
+const APP_URL = process.env.APP_URL
+class PhotosCollection extends Array { }
 
-/**
- * House = {
- *   title: String,
- *   noOfRooms: Integer,
- *   districtId: Integer,
- *   street: String,
- *   houseNo: String,
- *   price: Integer,
- *   material: Integer,
- *   floors: Integer,
- *   buildingType: Integer,
- *   squareTotal: Integer,
- *   squareLiving: Integer,
- *   squareKitchen: Integer,
- *   squareLand: Integer,
- *   registrationNo: String,
- *   renovated: Boolean,
- *   garage: Boolean,
- *   builtAt: String,
- *   description: Text,
- *   type: String,
- * }
- */
-class House extends Entity {
-  defaultFilter () {
-    return { type: 'House' }
-  }
+const House = attributes({
+  id: {
+    type: Number,
+    default: null
+  },
+  title: String,
+  noOfRooms: Number,
+  districtId: Number,
+  street: String,
+  houseNo: String,
+  price: Number,
+  material: Number,
+  floors: Number,
+  buildingType: Number,
+  squareTotal: Number,
+  squareLiving: Number,
+  squareKitchen: Number,
+  squareLand: Number,
+  registrationNo: String,
+  renovated: Boolean,
+  garage: Boolean,
+  builtAt: String,
+  description: String,
+  createdAt: Date,
+  updatedAt: Date,
+  type: {
+    type: String,
+    default: 'House'
+  },
 
-  async filter (q, filter) {
-    if (!filter || (Object.keys(filter).length === 0 && filter.constructor === Object)) {
-      return q
-    }
-    return q
+  /* JOINED PARAMS */
+  authorName: String,
+  featuredImage: String,
+  imageURL: {
+    type: String,
+    default: inst => (inst.featuredImage) ? `${APP_URL}/${inst.featuredImage.replace('public/', '')}` : ''
+  },
+
+  /* RELATIONS */
+  photos: {
+    type: PhotosCollection,
+    itemType: require('../photo/photo')
   }
-}
-module.exports = new House(adapter, 'properties')
+})(class House { })
+
+House.MATERIAL_BRICK = 0
+House.MATERIAL_BLOCKS = 1
+House.MATERIAL_WOOD = 2
+House.MATERIAL_OTHER = 3
+
+// окремий, частина, котедж, дача
+House.TYPE_SEPARATE = 0
+House.TYPE_PARTIAL = 1
+House.TYPE_COTTAGE = 2
+House.TYPE_SUMMERHOUSE = 3
+
+module.exports = House

@@ -1,12 +1,19 @@
-const { adapter, Entity } = require('../../config/db')
+const { attributes } = require('structure')
+const APP_URL = process.env.APP_URL
 
-/**
- * Photo = {
- *   id: Number,
- *   propertyId: Number,
- *   filePath: String,
- * }
- */
-class Photo extends Entity { }
+const Photo = attributes({
+  id: {
+    type: Number
+  },
+  propertyID: Number,
+  filePath: {
+    type: String,
+    required: true
+  }
+})(class Photo {
+  getURL () {
+    return `${APP_URL}${this.filePath}`
+  }
+})
 
-module.exports = new Photo(adapter, 'photos')
+module.exports = Photo

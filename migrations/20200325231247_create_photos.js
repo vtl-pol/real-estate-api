@@ -1,12 +1,11 @@
 const up = function (knex) {
   return knex.schema.createTable('photos', function (t) {
     t.increments('id')
-    t.integer('propertyId').notNullable()
+    t.integer('propertyID').notNullable().unsigned().index().references('id').inTable('properties')
     t.string('filePath').notNullable()
 
-    t.timestamps()
-
-    t.index('propertyId')
+    t.timestamp('createdAt').notNullable().defaultTo(knex.raw('CURRENT_TIMESTAMP'))
+    t.timestamp('updatedAt').notNullable().defaultTo(knex.raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
   })
 }
 

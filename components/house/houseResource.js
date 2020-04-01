@@ -1,6 +1,7 @@
-const brief = function (house) {
+const brief = (house) => {
   return (({
     id,
+    authorName,
     title,
     districtId,
     street,
@@ -14,12 +15,12 @@ const brief = function (house) {
     squareKitchen,
     squareLand,
     description,
-    /* eslint-disable camelcase */
-    created_at,
-    /* eslint-disable camelcase */
-    updated_at
+    createdAt,
+    updatedAt,
+    imageURL
   }) => ({
     id,
+    authorName,
     title,
     districtId,
     street,
@@ -33,14 +34,13 @@ const brief = function (house) {
     squareKitchen,
     squareLand,
     description,
-    /* eslint-disable camelcase */
-    created_at,
-    /* eslint-disable camelcase */
-    updated_at
+    createdAt,
+    updatedAt,
+    imageURL
   }))(house)
 }
 
-const full = function (house) {
+const full = (house) => {
   return (({
     id,
     title,
@@ -62,10 +62,8 @@ const full = function (house) {
     builtAt,
     description,
     type,
-    /* eslint-disable camelcase */
-    created_at,
-    /* eslint-disable camelcase */
-    updated_at
+    createdAt,
+    updatedAt
   }) => ({
     id,
     title,
@@ -87,10 +85,8 @@ const full = function (house) {
     builtAt,
     description,
     type,
-    /* eslint-disable camelcase */
-    created_at,
-    /* eslint-disable camelcase */
-    updated_at
+    createdAt,
+    updatedAt
   }))(house)
 }
 

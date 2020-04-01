@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt')
-const User = require('./user')
+const userDAL = require('./userDAL')
 
 class UserService {
   async generateHash (entry) {
@@ -19,7 +19,7 @@ class UserService {
       return err
     }
 
-    return User.create(payload)
+    return userDAL.create(payload)
   }
 
   async getCurrentUser (req, res) {

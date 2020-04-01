@@ -1,37 +1,57 @@
-const moment = require('moment')
-const { adapter, Entity } = require('../../config/db')
+const { attributes } = require('structure')
 
-/**
- * User = {
- *   fullName: String,
- *   rank: Number,
- *   role: Number,
- *   isOnContract: Boolean,
- *   isOfficial: Boolean,
- *   attachmentId: Number,
- *   phone: Number,
- *   email: String,
- *   password: String
- * }
- */
-class User extends Entity {
-  async findByEmail (email) {
-    const user = await this.table()
-      .where({ email })
-      .first()
-    return user
+const User = attributes({
+  id: {
+    type: Number,
+    default: null,
+    nullable: true
+  },
+  fullName: String,
+  rank: {
+    type: Number,
+    default: null
+  },
+  role: {
+    type: Number,
+    default: 0
+  },
+  isOnContract: {
+    type: Boolean,
+    default: false
+  },
+  isOfficial: {
+    type: Boolean,
+    default: false
+  },
+  attachmentId: Number,
+  phone: Number,
+  email: {
+    type: String,
+    required: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
+  createdAt: {
+    type: Date,
+    required: true
+  },
+  updatedAt: {
+    type: Date,
+    required: true
   }
+})(class User { })
 
-  async findByAccessToken (token) {
-    const user = await this.table()
-      .where({
-        accessToken: token
-      })
-      .where('tokenIssuedAt', '>=', moment().subtract(7, 'd').format())
-      .first()
+User.RANK_NONE = null
+User.RANK_INTERN = 0
+User.RANK_NEWBIE = 1
+User.RANK_AGENT = 2
+User.RANK_PROFESSIONAL = 3
 
-    return user
-  }
-}
+User.ROLE_GUEST = 0
+User.ROLE_AGENT = 1
+User.ROLE_MANAGER = 2
+User.ROLE_ADMIN = 3
 
-module.exports = new User(adapter, 'users')
+module.exports = User

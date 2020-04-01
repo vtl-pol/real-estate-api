@@ -12,7 +12,8 @@ const up = function (knex) {
     table.string('email', 255).notNullable()
     table.string('password', 255).notNullable()
 
-    table.timestamps()
+    table.timestamp('createdAt').notNullable().defaultTo(knex.raw('CURRENT_TIMESTAMP'))
+    table.timestamp('updatedAt').notNullable().defaultTo(knex.raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
 
     /**  INDEXES **/
     table.unique('email')

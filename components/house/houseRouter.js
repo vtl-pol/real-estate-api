@@ -17,7 +17,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), houseValidato
   houseService.createHouse(req, res)
 })
 
-router.put('/:id', passport.authenticate('jwt', { session: false }), houseValidator.house, houseValidator.uniqe, (req, res) => {
+router.put('/:id', passport.authenticate('jwt', { session: false }), houseValidator.uniqe, (req, res) => {
   houseService.updateHouse(req, res)
 })
 

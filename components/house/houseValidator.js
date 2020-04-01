@@ -1,9 +1,9 @@
 const Joi = require('joi')
-const House = require('./house')
+const houseDAL = require('./houseDAL')
 
 const houseSchema = Joi.object().keys({
   title: Joi.string().required(),
-  noOfRooms: Joi.number().integer().required(),
+  noOfRooms: Joi.number().integer().required().min(1).max(5),
   districtId: Joi.number().integer().required(),
   street: Joi.string().required(),
   houseNo: Joi.string().max(4).required(),
@@ -57,10 +57,13 @@ const house = (req, res, next) => {
   })
 }
 const uniqe = async (req, res, next) => {
+  if (!req.body.registrationNo) {
+    return next()
+  }
   const params = { registrationNo: req.body.registrationNo }
   const id = req.params.id
 
-  const exists = await House.recordExists(params, id)
+  const exists = await houseDAL.houseExists(params, id)
 
   if (exists) {
     return res.status(422).send({ success: false, error: 'Такий Кадастровий номер вже є в базі' })

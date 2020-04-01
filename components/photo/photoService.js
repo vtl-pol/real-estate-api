@@ -1,4 +1,4 @@
-const Photo = require('./photo')
+const photoDAL = require('./photoDAL')
 const multer = require('multer')
 const fs = require('fs')
 
@@ -31,7 +31,7 @@ const upload = multer({ storage }).array('photos')
 
 class PhotoService {
   async uploadPhotos (req, res, callback) {
-    upload(req, res, (error) => {
+    upload(req, res, async (error) => {
       if (error) {
         const result = {
           success: false,
@@ -39,9 +39,17 @@ class PhotoService {
         }
         callback(result)
       }
-      req.files.forEach(file => {
-        this.createPhoto(file, req.params.id)
-      })
+      for (const file of req.files) {
+        const result = await this.createPhoto(file, req.params.id)
+        if (result.error) {
+          // It's a false positive.
+          // We are in control of a filename in here and it can't be set by a user input
+          /* eslint-disable security/detect-non-literal-fs-filename */
+          fs.unlinkSync(`./public/images/properties/${file.filename}`)
+          callback(result)
+          return
+        }
+      }
       const result = {
         success: true,
         photos: req.files.map(f => `${process.env.APP_URL}/${f.path.replace('public/', '')}`),
@@ -51,14 +59,13 @@ class PhotoService {
     })
   }
 
-  async createPhoto (file, propertyId) {
+  async createPhoto (file, propertyID) {
     try {
-      const id = await Photo.create({ filePath: file.path, propertyId })
-      const photo = await Photo.find(id)
+      const photo = await photoDAL.create({ filePath: file.path, propertyID })
       return { photo }
     } catch (e) {
       console.error(e)
-      fs.unlinkSync(`./${file.path}`)
+      console.log(file)
       return { error: [file.originalname, e.message] }
     }
   }

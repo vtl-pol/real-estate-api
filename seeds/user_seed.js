@@ -4,7 +4,7 @@ const { userService } = require('../components/user')
 const seed = function () {
   return userService.reqisterUser({
     fullName: 'Адміністратор',
-    rank: 4,
+    rank: 3,
     role: 0,
     isOnContract: true,
     isOfficial: true,

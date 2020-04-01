@@ -22,7 +22,8 @@ const up = function (knex) {
     t.text('description')
     t.string('type')
 
-    t.timestamps()
+    t.timestamp('createdAt').notNullable().defaultTo(knex.raw('CURRENT_TIMESTAMP'))
+    t.timestamp('updatedAt').notNullable().defaultTo(knex.raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
 
     t.unique('registrationNo')
     t.index('districtId')

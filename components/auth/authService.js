@@ -1,20 +1,24 @@
 const bcrypt = require('bcrypt')
-const { User, userService } = require('../user')
+const { userDAL, userService } = require('../user')
 const moment = require('moment')
 const cryptojs = require('crypto-js')
 const jwt = require('jsonwebtoken')
 
 class AuthService {
-  async checkPassword (password, user = {}) {
-    return bcrypt.compare(password, user.password)
+  async checkPassword (password, userPassword) {
+    if (!password || !userPassword) {
+      return false
+    }
+    return bcrypt.compare(password, userPassword)
   }
 
   async issueAccessToken (user) {
     try {
       const accessToken = await userService.generateHash(JSON.stringify(user))
       const tokenIssuedAt = moment().format()
-
-      await User.update({ accessToken, tokenIssuedAt })
+      console.log(userService)
+      console.log(userDAL)
+      await userDAL.update(user.id, { accessToken, tokenIssuedAt })
 
       const encryptedData = cryptojs.AES.encrypt(accessToken, process.env.APP_JWT_SECRET)
 
@@ -31,8 +35,8 @@ class AuthService {
 
   async authenticate (req, res) {
     try {
-      const user = await User.findByEmail(req.body.email)
-      const passwordMatch = await this.checkPassword(req.body.password, user)
+      const user = await userDAL.findByEmail(req.body.email)
+      const passwordMatch = await this.checkPassword(req.body.password, user.password)
 
       if (user === undefined || !passwordMatch) {
         res.status(400).send({

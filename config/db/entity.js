@@ -6,15 +6,14 @@ class Entity {
     this.tableName = tableName
   }
 
-  defaultFilter () {
-    return null
+  defaultFilter (q) {
+    return q
   }
 
   table () {
     let builder = this.db(this.tableName)
-    if (this.defaultFilter()) {
-      builder = builder.where(this.defaultFilter())
-    }
+    builder = this.defaultFilter(builder)
+
     return builder
   }
 
