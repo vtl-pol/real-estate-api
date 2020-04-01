@@ -1,3 +1,5 @@
+const { photoResource } = require('../photo')
+
 const brief = (house) => {
   return (({
     id,
@@ -63,7 +65,9 @@ const full = (house) => {
     description,
     type,
     createdAt,
-    updatedAt
+    updatedAt,
+    photos,
+    author
   }) => ({
     id,
     title,
@@ -86,7 +90,9 @@ const full = (house) => {
     description,
     type,
     createdAt,
-    updatedAt
+    updatedAt,
+    author,
+    photos: photos.map(p => photoResource.brief(p))
   }))(house)
 }
 

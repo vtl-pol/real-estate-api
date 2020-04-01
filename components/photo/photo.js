@@ -7,13 +7,12 @@ const Photo = attributes({
   },
   propertyID: Number,
   filePath: {
+    type: String
+  },
+  fileURL: {
     type: String,
-    required: true
+    default: (inst) => inst.filePath ? `${APP_URL}/${inst.filePath.replace('public/', '')}` : ''
   }
-})(class Photo {
-  getURL () {
-    return `${APP_URL}${this.filePath}`
-  }
-})
+})(class Photo {})
 
 module.exports = Photo

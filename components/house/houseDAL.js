@@ -1,5 +1,6 @@
 const { db } = require('../../config')
 const House = require('./house')
+const { Photo } = require('../photo')
 
 const type = 'house'
 
@@ -25,7 +26,8 @@ class HouseDAL {
 
   async find (id) {
     const house = await db(this.table).where({ id }).first()
-
+    const photos = await db('photos').where({ propertyID: house.id })
+    house.photos = photos.map(ph => new Photo(ph))
     return new House(house)
   }
 
