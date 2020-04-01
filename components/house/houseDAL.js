@@ -50,7 +50,8 @@ class HouseDAL {
     return result
   }
 
-  async delete () {
+  async delete (id) {
+    return db(this.table).where({ id }).del()
   }
 }
 
