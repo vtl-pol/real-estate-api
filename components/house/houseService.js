@@ -1,6 +1,6 @@
 const houseDAL = require('./houseDAL')
 const houseResource = require('./houseResource')
-const { photoService } = require('../photo')
+const { photoService, photoDAL } = require('../photo')
 
 class HouseService {
   async getHouses (req, res) {
@@ -77,7 +77,11 @@ class HouseService {
 
   async deleteHouse (req, res) {
     try {
-      const result = await houseDAL.delete(req.params.id)
+      const house = await houseDAL.find(req.params.id)
+      for (const photo of house.photos) {
+        await photoDAL.delete(photo.id)
+      }
+      const result = await houseDAL.delete(house.id)
       if (result > 0) {
         res.send({ success: true })
       } else {

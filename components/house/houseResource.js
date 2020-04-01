@@ -19,7 +19,10 @@ const brief = (house) => {
     description,
     createdAt,
     updatedAt,
-    imageURL
+    imageURL,
+    propertyStatus,
+    contract,
+    motivation
   }) => ({
     id,
     authorName,
@@ -38,7 +41,10 @@ const brief = (house) => {
     description,
     createdAt,
     updatedAt,
-    imageURL
+    imageURL,
+    propertyStatus,
+    contract,
+    motivation
   }))(house)
 }
 
@@ -67,7 +73,10 @@ const full = (house) => {
     createdAt,
     updatedAt,
     photos,
-    author
+    author,
+    propertyStatus,
+    contract,
+    motivation
   }) => ({
     id,
     title,
@@ -92,7 +101,10 @@ const full = (house) => {
     createdAt,
     updatedAt,
     author,
-    photos: photos.map(p => photoResource.brief(p))
+    photos: photos.map(p => photoResource.brief(p)),
+    propertyStatus,
+    contract,
+    motivation
   }))(house)
 }
 

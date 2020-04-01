@@ -1,5 +1,6 @@
 const Joi = require('joi')
 const houseDAL = require('./houseDAL')
+const House = require('./house')
 
 const houseSchema = Joi.object().keys({
   title: Joi.string().required(),
@@ -19,7 +20,10 @@ const houseSchema = Joi.object().keys({
   renovated: Joi.boolean().required(),
   garage: Joi.boolean().required(),
   builtAt: Joi.string().regex(/^\d{4} Q\d{1}$/).required(), // 2019 Q2
-  description: Joi.string().required()
+  description: Joi.string().required(),
+  contract: Joi.string().only(...House.CONTRACTS).allow(null),
+  motivation: Joi.string().only(...House.MOTIVATIONS).allow(null),
+  source: Joi.number().integer().min(1).max(Object.keys(House.SOURCES).length - 1).allow(null)
 })
 
 const formattedErrors = (errs) => {
