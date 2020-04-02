@@ -1,3 +1,5 @@
 module.exports = {
-  db: require('./db')
+  cors: require('./cors'),
+  db: require('./db'),
+  router: require('./router')
 }

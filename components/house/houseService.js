@@ -32,7 +32,7 @@ class HouseService {
     try {
       const payload = req.body
       payload.authorID = req.user.id
-      console.log(req.user)
+
       const newHouse = await houseDAL.create(payload)
       if (req.body.photos && req.body.photos.length) {
         photoService.uploadPhotos(req, res, async (status) => {

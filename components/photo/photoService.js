@@ -65,7 +65,6 @@ class PhotoService {
       return { photo }
     } catch (e) {
       console.error(e)
-      console.log(file)
       return { error: [file.originalname, e.message] }
     }
   }

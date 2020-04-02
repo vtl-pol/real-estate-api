@@ -16,8 +16,7 @@ class AuthService {
     try {
       const accessToken = await userService.generateHash(JSON.stringify(user))
       const tokenIssuedAt = moment().format()
-      console.log(userService)
-      console.log(userDAL)
+
       await userDAL.update(user.id, { accessToken, tokenIssuedAt })
 
       const encryptedData = cryptojs.AES.encrypt(accessToken, process.env.APP_JWT_SECRET)
@@ -50,7 +49,7 @@ class AuthService {
 
       res.send({ success: (token !== null), access_token: token, error: error })
     } catch (error) {
-      console.log(error)
+      console.error(error)
       res.status(500).json({ error: error.message })
     }
   }

@@ -1,5 +1,4 @@
 const moment = require('moment')
-
 const { db } = require('../../config')
 const User = require('./user')
 

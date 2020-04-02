@@ -17,7 +17,6 @@ class HouseDAL {
 
       .select('properties.*', 'users.fullName AS authorName', 'photos.featuredImage')
 
-    console.log(query.toSQL().sql)
     const { data, pagination } = await query.paginate({ perPage, currentPage })
     const houses = data.map(r => new House(r))
 
