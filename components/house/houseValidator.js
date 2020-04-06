@@ -1,6 +1,7 @@
 const Joi = require('joi')
-const houseDAL = require('./houseDAL')
-const House = require('./house')
+const PropertyDAL = require('../property/propertyDAL')
+const houseDAL = new PropertyDAL('properties', 'house')
+const propertyConstants = require('../property/propertyConstants')
 
 const houseSchema = Joi.object().keys({
   title: Joi.string().required(),
@@ -21,9 +22,9 @@ const houseSchema = Joi.object().keys({
   garage: Joi.boolean().required(),
   builtAt: Joi.string().regex(/^\d{4} Q\d{1}$/).required(), // 2019 Q2
   description: Joi.string().required(),
-  contract: Joi.string().only(...House.CONTRACTS).allow(null),
-  motivation: Joi.string().only(...House.MOTIVATIONS).allow(null),
-  source: Joi.number().integer().min(1).max(Object.keys(House.SOURCES).length - 1).allow(null)
+  contract: Joi.string().only(...propertyConstants.CONTRACTS).allow(null),
+  motivation: Joi.string().only(...propertyConstants.MOTIVATIONS).allow(null),
+  source: Joi.number().integer().min(1).max(Object.keys(propertyConstants.SOURCES).length - 1).allow(null)
 })
 
 const formattedErrors = (errs) => {
@@ -67,7 +68,7 @@ const uniqe = async (req, res, next) => {
   const params = { registrationNo: req.body.registrationNo }
   const id = req.params.id
 
-  const exists = await houseDAL.houseExists(params, id)
+  const exists = await houseDAL.propertyExists(params, id)
 
   if (exists) {
     return res.status(422).send({ success: false, error: 'Такий Кадастровий номер вже є в базі' })

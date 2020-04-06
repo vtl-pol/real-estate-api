@@ -1,6 +1,14 @@
 const express = require('express')
 const router = express.Router()
-const houseService = require('./houseService')
+
+const PropertyDAL = require('../property/propertyDAL')
+const PropertyService = require('../property/propertyService')
+
+const House = require('./house')
+const houseResource = require('./houseResource')
+const houseDAL = new PropertyDAL('properties', 'house', House)
+const houseService = new PropertyService(houseDAL, houseResource)
+
 const passport = require('passport')
 require('../auth/authMiddleware')
 const houseValidator = require('./houseValidator')

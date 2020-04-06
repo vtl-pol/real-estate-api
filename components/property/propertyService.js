@@ -1,14 +1,18 @@
-const houseDAL = require('./houseDAL')
-const houseResource = require('./houseResource')
+const houseResource = require('../house/houseResource')
 const { photoService, photoDAL } = require('../photo')
 
-class HouseService {
+class PropertyService {
+  constructor (propertyDAL, propertyResource) {
+    this.propertyDAL = propertyDAL
+    this.propertyResource = propertyResource
+  }
+
   async getHouses (req, res) {
     try {
       const filter = req.query.filter || {}
       const currentPage = req.query.page || 1
       const perPage = 10
-      const { houses, pagination } = await houseDAL.filterAndLoad({ filter, currentPage, perPage })
+      const { houses, pagination } = await this.propertyDAL.filterAndLoad({ filter, currentPage, perPage })
 
       res.send({ success: true, houses: houses.map(h => houseResource.brief(h)), pagination })
     } catch (error) {
@@ -19,7 +23,7 @@ class HouseService {
 
   async getHouse (req, res) {
     try {
-      const house = await houseDAL.find(req.params.id)
+      const house = await this.propertyDAL.find(req.params.id)
 
       res.send({ success: true, house: houseResource.full(house) })
     } catch (error) {
@@ -33,7 +37,7 @@ class HouseService {
       const payload = req.body
       payload.authorID = req.user.id
 
-      const newHouse = await houseDAL.create(payload)
+      const newHouse = await this.propertyDAL.create(payload)
       if (req.body.photos && req.body.photos.length) {
         photoService.uploadPhotos(req, res, async (status) => {
           res.status(status.error ? 422 : 200).send({
@@ -56,9 +60,9 @@ class HouseService {
       const id = req.params.id
       const payload = req.body
 
-      const updated = await houseDAL.update(id, payload)
+      const updated = await this.propertyDAL.update(id, payload)
       if (updated) {
-        res.send({ success: true, house: (await houseDAL.find(id)) })
+        res.send({ success: true, house: (await this.propertyDAL.find(id)) })
       } else {
         // No such record
         res.status(404).send({ success: false, error: `Запису #${id} не існує` })
@@ -77,11 +81,11 @@ class HouseService {
 
   async deleteHouse (req, res) {
     try {
-      const house = await houseDAL.find(req.params.id)
+      const house = await this.propertyDAL.find(req.params.id)
       for (const photo of house.photos) {
         await photoDAL.delete(photo.id)
       }
-      const result = await houseDAL.delete(house.id)
+      const result = await this.propertyDAL.delete(house.id)
       if (result > 0) {
         res.send({ success: true })
       } else {
@@ -95,4 +99,4 @@ class HouseService {
   }
 }
 
-module.exports = new HouseService()
+module.exports = PropertyService

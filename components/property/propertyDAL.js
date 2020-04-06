@@ -1,24 +1,23 @@
 const { db } = require('../../config')
-const House = require('./house')
 const { Photo } = require('../photo')
 
-const type = 'house'
-
-class HouseDAL {
-  constructor (table) {
+class PropertyDAL {
+  constructor (table, propType, PropertyModel) {
     this.table = table
+    this.propType = propType
+    this.PropertyModel = PropertyModel
   }
 
   async filterAndLoad ({ filter, currentPage, perPage }) {
     const query = db(this.table)
-      .where({ type })
+      .where({ type: this.propType })
       .leftJoin('users', 'properties.authorID', '=', 'users.id')
       .leftJoin(db('photos').select('propertyID').min('filePath', { as: 'featuredImage' }).groupBy('propertyID').as('photos'), 'properties.id', '=', 'photos.propertyID')
 
       .select('properties.*', 'users.fullName AS authorName', 'photos.featuredImage')
 
     const { data, pagination } = await query.paginate({ perPage, currentPage })
-    const houses = data.map(r => new House(r))
+    const houses = data.map(r => new this.PropertyModel(r))
 
     return { houses, pagination }
   }
@@ -27,17 +26,17 @@ class HouseDAL {
     const house = await db(this.table).where({ id }).first()
     const photos = await db('photos').where({ propertyID: house.id })
     house.photos = photos.map(ph => new Photo(ph))
-    return new House(house)
+    return new this.PropertyModel(house)
   }
 
-  async houseExists (filter, id = null) {
+  async propertyExists (filter, id = null) {
     const result = await db(this.table).where(filter).whereNot({ id }).limit(1).select('id').first()
 
     return (result !== undefined)
   }
 
   async create (payload) {
-    payload.type = type
+    payload.type = this.propType
     const houseID = await db(this.table).insert(payload)
     const house = await this.find(houseID)
 
@@ -54,4 +53,4 @@ class HouseDAL {
   }
 }
 
-module.exports = new HouseDAL('properties')
+module.exports = PropertyDAL
