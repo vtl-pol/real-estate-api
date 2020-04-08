@@ -2,7 +2,7 @@ const { attributes } = require('structure')
 const APP_URL = process.env.APP_URL
 class PhotosCollection extends Array { }
 
-const House = attributes({
+const Apartment = attributes({
   id: {
     type: Number,
     default: null
@@ -23,19 +23,18 @@ const House = attributes({
   districtId: Number,
   street: String,
   houseNo: String,
+  aptNo: String,
   price: Number,
   material: Number,
+  floor: Number,
   floors: Number,
   buildingType: Number,
   squareTotal: Number,
   squareLiving: Number,
   squareKitchen: Number,
-  squareLand: Number,
-  registrationNo: String,
   renovated: Boolean,
-  garage: Boolean,
-  builtAt: String,
   description: String,
+  autonomousHeat: Boolean,
   ownerName: String,
   ownerPhone: Number,
   ownerBirthday: Date,
@@ -43,7 +42,7 @@ const House = attributes({
   updatedAt: Date,
   type: {
     type: String,
-    default: 'House'
+    default: 'Apartment'
   },
 
   /* JOINED PARAMS */
@@ -59,21 +58,23 @@ const House = attributes({
     type: PhotosCollection,
     itemType: require('../photo/photo')
   }
-})(class House { })
+})(class Apartment { })
 
-House.MATERIALS = {
+Apartment.MATERIALS = {
   BRICK: 0,
-  BLOCKS: 1,
-  WOOD: 2,
-  OTHER: 3
+  PANEL: 4
 }
 
-// окремий, частина, котедж, дача
-House.TYPES = {
-  SEPARATE: 0,
-  PARTIAL: 1,
-  COTTAGE: 2,
-  SUMMERHOUSE: 3
+Apartment.TYPES = {
+  DORM: 4,
+  GUEST: 5,
+  SMALL_FAM: 6,
+  FULL_FEATURED: 7,
+  KHRUSHCHEV_BUILD: 8,
+  IMPROVED: 9,
+  CZECH: 10,
+  NEW_BUILD: 11,
+  STALIN_BUILD: 12
 }
 
-module.exports = House
+module.exports = Apartment

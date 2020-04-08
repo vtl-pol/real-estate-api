@@ -14,23 +14,23 @@ require('../auth/authMiddleware')
 const houseValidator = require('./houseValidator')
 
 router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
-  houseService.getHouses(req, res)
+  houseService.getProperties(req, res)
 })
 
 router.get('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
-  houseService.getHouse(req, res)
+  houseService.getProperty(req, res)
 })
 
 router.post('/', passport.authenticate('jwt', { session: false }), houseValidator.house, houseValidator.uniqe, (req, res) => {
-  houseService.createHouse(req, res)
+  houseService.createProperty(req, res)
 })
 
 router.put('/:id', passport.authenticate('jwt', { session: false }), houseValidator.uniqe, (req, res) => {
-  houseService.updateHouse(req, res)
+  houseService.updateProperty(req, res)
 })
 
-router.delete('/:id', passport.authenticate('jwt', { session: false }), houseValidator.house, (req, res) => {
-  houseService.deleteHouse(req, res)
+router.delete('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+  houseService.deleteProperty(req, res)
 })
 
 router.post('/:id/photos', passport.authenticate('jwt', { session: false }), (req, res) => {

@@ -1,6 +1,7 @@
+const moment = require('moment')
 const { photoResource } = require('../photo')
 
-const brief = (house) => {
+const brief = (property) => {
   return (({
     id,
     authorName,
@@ -8,6 +9,7 @@ const brief = (house) => {
     districtId,
     street,
     houseNo,
+    floor,
     price,
     material,
     floors,
@@ -15,7 +17,6 @@ const brief = (house) => {
     squareTotal,
     squareLiving,
     squareKitchen,
-    squareLand,
     description,
     createdAt,
     updatedAt,
@@ -32,6 +33,7 @@ const brief = (house) => {
     districtId,
     street,
     houseNo,
+    floor,
     price,
     material,
     floors,
@@ -39,7 +41,6 @@ const brief = (house) => {
     squareTotal,
     squareLiving,
     squareKitchen,
-    squareLand,
     description,
     createdAt,
     updatedAt,
@@ -49,10 +50,10 @@ const brief = (house) => {
     motivation,
     ownerName,
     ownerPhone
-  }))(house)
+  }))(property)
 }
 
-const full = (house) => {
+const full = (property) => {
   return (({
     id,
     title,
@@ -60,6 +61,9 @@ const full = (house) => {
     districtId,
     street,
     houseNo,
+    aptNo,
+    floor,
+    autonomousHeat,
     price,
     material,
     floors,
@@ -67,10 +71,7 @@ const full = (house) => {
     squareTotal,
     squareLiving,
     squareKitchen,
-    squareLand,
-    registrationNo,
     renovated,
-    garage,
     builtAt,
     description,
     type,
@@ -91,6 +92,9 @@ const full = (house) => {
     districtId,
     street,
     houseNo,
+    aptNo,
+    floor,
+    autonomousHeat,
     price,
     material,
     floors,
@@ -98,10 +102,7 @@ const full = (house) => {
     squareTotal,
     squareLiving,
     squareKitchen,
-    squareLand,
-    registrationNo,
     renovated,
-    garage,
     builtAt,
     description,
     type,
@@ -114,8 +115,8 @@ const full = (house) => {
     motivation,
     ownerName,
     ownerPhone,
-    ownerBirthday
-  }))(house)
+    ownerBirthday: moment(ownerBirthday).format('DD-MM-YYYY')
+  }))(property)
 }
 
 module.exports = { brief, full }
