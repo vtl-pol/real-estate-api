@@ -88,7 +88,8 @@ const full = (house) => {
     isOnViber,
     isOnTelegram,
     isOnFacebook,
-    isOnWhatsapp
+    isOnWhatsapp,
+    reasonToSell
   }) => ({
     id,
     title,
@@ -123,7 +124,8 @@ const full = (house) => {
     isOnViber,
     isOnTelegram,
     isOnFacebook,
-    isOnWhatsapp
+    isOnWhatsapp,
+    reasonToSell
   }))(house)
 }
 

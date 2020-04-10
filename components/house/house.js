@@ -43,6 +43,7 @@ const House = attributes({
   isOnTelegram: Boolean,
   isOnFacebook: Boolean,
   isOnWhatsapp: Boolean,
+  reasonToSell: String,
   createdAt: Date,
   updatedAt: Date,
   type: {

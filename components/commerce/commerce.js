@@ -2,7 +2,7 @@ const { attributes } = require('structure')
 const APP_URL = process.env.APP_URL
 class PhotosCollection extends Array { }
 
-const Apartment = attributes({
+const Commerce = attributes({
   id: {
     type: Number,
     default: null
@@ -23,18 +23,15 @@ const Apartment = attributes({
   districtId: Number,
   street: String,
   houseNo: String,
-  aptNo: String,
   price: Number,
-  material: Number,
   floor: Number,
   floors: Number,
   buildingType: Number,
   squareTotal: Number,
   squareLiving: Number,
-  squareKitchen: Number,
   renovated: Boolean,
-  description: String,
   autonomousHeat: Boolean,
+  description: String,
   ownerName: String,
   ownerPhone: Number,
   ownerBirthday: Date,
@@ -47,7 +44,7 @@ const Apartment = attributes({
   updatedAt: Date,
   type: {
     type: String,
-    default: 'Apartment'
+    default: 'House'
   },
 
   /* JOINED PARAMS */
@@ -63,23 +60,16 @@ const Apartment = attributes({
     type: PhotosCollection,
     itemType: require('../photo/photo')
   }
-})(class Apartment { })
+})(class Commerce { })
 
-Apartment.MATERIALS = {
-  BRICK: 0,
-  PANEL: 4
+// склад, торгове, кафе, офіс, виробниче, вільне, інше
+Commerce.BUILDING_TYPES = {
+  WAREHOUSE: 0,
+  TRADE: 1,
+  CAFE: 2,
+  PRODUCTION: 3,
+  FREE: 4,
+  OTHER: 5
 }
 
-Apartment.TYPES = {
-  DORM: 4,
-  GUEST: 5,
-  SMALL_FAM: 6,
-  FULL_FEATURED: 7,
-  KHRUSHCHEV_BUILD: 8,
-  IMPROVED: 9,
-  CZECH: 10,
-  NEW_BUILD: 11,
-  STALIN_BUILD: 12
-}
-
-module.exports = Apartment
+module.exports = Commerce

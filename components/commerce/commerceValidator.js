@@ -2,27 +2,23 @@ const Joi = require('joi')
 const moment = require('moment')
 
 const PropertyDAL = require('../property/propertyDAL')
-const houseDAL = new PropertyDAL('properties', 'house')
+const commerceDAL = new PropertyDAL('properties', 'commerce')
 const { propertyConstants } = require('../property')
 
-const houseSchema = Joi.object().keys({
+const commerceSchema = Joi.object().keys({
   title: Joi.string().required(),
   noOfRooms: Joi.number().integer().required().min(1).max(5),
   districtId: Joi.number().integer().required(),
   street: Joi.string().required(),
   houseNo: Joi.string().max(4).required(),
   price: Joi.number().integer().max(9999999).required(),
-  material: Joi.number().integer().required(),
-  floors: Joi.number().integer().min(1).max(4).required(),
-  buildingType: Joi.number().integer().required(),
+  floor: Joi.number().integer().required(),
+  floors: Joi.number().integer().min(1).max(5).required(),
+  buildingType: Joi.number().integer().min(0).max(5).required(),
   squareTotal: Joi.number().integer().max(999).required(),
   squareLiving: Joi.number().integer().max(999).required(),
-  squareKitchen: Joi.number().integer().max(99).required(),
-  squareLand: Joi.number().integer().required(),
-  registrationNo: Joi.string().regex(/^\d{10}:\d{2}:\d{3}:\d{4}$/).required(), // 0000000000:00:000:0001
   renovated: Joi.boolean().required(),
-  garage: Joi.boolean().required(),
-  builtAt: Joi.string().regex(/^\d{4} Q\d{1}$/).required(), // 2019 Q2
+  autonomousHeat: Joi.boolean().required(),
   description: Joi.string().required(),
   contract: Joi.string().only(...propertyConstants.CONTRACTS).allow(null),
   motivation: Joi.string().only(...propertyConstants.MOTIVATIONS).allow(null),
@@ -66,7 +62,7 @@ const fields = (req, res, next) => {
     req.body.ownerBirthday = moment(req.body.ownerBirthday, 'DD-MM-YYYY').format()
   }
   console.log(req.body.ownerBirthday)
-  Joi.validate(req.body, houseSchema, function (err, _value) {
+  Joi.validate(req.body, commerceSchema, function (err, _value) {
     if (err) {
       const errors = formattedErrors(err.details)
       return res.status(422).json({ errors })
@@ -81,7 +77,7 @@ const uniqe = async (req, res, next) => {
   const params = { registrationNo: req.body.registrationNo }
   const id = req.params.id
 
-  const exists = await houseDAL.propertyExists(params, id)
+  const exists = await commerceDAL.propertyExists(params, id)
 
   if (exists) {
     return res.status(422).send({ success: false, error: 'Такий Кадастровий номер вже є в базі' })

@@ -21,7 +21,7 @@ router.get('/:id', passport.authenticate('jwt', { session: false }), (req, res) 
   houseService.getProperty(req, res)
 })
 
-router.post('/', passport.authenticate('jwt', { session: false }), houseValidator.house, houseValidator.uniqe, (req, res) => {
+router.post('/', passport.authenticate('jwt', { session: false }), houseValidator.fields, houseValidator.uniqe, (req, res) => {
   houseService.createProperty(req, res)
 })
 

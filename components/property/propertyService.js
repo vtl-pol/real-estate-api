@@ -84,10 +84,12 @@ class PropertyService {
   async deleteProperty (req, res) {
     try {
       const property = await this.propertyDAL.find(req.params.id)
-      for (const photo of property.photos) {
-        await photoDAL.delete(photo.id)
+      if (property) {
+        for (const photo of property.photos) {
+          await photoDAL.delete(photo.id)
+        }
       }
-      const result = await this.propertyDAL.delete(property.id)
+      const result = await this.propertyDAL.delete(req.params.id)
       if (result > 0) {
         res.send({ success: true })
       } else {
