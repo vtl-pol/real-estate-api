@@ -26,7 +26,11 @@ const apartmentSchema = Joi.object().keys({
   source: Joi.number().integer().min(1).max(Object.keys(propertyConstants.SOURCES).length - 1).allow(null),
   ownerName: Joi.string().required(),
   ownerPhone: Joi.string().required(),
-  ownerBirthday: Joi.date().raw()
+  ownerBirthday: Joi.date().raw(),
+  isOnViber: Joi.boolean(),
+  isOnTelegram: Joi.boolean(),
+  isOnFacebook: Joi.boolean(),
+  isOnWhatsapp: Joi.boolean()
 })
 
 const formattedErrors = (errs) => {

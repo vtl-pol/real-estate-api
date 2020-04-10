@@ -84,7 +84,11 @@ const full = (property) => {
     motivation,
     ownerName,
     ownerPhone,
-    ownerBirthday
+    ownerBirthday,
+    isOnViber,
+    isOnTelegram,
+    isOnFacebook,
+    isOnWhatsapp
   }) => ({
     id,
     title,
@@ -115,7 +119,11 @@ const full = (property) => {
     motivation,
     ownerName,
     ownerPhone,
-    ownerBirthday: moment(ownerBirthday).format('DD-MM-YYYY')
+    ownerBirthday: moment(ownerBirthday).format('DD-MM-YYYY'),
+    isOnViber,
+    isOnTelegram,
+    isOnFacebook,
+    isOnWhatsapp
   }))(property)
 }
 

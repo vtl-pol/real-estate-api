@@ -1,3 +1,4 @@
+const moment = require('moment')
 const { photoResource } = require('../photo')
 
 const brief = (house) => {
@@ -83,7 +84,11 @@ const full = (house) => {
     motivation,
     ownerName,
     ownerPhone,
-    ownerBirthday
+    ownerBirthday,
+    isOnViber,
+    isOnTelegram,
+    isOnFacebook,
+    isOnWhatsapp
   }) => ({
     id,
     title,
@@ -114,7 +119,11 @@ const full = (house) => {
     motivation,
     ownerName,
     ownerPhone,
-    ownerBirthday
+    ownerBirthday: moment(ownerBirthday).format('DD-MM-YYYY'),
+    isOnViber,
+    isOnTelegram,
+    isOnFacebook,
+    isOnWhatsapp
   }))(house)
 }
 

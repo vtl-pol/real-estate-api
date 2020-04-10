@@ -38,6 +38,10 @@ const Apartment = attributes({
   ownerName: String,
   ownerPhone: Number,
   ownerBirthday: Date,
+  isOnViber: Boolean,
+  isOnTelegram: Boolean,
+  isOnFacebook: Boolean,
+  isOnWhatsapp: Boolean,
   createdAt: Date,
   updatedAt: Date,
   type: {
