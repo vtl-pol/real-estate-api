@@ -26,7 +26,7 @@ class PropertyService {
       if (property === null) {
         res.status(404).send({ success: false, error: 'Property not found' })
       }
-      res.send({ success: true, properties: this.propertyResource.full(property) })
+      res.send({ success: true, property: this.propertyResource.full(property) })
     } catch (error) {
       console.error(error)
       res.status(500).json({ success: false, error: error.message })
