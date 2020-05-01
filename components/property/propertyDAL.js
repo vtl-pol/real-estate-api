@@ -18,7 +18,6 @@ class PropertyDAL {
     const query = this.table()
       .leftJoin('users', 'properties.authorID', '=', 'users.id')
       .leftJoin(db('photos').select('propertyID').min('filePath', { as: 'featuredImage' }).groupBy('propertyID').as('photos'), 'properties.id', '=', 'photos.propertyID')
-
       .select('properties.*', 'users.fullName AS authorName', 'photos.featuredImage')
 
     const { data, pagination } = await query.paginate({ perPage, currentPage })

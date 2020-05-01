@@ -61,7 +61,6 @@ const formattedErrors = (errs) => {
 const fields = (req, res, next) => {
   if (req.body.ownerBirthday) {
     req.body.ownerBirthday = moment(req.body.ownerBirthday, 'DD-MM-YYYY').format()
-    console.log(req.body.ownerBirthday)
   }
 
   Joi.validate(req.body, apartmentSchema, function (err, _value) {
