@@ -67,18 +67,17 @@ const House = attributes({
 })(class House { })
 
 House.MATERIALS = {
-  BRICK: 0,
-  BLOCKS: 1,
-  WOOD: 2,
-  OTHER: 3
+  0: 'Цегла',
+  1: 'Блоки',
+  2: 'Дерево',
+  3: 'Інше'
 }
 
-// окремий, частина, котедж, дача
 House.TYPES = {
-  SEPARATE: 0,
-  PARTIAL: 1,
-  COTTAGE: 2,
-  SUMMERHOUSE: 3
+  0: 'Окремий',
+  1: 'Частина',
+  2: 'Котедж',
+  3: 'Дача'
 }
 
 module.exports = House

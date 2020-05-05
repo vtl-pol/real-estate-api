@@ -9,6 +9,7 @@ const { commerceRouter } = require('../components/commerce')
 const { apartmentBuyerRouter } = require('../components/apartmentBuyer')
 const { houseBuyerRouter } = require('../components/houseBuyer')
 const { commerceBuyerRouter } = require('../components/commerceBuyer')
+const { constantsRouter } = require('../components/constants')
 
 appRouter.use('/', indexRouter)
 appRouter.use('/auth', authRouter)
@@ -19,5 +20,6 @@ appRouter.use('/commerce', commerceRouter)
 appRouter.use('/buyers/apartments', apartmentBuyerRouter)
 appRouter.use('/buyers/houses', houseBuyerRouter)
 appRouter.use('/buyers/commerce', commerceBuyerRouter)
+appRouter.use('/constants', constantsRouter)
 
 module.exports = appRouter

@@ -5,11 +5,11 @@ const { buyerConstants } = require('../buyer')
 const { propertyConstants } = require('../property')
 const { Apartment } = require('../apartment')
 
-const sourcesIDs = Object.keys(buyerConstants.SOURCES).map(k => Number(k))
-const aptFloorTypes = Object.keys(buyerConstants.APT_FLOORS).map(k => Number(k))
-const allowedStatuses = Object.values(propertyConstants.STATUSES)
-const allowedMaterials = Object.values(Apartment.MATERIALS)
-const allowedBuildingTypes = Object.values(Apartment.TYPES)
+const sourcesIDs = Object.keys(buyerConstants.SOURCES).map(Number)
+const aptFloorTypes = Object.keys(buyerConstants.APT_FLOORS).map(Number)
+const allowedStatuses = Object.keys(propertyConstants.STATUSES).map(Number)
+const allowedMaterials = Object.keys(Apartment.MATERIALS).map(Number)
+const allowedBuildingTypes = Object.keys(Apartment.TYPES).map(Number)
 
 const apartmentSchema = Joi.object().keys({
   name: Joi.string().required(),

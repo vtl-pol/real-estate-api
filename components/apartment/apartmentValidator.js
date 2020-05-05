@@ -3,6 +3,8 @@ const moment = require('moment')
 
 const { propertyConstants } = require('../property')
 
+const allowedSources = Object.keys(propertyConstants.SOURCES).map(Number)
+
 const apartmentSchema = Joi.object().keys({
   title: Joi.string().required(),
   noOfRooms: Joi.number().integer().required().min(1).max(5),
@@ -23,7 +25,7 @@ const apartmentSchema = Joi.object().keys({
   description: Joi.string().required(),
   contract: Joi.string().only(...propertyConstants.CONTRACTS).allow(null),
   motivation: Joi.string().only(...propertyConstants.MOTIVATIONS).allow(null),
-  source: Joi.number().integer().min(1).max(Object.keys(propertyConstants.SOURCES).length - 1).allow(null),
+  source: Joi.number().integer().only(allowedSources).allow(null),
   ownerName: Joi.string().required(),
   ownerPhone: Joi.string().required(),
   ownerBirthday: Joi.date().raw(),

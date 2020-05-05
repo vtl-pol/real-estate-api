@@ -66,20 +66,20 @@ const Apartment = attributes({
 })(class Apartment { })
 
 Apartment.MATERIALS = {
-  BRICK: 0,
-  PANEL: 4
+  0: 'Цегла',
+  4: 'Панель'
 }
 
 Apartment.TYPES = {
-  DORM: 4,
-  GUEST: 5,
-  SMALL_FAM: 6,
-  FULL_FEATURED: 7,
-  KHRUSHCHEV_BUILD: 8,
-  IMPROVED: 9,
-  CZECH: 10,
-  NEW_BUILD: 11,
-  STALIN_BUILD: 12
+  4: 'Гуртожиток',
+  5: 'Гостинка',
+  6: 'Малосімейка',
+  7: 'Повноцінна',
+  8: 'Хрущовка',
+  9: 'Покращене',
+  10: 'Чешка',
+  11: 'Новобудова',
+  12: 'Сталінка'
 }
 
 module.exports = Apartment

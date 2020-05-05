@@ -62,14 +62,14 @@ const Commerce = attributes({
   }
 })(class Commerce { })
 
-// склад, торгове, кафе, офіс, виробниче, вільне, інше
 Commerce.BUILDING_TYPES = {
-  WAREHOUSE: 0,
-  TRADE: 1,
-  CAFE: 2,
-  PRODUCTION: 3,
-  FREE: 4,
-  OTHER: 5
+  0: 'Склад',
+  1: 'Торгове',
+  2: 'Кафе',
+  3: 'Офіс',
+  4: 'Виробниче',
+  5: 'Вільне',
+  6: 'Інше'
 }
 
 module.exports = Commerce

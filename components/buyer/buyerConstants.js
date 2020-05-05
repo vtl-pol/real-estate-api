@@ -1,5 +1,3 @@
-const PROPERTY_TYPES = ['House', 'Apartment', 'Commerce']
-
 const SOURCES = {
   1: 'Особистий агента',
   2: 'Реклама НЕД olx.ua',
@@ -53,4 +51,4 @@ const HOUSE_RANGES = {
   2: 'Від 5 км.'
 }
 
-module.exports = { PROPERTY_TYPES, SOURCES, APT_FLOORS, HOUSE_RANGES }
+module.exports = { SOURCES, APT_FLOORS, HOUSE_RANGES }

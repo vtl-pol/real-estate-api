@@ -1,8 +1,7 @@
-// заявка, оброблений, в рекламі
 const STATUSES = {
-  APPLICATION: 0,
-  PROCESSED: 1,
-  PROMOTION: 2
+  0: 'Заявка',
+  1: 'Оброблений',
+  2: 'В Рекламі'
 }
 
 const CONTRACTS = ['НЕД', 'ЕД']
