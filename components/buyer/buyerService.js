@@ -11,7 +11,7 @@ class BuyerService {
       const perPage = 10
       const { buyers, pagination } = await this.buyerDAL.getBuyers({ currentPage, perPage })
 
-      res.send({ success: true, buyers: buyers.map(b => this.buyerResource.brief(b)), pagination })
+      res.send({ success: true, buyers: buyers.map(b => this.buyerResource.full(b)), pagination })
     } catch (error) {
       console.error(error)
       res.status(500).send({ success: false, error })

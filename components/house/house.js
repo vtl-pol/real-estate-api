@@ -1,5 +1,5 @@
 const { attributes } = require('structure')
-const APP_URL = process.env.APP_URL
+
 class PhotosCollection extends Array { }
 
 const House = attributes({
@@ -53,11 +53,6 @@ const House = attributes({
 
   /* JOINED PARAMS */
   authorName: String,
-  featuredImage: String,
-  imageURL: {
-    type: String,
-    default: inst => (inst.featuredImage) ? `${APP_URL}/${inst.featuredImage.replace('public/', '')}` : ''
-  },
 
   /* RELATIONS */
   photos: {

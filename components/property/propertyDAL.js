@@ -17,17 +17,21 @@ class PropertyDAL {
   async filterAndLoad ({ filter, currentPage, perPage }) {
     const query = this.table()
       .leftJoin('users', 'properties.authorID', '=', 'users.id')
-      .leftJoin(db('photos').select('propertyID').min('filePath', { as: 'featuredImage' }).groupBy('propertyID').as('photos'), 'properties.id', '=', 'photos.propertyID')
-      .select('properties.*', 'users.fullName AS authorName', 'photos.featuredImage')
+      .select('properties.*', 'users.fullName AS authorName')
 
     const { data, pagination } = await query.paginate({ perPage, currentPage })
-    const properties = data.map(r => new this.PropertyModel(r))
+    const photos = await db('photos').where('propertyID', 'IN', data.map(i => i.id))
+    const props = data.map(r => Object.assign(r, { photos: photos.filter(p => p.propertyID === r.id) }))
+    const properties = props.map(r => new this.PropertyModel(r))
 
     return { properties, pagination }
   }
 
   async find (id) {
-    const house = await this.table().where({ id }).first()
+    const house = await this.table().where({ 'properties.id': id })
+      .leftJoin('users', 'properties.authorID', '=', 'users.id')
+      .select('properties.*', 'users.fullName AS authorName')
+      .first()
     if (!house) {
       return null
     }

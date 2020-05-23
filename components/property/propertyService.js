@@ -13,7 +13,7 @@ class PropertyService {
       const perPage = 10
       const { properties, pagination } = await this.propertyDAL.filterAndLoad({ filter, currentPage, perPage })
 
-      res.send({ success: true, properties: properties.map(h => this.propertyResource.brief(h)), pagination })
+      res.send({ success: true, properties: properties.map(h => this.propertyResource.full(h)), pagination })
     } catch (error) {
       console.error(error)
       res.status(500).json({ success: false, error: error.message })

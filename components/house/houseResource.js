@@ -1,61 +1,10 @@
 const moment = require('moment')
 const { photoResource } = require('../photo')
 
-const brief = (house) => {
-  return (({
-    id,
-    authorName,
-    title,
-    districtId,
-    street,
-    houseNo,
-    price,
-    material,
-    floors,
-    buildingType,
-    squareTotal,
-    squareLiving,
-    squareKitchen,
-    squareLand,
-    description,
-    createdAt,
-    updatedAt,
-    imageURL,
-    propertyStatus,
-    contract,
-    motivation,
-    ownerName,
-    ownerPhone
-  }) => ({
-    id,
-    authorName,
-    title,
-    districtId,
-    street,
-    houseNo,
-    price,
-    material,
-    floors,
-    buildingType,
-    squareTotal,
-    squareLiving,
-    squareKitchen,
-    squareLand,
-    description,
-    createdAt,
-    updatedAt,
-    imageURL,
-    propertyStatus,
-    contract,
-    motivation,
-    ownerName,
-    ownerPhone
-  }))(house)
-}
-
 const full = (house) => {
   return (({
     id,
+    authorName,
     title,
     noOfRooms,
     districtId,
@@ -82,6 +31,7 @@ const full = (house) => {
     propertyStatus,
     contract,
     motivation,
+    source,
     ownerName,
     ownerPhone,
     ownerBirthday,
@@ -92,6 +42,7 @@ const full = (house) => {
     reasonToSell
   }) => ({
     id,
+    authorName,
     title,
     noOfRooms,
     districtId,
@@ -118,6 +69,7 @@ const full = (house) => {
     propertyStatus,
     contract,
     motivation,
+    source,
     ownerName,
     ownerPhone,
     ownerBirthday: moment(ownerBirthday).format('DD-MM-YYYY'),
@@ -129,4 +81,4 @@ const full = (house) => {
   }))(house)
 }
 
-module.exports = { brief, full }
+module.exports = { full }

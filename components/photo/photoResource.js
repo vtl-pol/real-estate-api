@@ -1,4 +1,4 @@
-const brief = function (photo) {
+const full = function (photo) {
   return (({
     id,
     propertyID,
@@ -10,4 +10,4 @@ const brief = function (photo) {
   }))(photo)
 }
 
-module.exports = { brief }
+module.exports = { full }

@@ -1,54 +1,6 @@
 const moment = require('moment')
 const { photoResource } = require('../photo')
 
-const brief = (commerce) => {
-  return (({
-    id,
-    authorName,
-    title,
-    districtId,
-    street,
-    houseNo,
-    price,
-    floor,
-    floors,
-    buildingType,
-    squareTotal,
-    squareLiving,
-    description,
-    createdAt,
-    updatedAt,
-    imageURL,
-    propertyStatus,
-    contract,
-    motivation,
-    ownerName,
-    ownerPhone
-  }) => ({
-    id,
-    authorName,
-    title,
-    districtId,
-    street,
-    houseNo,
-    price,
-    floor,
-    floors,
-    buildingType,
-    squareTotal,
-    squareLiving,
-    description,
-    createdAt,
-    updatedAt,
-    imageURL,
-    propertyStatus,
-    contract,
-    motivation,
-    ownerName,
-    ownerPhone
-  }))(commerce)
-}
-
 const full = (commerce) => {
   return (({
     id,
@@ -119,4 +71,4 @@ const full = (commerce) => {
   }))(commerce)
 }
 
-module.exports = { brief, full }
+module.exports = { full }
