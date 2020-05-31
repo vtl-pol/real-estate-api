@@ -65,7 +65,7 @@ const full = (house) => {
     createdAt,
     updatedAt,
     author,
-    photos: photos.map(p => photoResource.brief(p)),
+    photos: photos.map(p => photoResource.full(p)),
     propertyStatus,
     contract,
     motivation,

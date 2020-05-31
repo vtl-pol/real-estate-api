@@ -81,6 +81,23 @@ class PropertyService {
     })
   }
 
+  async deletePhoto (req, res) {
+    const id = req.params.id
+    const propertyID = req.params.propertyID
+    const photo = await photoDAL.findBy({ id, propertyID })
+    if (photo.id !== undefined) {
+      await photoDAL.delete(photo.id)
+      res.send({
+        success: true,
+        photo
+      })
+    } else {
+      res.status(404).send({
+        error: 'Фото не знайдено'
+      })
+    }
+  }
+
   async deleteProperty (req, res) {
     try {
       const property = await this.propertyDAL.find(req.params.id)

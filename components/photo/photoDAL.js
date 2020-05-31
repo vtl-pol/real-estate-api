@@ -7,6 +7,11 @@ class PhotoDAL {
     this.table = table
   }
 
+  async findBy (params) {
+    const photo = await db(this.table).where(params).first()
+    return new Photo(photo)
+  }
+
   async find (id) {
     const photo = await db(this.table).where({ id }).first()
     return new Photo(photo)

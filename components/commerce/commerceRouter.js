@@ -37,4 +37,8 @@ router.post('/:id/photos', passport.authenticate('jwt', { session: false }), (re
   commerceService.uploadPhotos(req, res)
 })
 
+router.delete('/:propertyID/photos/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+  commerceService.deletePhoto(req, res)
+})
+
 module.exports = router

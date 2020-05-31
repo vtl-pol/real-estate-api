@@ -66,7 +66,7 @@ const full = (commerce) => {
     createdAt,
     updatedAt,
     authorName,
-    photos: photos.map(p => photoResource.brief(p)),
+    photos: photos.map(p => photoResource.full(p)),
     ownerBirthday: moment(ownerBirthday).format('DD-MM-YYYY')
   }))(commerce)
 }
