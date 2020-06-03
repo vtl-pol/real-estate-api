@@ -1,84 +1,66 @@
 const moment = require('moment')
+const { extract } = require('../../utils/object')
+
 const { photoResource } = require('../photo')
 
-const full = (house) => {
-  return (({
-    id,
-    authorName,
-    title,
-    noOfRooms,
-    districtId,
-    street,
-    houseNo,
-    price,
-    material,
-    floors,
-    buildingType,
-    squareTotal,
-    squareLiving,
-    squareKitchen,
-    squareLand,
-    registrationNo,
-    renovated,
-    garage,
-    builtAt,
-    description,
-    type,
-    createdAt,
-    updatedAt,
-    photos,
-    author,
-    propertyStatus,
-    contract,
-    motivation,
-    source,
-    ownerName,
-    ownerPhone,
-    ownerBirthday,
-    isOnViber,
-    isOnTelegram,
-    isOnFacebook,
-    isOnWhatsapp,
-    reasonToSell
-  }) => ({
-    id,
-    authorName,
-    title,
-    noOfRooms,
-    districtId,
-    street,
-    houseNo,
-    price,
-    material,
-    floors,
-    buildingType,
-    squareTotal,
-    squareLiving,
-    squareKitchen,
-    squareLand,
-    registrationNo,
-    renovated,
-    garage,
-    builtAt,
-    description,
-    type,
-    createdAt,
-    updatedAt,
-    author,
-    photos: photos.map(p => photoResource.full(p)),
-    propertyStatus,
-    contract,
-    motivation,
-    source,
-    ownerName,
-    ownerPhone,
-    ownerBirthday: moment(ownerBirthday).format('DD-MM-YYYY'),
-    isOnViber,
-    isOnTelegram,
-    isOnFacebook,
-    isOnWhatsapp,
-    reasonToSell
-  }))(house)
+const propertyAttributes = [
+  'id',
+  'authorName',
+  'title',
+  'noOfRooms',
+  'districtId',
+  'street',
+  'houseNo',
+  'price',
+  'material',
+  'floors',
+  'buildingType',
+  'squareTotal',
+  'squareLiving',
+  'squareKitchen',
+  'squareLand',
+  'registrationNo',
+  'renovated',
+  'garage',
+  'builtAt',
+  'description',
+  'type',
+  'createdAt',
+  'updatedAt',
+  'photos',
+  'author',
+  'propertyStatus',
+  'contract',
+  'motivation',
+  'source',
+  'ownerName',
+  'ownerPhone',
+  'ownerBirthday',
+  'isOnViber',
+  'isOnTelegram',
+  'isOnFacebook',
+  'isOnWhatsapp',
+  'reasonToSell'
+]
+
+const archiveAttributes = [
+  'archivedAt',
+  'archivedTill',
+  'archivedReason',
+  'soldByID'
+]
+
+const full = (property) => {
+  const result = extract(propertyAttributes, property)
+
+  result.photos = property.photos.map(p => photoResource.full(p))
+  result.ownerBirthday = moment(property.ownerBirthday).format('DD-MM-YYYY')
+
+  return result
 }
 
-module.exports = { full }
+const archive = (property) => {
+  return { ...full(property), ...extract(archiveAttributes, property) }
+}
+
+module.exports = { full, archive }

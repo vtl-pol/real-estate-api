@@ -1,60 +1,5 @@
 const { buyerConstants } = require('../buyer')
 
-const brief = (buyer) => {
-  return (({
-    id,
-    name,
-    phone,
-    authorID,
-    responsibleID,
-    buyerStatus,
-    contract,
-    motivation,
-    source,
-    reasonToBuy,
-    description,
-    createdAt,
-    updatedAt,
-    noOfRooms,
-    range,
-    districtID,
-    maxPrice,
-    material,
-    buildingType,
-    squareTotal,
-    squareLand,
-    isRenovated,
-    hasGarage,
-    authorName
-  }) => ({
-    id,
-    name,
-    phone,
-    authorID,
-    responsibleID,
-    buyerStatus,
-    contract,
-    motivation,
-    source,
-    sourceName: buyerConstants.SOURCES[parseInt(source)],
-    reasonToBuy,
-    description,
-    createdAt,
-    updatedAt,
-    noOfRooms,
-    range: buyerConstants.HOUSE_RANGES[parseInt(range)],
-    districtID,
-    maxPrice,
-    material,
-    buildingType,
-    squareTotal,
-    squareLand,
-    isRenovated,
-    hasGarage,
-    authorName
-  }))(buyer)
-}
-
 const full = (buyer) => {
   return (({
     id,
@@ -120,4 +65,4 @@ const full = (buyer) => {
   }))(buyer)
 }
 
-module.exports = { brief, full }
+module.exports = { full }

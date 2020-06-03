@@ -22,7 +22,7 @@ class BuyerService {
     try {
       const buyer = await this.buyerDAL.find(req.params.id)
       if (buyer === null) {
-        res.status(404).send({ success: false, error: 'Property not found' })
+        res.status(404).send({ success: false, error: 'Покупця не існує' })
       }
       res.send({ success: true, buyer: this.buyerResource.full(buyer) })
     } catch (error) {

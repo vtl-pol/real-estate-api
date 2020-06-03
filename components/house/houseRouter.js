@@ -9,35 +9,35 @@ const houseResource = require('./houseResource')
 const houseDAL = new PropertyDAL('properties', 'house', House)
 const houseService = new PropertyService(houseDAL, houseResource)
 
-const passport = require('passport')
-require('../auth/authMiddleware')
+const authMiddleware = require('../auth/authMiddleware')
 const houseValidator = require('./houseValidator')
+const propertyValidator = require('../archive/property/propertyValidator')
 
-router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.get('/', authMiddleware, (req, res) => {
   houseService.getProperties(req, res)
 })
 
-router.get('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.get('/:id', authMiddleware, (req, res) => {
   houseService.getProperty(req, res)
 })
 
-router.post('/', passport.authenticate('jwt', { session: false }), houseValidator.fields, houseValidator.uniqe, (req, res) => {
+router.post('/', authMiddleware, houseValidator.fields, houseValidator.uniqe, (req, res) => {
   houseService.createProperty(req, res)
 })
 
-router.put('/:id', passport.authenticate('jwt', { session: false }), houseValidator.uniqe, (req, res) => {
+router.put('/:id', authMiddleware, houseValidator.uniqe, (req, res) => {
   houseService.updateProperty(req, res)
 })
 
-router.delete('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
-  houseService.deleteProperty(req, res)
+router.delete('/:id/archive', authMiddleware, propertyValidator.archive, (req, res) => {
+  houseService.archiveProperty(req, res)
 })
 
-router.post('/:id/photos', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.post('/:id/photos', authMiddleware, (req, res) => {
   houseService.uploadPhotos(req, res)
 })
 
-router.delete('/:propertyID/photos/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.delete('/:propertyID/photos/:id', authMiddleware, (req, res) => {
   houseService.deletePhoto(req, res)
 })
 

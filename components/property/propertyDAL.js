@@ -1,17 +1,26 @@
 const moment = require('moment')
 
 const { db } = require('../../config')
-const { Photo } = require('../photo')
+const { Photo, photoDAL } = require('../photo')
 
 class PropertyDAL {
   constructor (table, propType, PropertyModel) {
     this.tableName = table
     this.propType = propType
     this.PropertyModel = PropertyModel
+    this.archiveMode = false
+  }
+
+  setArchiveMode () {
+    this.archiveMode = true
   }
 
   table () {
-    return db(this.tableName).where({ type: this.propType })
+    if (this.archiveMode) {
+      return db(this.tableName).where({ type: this.propType })
+        .whereNot({ archivedAt: null })
+    }
+    return db(this.tableName).where({ type: this.propType, archivedAt: null })
   }
 
   async filterAndLoad ({ filter, currentPage, perPage }) {
@@ -22,9 +31,9 @@ class PropertyDAL {
     const { data, pagination } = await query.paginate({ perPage, currentPage })
     const photos = await db('photos').where('propertyID', 'IN', data.map(i => i.id))
     const props = data.map(r => Object.assign(r, { photos: photos.filter(p => p.propertyID === r.id) }))
-    const properties = props.map(r => new this.PropertyModel(r))
+    const records = props.map(r => new this.PropertyModel(r))
 
-    return { properties, pagination }
+    return { records, pagination }
   }
 
   async find (id) {
@@ -62,7 +71,31 @@ class PropertyDAL {
     return result
   }
 
+  async archive (id, payload) {
+    return this.table().where({ id }).update({
+      archivedAt: moment().format(),
+      archivedReason: payload.archivedReason,
+      archivedTill: (payload.archivedTill || null),
+      soldByID: (payload.soldByID || null)
+    })
+  }
+
+  async restoreFromArchive (id) {
+    return this.table().where({ id }).update({
+      archivedAt: null,
+      archivedReason: null,
+      archivedTill: null,
+      soldByID: null
+    })
+  }
+
   async delete (id) {
+    const item = await this.find(id)
+    if (item && item.photos) {
+      for (const photo of item.photos) {
+        await photoDAL.delete(photo.id)
+      }
+    }
     return this.table().where({ id }).del()
   }
 }

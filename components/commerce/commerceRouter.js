@@ -9,35 +9,35 @@ const commerceResource = require('./commerceResource')
 const commerceDAL = new PropertyDAL('properties', 'commerce', Commerce)
 const commerceService = new PropertyService(commerceDAL, commerceResource)
 
-const passport = require('passport')
-require('../auth/authMiddleware')
+const authMiddleware = require('../auth/authMiddleware')
 const commerceValidator = require('./commerceValidator')
+const propertyValidator = require('../archive/property/propertyValidator')
 
-router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.get('/', authMiddleware, (req, res) => {
   commerceService.getProperties(req, res)
 })
 
-router.get('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.get('/:id', authMiddleware, (req, res) => {
   commerceService.getProperty(req, res)
 })
 
-router.post('/', passport.authenticate('jwt', { session: false }), commerceValidator.fields, commerceValidator.uniqe, (req, res) => {
+router.post('/', authMiddleware, commerceValidator.fields, commerceValidator.uniqe, (req, res) => {
   commerceService.createProperty(req, res)
 })
 
-router.put('/:id', passport.authenticate('jwt', { session: false }), commerceValidator.uniqe, (req, res) => {
+router.put('/:id', authMiddleware, commerceValidator.uniqe, (req, res) => {
   commerceService.updateProperty(req, res)
 })
 
-router.delete('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
-  commerceService.deleteProperty(req, res)
+router.delete('/:id/archive', authMiddleware, propertyValidator.archive, (req, res) => {
+  commerceService.archiveProperty(req, res)
 })
 
-router.post('/:id/photos', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.post('/:id/photos', authMiddleware, (req, res) => {
   commerceService.uploadPhotos(req, res)
 })
 
-router.delete('/:propertyID/photos/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.delete('/:propertyID/photos/:id', authMiddleware, (req, res) => {
   commerceService.deletePhoto(req, res)
 })
 

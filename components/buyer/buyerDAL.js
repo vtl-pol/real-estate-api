@@ -6,10 +6,19 @@ class BuyerDAL {
     this.tableName = table
     this.lookingFor = propType
     this.BuyerModel = BuyerModel
+    this.archive = false
+  }
+
+  setArchiveMode () {
+    this.archive = true
   }
 
   table () {
-    return db(this.tableName).where({ lookingFor: this.lookingFor })
+    if (this.archive) {
+      return db(this.tableName).where({ type: this.propType })
+        .whereNot({ archivedAt: null })
+    }
+    return db(this.tableName).where({ type: this.propType, archivedAt: null })
   }
 
   async getBuyers ({ currentPage, perPage }) {
@@ -45,6 +54,24 @@ class BuyerDAL {
     }
     const result = await this.table().update(payload).where({ id })
     return result
+  }
+
+  async archive (id, payload) {
+    return this.table().where({ id }).update({
+      archivedAt: moment().format(),
+      archivedReason: payload.reason,
+      archivedTill: (payload.archivedTill || null),
+      soldBy: (payload.soldBy || null)
+    })
+  }
+
+  async restoreFromArchive (id) {
+    return this.table().where({ id }).update({
+      archivedAt: null,
+      archivedReason: null,
+      archivedTill: null,
+      soldBy: null
+    })
   }
 
   async delete (id) {

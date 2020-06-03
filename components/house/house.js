@@ -46,6 +46,23 @@ const House = attributes({
   reasonToSell: String,
   createdAt: Date,
   updatedAt: Date,
+  archivedAt: {
+    type: Date,
+    nullable: true
+  },
+  archivedTill: {
+    type: Date,
+    nullable: true
+  },
+  archivedReason: {
+    type: Number,
+    nullable: true
+  },
+  soldByID: {
+    type: Number,
+    nullable: true
+  },
+
   type: {
     type: String,
     default: 'House'

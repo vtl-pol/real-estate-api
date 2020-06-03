@@ -1,6 +1,8 @@
 const Joi = require('joi')
 const moment = require('moment')
 
+const { formattedErrors } = require('../../utils/errors')
+
 const { buyerConstants } = require('../buyer')
 const { propertyConstants } = require('../property')
 const { Commerce } = require('../commerce')
@@ -32,35 +34,9 @@ const apartmentSchema = Joi.object().keys({
   reasonToBuy: Joi.string()
 })
 
-const formattedErrors = (errs) => {
-  const result = {}
-  errs.map(err => {
-    console.log(err)
-    switch (err.type) {
-      case 'any.required':
-        result[err.context.key] = 'Поле обов\'язкове'
-        break
-      case 'any.empty':
-        result[err.context.key] = 'Поле обов\'язкове'
-        break
-      case 'string.min':
-        result[err.context.key] = `Мінімально ${err.context.limit} символів`
-        break
-      case 'string.max':
-        result[err.context.key] = `Максимально ${err.context.limit} символів`
-        break
-      default:
-        result[err.context.key] = 'Не вірне значення'
-        break
-    }
-  })
-  return result
-}
-
 const fields = (req, res, next) => {
   if (req.body.birthday) {
     req.body.birthday = moment(req.body.birthday, 'DD-MM-YYYY').format()
-    console.log(req.body.birthday)
   }
 
   Joi.validate(req.body, apartmentSchema, function (err, _value) {

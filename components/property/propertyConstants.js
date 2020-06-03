@@ -42,4 +42,12 @@ const SOURCES = {
   32: 'Невідомо'
 }
 
-module.exports = { STATUSES, CONTRACTS, MOTIVATIONS, SOURCES }
+const ARCHIVED_REASONS = {
+  1: 'Під Завдатком',
+  2: 'Продано',
+  3: 'Продано за Ціну',
+  4: 'Передумали',
+  5: 'Призупинили Продаж'
+}
+
+module.exports = { STATUSES, CONTRACTS, MOTIVATIONS, SOURCES, ARCHIVED_REASONS }

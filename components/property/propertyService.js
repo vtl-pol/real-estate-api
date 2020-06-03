@@ -11,9 +11,9 @@ class PropertyService {
       const filter = req.query.filter || {}
       const currentPage = req.query.page || 1
       const perPage = 10
-      const { properties, pagination } = await this.propertyDAL.filterAndLoad({ filter, currentPage, perPage })
+      const { records, pagination } = await this.propertyDAL.filterAndLoad({ filter, currentPage, perPage })
 
-      res.send({ success: true, properties: properties.map(h => this.propertyResource.full(h)), pagination })
+      res.send({ success: true, properties: records.map(h => this.propertyResource.full(h)), pagination })
     } catch (error) {
       console.error(error)
       res.status(500).json({ success: false, error: error.message })
@@ -24,7 +24,7 @@ class PropertyService {
     try {
       const property = await this.propertyDAL.find(req.params.id)
       if (property === null) {
-        res.status(404).send({ success: false, error: 'Property not found' })
+        res.status(404).send({ success: false, error: 'Об`єкту не існує' })
       }
       res.send({ success: true, property: this.propertyResource.full(property) })
     } catch (error) {
@@ -98,16 +98,11 @@ class PropertyService {
     }
   }
 
-  async deleteProperty (req, res) {
+  async archiveProperty (req, res) {
     try {
-      const property = await this.propertyDAL.find(req.params.id)
-      if (property) {
-        for (const photo of property.photos) {
-          await photoDAL.delete(photo.id)
-        }
-      }
-      const result = await this.propertyDAL.delete(req.params.id)
-      if (result > 0) {
+      const payload = req.body
+      const result = await this.propertyDAL.archive(req.params.id, payload)
+      if (result) {
         res.send({ success: true })
       } else {
         // No record

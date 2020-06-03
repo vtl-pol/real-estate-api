@@ -24,3 +24,5 @@ async function authenticateWithToken (payload, done) {
 }
 
 passport.use(new JwtStrategy(options, authenticateWithToken))
+
+module.exports = passport.authenticate('jwt', { session: false })
