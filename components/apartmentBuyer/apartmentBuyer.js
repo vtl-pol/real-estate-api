@@ -35,6 +35,23 @@ const ApartmentBuyer = attributes({
   isRenovated: Boolean, // 7. Ремонт
   autonomousHeat: Boolean, // 8. Автономне опалення
 
+  archivedAt: {
+    type: Date,
+    nullable: true
+  },
+  archivedTill: {
+    type: Date,
+    nullable: true
+  },
+  archivedReason: {
+    type: Number,
+    nullable: true
+  },
+  soldBy: {
+    type: Number,
+    nullable: true
+  },
+
   /* JOINED PARAMS */
   authorName: String
 })(class ApartmentBuyer { })

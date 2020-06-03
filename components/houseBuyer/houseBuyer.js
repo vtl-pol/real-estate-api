@@ -39,6 +39,23 @@ const HouseBuyer = attributes({
   isRenovated: Boolean, // 9. Ремонт
   hasGarage: Boolean, // 10. Гараж
 
+  archivedAt: {
+    type: Date,
+    nullable: true
+  },
+  archivedTill: {
+    type: Date,
+    nullable: true
+  },
+  archivedReason: {
+    type: Number,
+    nullable: true
+  },
+  soldBy: {
+    type: Number,
+    nullable: true
+  },
+
   /* JOINED PARAMS */
   authorName: String
 })(class HouseBuyer { })

@@ -9,28 +9,28 @@ const apartmentBuyerResource = require('./apartmentBuyerResource')
 const apartmentBuyerDAL = new BuyerDAL('buyers', 'apartment', Buyer)
 const apartmentService = new BuyerService(apartmentBuyerDAL, apartmentBuyerResource)
 
-const passport = require('passport')
-require('../auth/authMiddleware')
+const authMiddleware = require('../auth/authMiddleware')
 const apartmentBuyerValidator = require('./apartmentBuyerValidator')
+const buyerValidator = require('../archive/buyer/buyerValidator')
 
-router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.get('/', authMiddleware, (req, res) => {
   apartmentService.getBuyers(req, res)
 })
 
-router.get('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.get('/:id', authMiddleware, (req, res) => {
   apartmentService.getBuyer(req, res)
 })
 
-router.post('/', passport.authenticate('jwt', { session: false }), apartmentBuyerValidator.fields, (req, res) => {
+router.post('/', authMiddleware, apartmentBuyerValidator.fields, (req, res) => {
   apartmentService.createBuyer(req, res)
 })
 
-router.put('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.put('/:id', authMiddleware, (req, res) => {
   apartmentService.updateBuyer(req, res)
 })
 
-router.delete('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
-  apartmentService.deleteBuyer(req, res)
+router.delete('/:id/archive', authMiddleware, buyerValidator.archive, (req, res) => {
+  apartmentService.archiveBuyer(req, res)
 })
 
 module.exports = router

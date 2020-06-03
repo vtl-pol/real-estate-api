@@ -51,4 +51,10 @@ const HOUSE_RANGES = {
   2: 'Від 5 км.'
 }
 
-module.exports = { SOURCES, APT_FLOORS, HOUSE_RANGES }
+const SOLD_BYS = {
+  1: 'Невідомо',
+  2: 'Інше АН',
+  3: 'Наше АН'
+}
+
+module.exports = { SOURCES, APT_FLOORS, HOUSE_RANGES, SOLD_BYS }

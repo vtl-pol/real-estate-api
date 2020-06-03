@@ -9,28 +9,28 @@ const commerceBuyerResource = require('./commerceBuyerResource')
 const commerceBuyerDAL = new BuyerDAL('buyers', 'commerce', Buyer)
 const commerceService = new BuyerService(commerceBuyerDAL, commerceBuyerResource)
 
-const passport = require('passport')
-require('../auth/authMiddleware')
+const authMiddleware = require('../auth/authMiddleware')
 const commerceBuyerValidator = require('./commerceBuyerValidator')
+const buyerValidator = require('../archive/buyer/buyerValidator')
 
-router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.get('/', authMiddleware, (req, res) => {
   commerceService.getBuyers(req, res)
 })
 
-router.get('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.get('/:id', authMiddleware, (req, res) => {
   commerceService.getBuyer(req, res)
 })
 
-router.post('/', passport.authenticate('jwt', { session: false }), commerceBuyerValidator.fields, (req, res) => {
+router.post('/', authMiddleware, commerceBuyerValidator.fields, (req, res) => {
   commerceService.createBuyer(req, res)
 })
 
-router.put('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.put('/:id', authMiddleware, (req, res) => {
   commerceService.updateBuyer(req, res)
 })
 
-router.delete('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
-  commerceService.deleteBuyer(req, res)
+router.delete('/:id/archive', authMiddleware, buyerValidator.archive, (req, res) => {
+  commerceService.archiveBuyer(req, res)
 })
 
 module.exports = router

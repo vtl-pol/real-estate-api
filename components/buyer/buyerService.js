@@ -9,9 +9,9 @@ class BuyerService {
     try {
       const currentPage = req.query.page || 1
       const perPage = 10
-      const { buyers, pagination } = await this.buyerDAL.getBuyers({ currentPage, perPage })
+      const { records, pagination } = await this.buyerDAL.filterAndLoad({ currentPage, perPage })
 
-      res.send({ success: true, buyers: buyers.map(b => this.buyerResource.full(b)), pagination })
+      res.send({ success: true, buyers: records.map(b => this.buyerResource.full(b)), pagination })
     } catch (error) {
       console.error(error)
       res.status(500).send({ success: false, error })
@@ -63,13 +63,13 @@ class BuyerService {
     }
   }
 
-  async deleteBuyer (req, res) {
+  async archiveBuyer (req, res) {
     try {
-      const result = await this.buyerDAL.delete(req.params.id)
+      const payload = req.body
+      const result = await this.buyerDAL.archive(req.params.id, payload)
       if (result > 0) {
         res.send({ success: true })
       } else {
-        // No record
         res.status(404).send({ success: false, error: `Запису #${req.params.id} не існує` })
       }
     } catch (error) {

@@ -34,6 +34,23 @@ const CommerceBuyer = attributes({
   isRenovated: Boolean,
   autonomousHeat: Boolean,
 
+  archivedAt: {
+    type: Date,
+    nullable: true
+  },
+  archivedTill: {
+    type: Date,
+    nullable: true
+  },
+  archivedReason: {
+    type: Number,
+    nullable: true
+  },
+  soldBy: {
+    type: Number,
+    nullable: true
+  },
+
   /* JOINED PARAMS */
   authorName: String
 })(class CommerceBuyer { })

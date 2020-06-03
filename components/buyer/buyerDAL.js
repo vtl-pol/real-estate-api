@@ -6,30 +6,30 @@ class BuyerDAL {
     this.tableName = table
     this.lookingFor = propType
     this.BuyerModel = BuyerModel
-    this.archive = false
+    this.archiveMode = false
   }
 
   setArchiveMode () {
-    this.archive = true
+    this.archiveMode = true
   }
 
   table () {
-    if (this.archive) {
-      return db(this.tableName).where({ type: this.propType })
+    if (this.archiveMode) {
+      return db(this.tableName).where({ lookingFor: this.lookingFor })
         .whereNot({ archivedAt: null })
     }
-    return db(this.tableName).where({ type: this.propType, archivedAt: null })
+    return db(this.tableName).where({ lookingFor: this.lookingFor, archivedAt: null })
   }
 
-  async getBuyers ({ currentPage, perPage }) {
+  async filterAndLoad ({ currentPage, perPage }) {
     const { data, pagination } = await this.table()
       .leftJoin('users', 'buyers.authorID', '=', 'users.id')
       .select('buyers.*', 'users.fullName AS authorName')
       .paginate({ perPage, currentPage })
 
-    const buyers = data.map(r => new this.BuyerModel(r))
+    const records = data.map(r => new this.BuyerModel(r))
 
-    return { buyers, pagination }
+    return { records, pagination }
   }
 
   async find (id) {
@@ -59,7 +59,7 @@ class BuyerDAL {
   async archive (id, payload) {
     return this.table().where({ id }).update({
       archivedAt: moment().format(),
-      archivedReason: payload.reason,
+      archivedReason: payload.archivedReason,
       archivedTill: (payload.archivedTill || null),
       soldBy: (payload.soldBy || null)
     })

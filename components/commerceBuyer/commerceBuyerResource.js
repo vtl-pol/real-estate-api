@@ -1,62 +1,52 @@
+const { extract } = require('../../utils/object')
 const { buyerConstants } = require('../buyer')
 
+const buyerAttributes = [
+  'id',
+  'name',
+  'phone',
+  'birthday',
+  'isOnViber',
+  'isOnTelegram',
+  'isOnFacebook',
+  'isOnWhatsapp',
+  'authorID',
+  'responsibleID',
+  'buyerStatus',
+  'contract',
+  'motivation',
+  'source',
+  'reasonToBuy',
+  'description',
+  'createdAt',
+  'updatedAt',
+  'noOfRooms',
+  'districtID',
+  'maxPrice',
+  'buildingType',
+  'squareTotal',
+  'isRenovated',
+  'autonomousHeat',
+  'authorName'
+]
+
+const archiveAttributes = [
+  'archivedAt',
+  'archivedTill',
+  'archivedReason',
+  'soldByID'
+]
+
 const full = (buyer) => {
-  return (({
-    id,
-    name,
-    phone,
-    birthday,
-    isOnViber,
-    isOnTelegram,
-    isOnFacebook,
-    isOnWhatsapp,
-    authorID,
-    responsibleID,
-    buyerStatus,
-    contract,
-    motivation,
-    source,
-    reasonToBuy,
-    description,
-    createdAt,
-    updatedAt,
-    noOfRooms,
-    districtID,
-    maxPrice,
-    buildingType,
-    squareTotal,
-    isRenovated,
-    autonomousHeat,
-    authorName
-  }) => ({
-    id,
-    name,
-    phone,
-    birthday,
-    isOnViber,
-    isOnTelegram,
-    isOnFacebook,
-    isOnWhatsapp,
-    authorID,
-    responsibleID,
-    buyerStatus,
-    contract,
-    motivation,
-    source,
-    sourceName: buyerConstants.SOURCES[parseInt(source)],
-    reasonToBuy,
-    description,
-    createdAt,
-    updatedAt,
-    noOfRooms,
-    districtID,
-    maxPrice,
-    buildingType,
-    squareTotal,
-    isRenovated,
-    autonomousHeat,
-    authorName
-  }))(buyer)
+  const result = extract(buyerAttributes, buyer)
+
+  result.sourceName = buyerConstants.SOURCES[parseInt(buyer.source)]
+
+  return result
 }
 
-module.exports = { full }
+const archive = (buyer) => {
+  return { ...full(buyer), ...extract(archiveAttributes, buyer) }
+}
+
+module.exports = { full, archive }
