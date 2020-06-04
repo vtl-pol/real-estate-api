@@ -15,9 +15,12 @@ class ConstantsService {
     const PROPERTY_CONTRACTS = propertyConstants.CONTRACTS
     const PROPERTY_MOTIVATIONS = propertyConstants.MOTIVATIONS
     const PROPERTY_SOURCES = propertyConstants.SOURCES
+    const ARCHIVED_REASONS = propertyConstants.ARCHIVED_REASONS
+
     const BUYER_SOURCES = buyerConstants.SOURCES
     const BUYER_APT_FLOORS = buyerConstants.APT_FLOORS
     const BUYER_HOUSE_RANGES = buyerConstants.HOUSE_RANGES
+    const SOLD_BYS = buyerConstants.SOLD_BYS
 
     return res.send({
       APARTMENT_MATERIALS,
@@ -31,7 +34,9 @@ class ConstantsService {
       PROPERTY_SOURCES,
       BUYER_SOURCES,
       BUYER_APT_FLOORS,
-      BUYER_HOUSE_RANGES
+      BUYER_HOUSE_RANGES,
+      ARCHIVED_REASONS,
+      SOLD_BYS
     })
   }
 }
