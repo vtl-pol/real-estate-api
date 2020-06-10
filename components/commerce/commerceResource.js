@@ -35,7 +35,8 @@ const propertyAttributes = [
   'updatedAt',
   'authorName',
   'photos',
-  'ownerBirthday'
+  'ownerBirthday',
+  'featuredPhoto'
 ]
 
 const archiveAttributes = [

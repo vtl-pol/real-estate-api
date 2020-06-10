@@ -31,7 +31,8 @@ const commerceSchema = Joi.object().keys({
   isOnViber: Joi.boolean(),
   isOnTelegram: Joi.boolean(),
   isOnFacebook: Joi.boolean(),
-  isOnWhatsapp: Joi.boolean()
+  isOnWhatsapp: Joi.boolean(),
+  featuredPhotoNo: Joi.number().integer().min(0)
 })
 
 const fields = (req, res, next) => {

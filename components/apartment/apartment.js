@@ -43,6 +43,10 @@ const Apartment = attributes({
   isOnFacebook: Boolean,
   isOnWhatsapp: Boolean,
   reasonToSell: String,
+  featuredPhotoNo: {
+    type: Number,
+    default: 0
+  },
   createdAt: Date,
   updatedAt: Date,
   archivedAt: {
@@ -69,6 +73,10 @@ const Apartment = attributes({
 
   /* JOINED PARAMS */
   authorName: String,
+  featuredPhoto: {
+    type: String,
+    default: (inst) => inst.photos.length ? inst.photos[inst.featuredPhotoNo].fileURL : ''
+  },
 
   /* RELATIONS */
   photos: {

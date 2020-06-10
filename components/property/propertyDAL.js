@@ -37,16 +37,16 @@ class PropertyDAL {
   }
 
   async find (id) {
-    const house = await this.table().where({ 'properties.id': id })
+    const property = await this.table().where({ 'properties.id': id })
       .leftJoin('users', 'properties.authorID', '=', 'users.id')
       .select('properties.*', 'users.fullName AS authorName')
       .first()
-    if (!house) {
+    if (!property) {
       return null
     }
-    const photos = await db('photos').where({ propertyID: house.id })
-    house.photos = photos.map(ph => new Photo(ph))
-    return new this.PropertyModel(house)
+    const photos = await db('photos').where({ propertyID: property.id })
+    property.photos = photos.map(ph => new Photo(ph))
+    return new this.PropertyModel(property)
   }
 
   async propertyExists (filter, id = null) {

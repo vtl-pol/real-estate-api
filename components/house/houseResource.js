@@ -40,7 +40,8 @@ const propertyAttributes = [
   'isOnTelegram',
   'isOnFacebook',
   'isOnWhatsapp',
-  'reasonToSell'
+  'reasonToSell',
+  'featuredPhoto'
 ]
 
 const archiveAttributes = [
