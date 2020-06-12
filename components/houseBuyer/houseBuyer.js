@@ -14,11 +14,20 @@ const HouseBuyer = attributes({
   isOnFacebook: Boolean,
   isOnWhatsapp: Boolean,
   authorID: Number,
-  responsibleID: Number,
-  buyerStatus: Number,
+  responsibleID: {
+    type: Number,
+    nullable: true
+  },
+  buyerStatus: {
+    type: Number,
+    default: 1
+  },
   contract: String,
   motivation: String,
-  source: Number,
+  source: {
+    type: Number,
+    nullable: true
+  },
   reasonToBuy: String,
   description: String,
   createdAt: Date,
@@ -26,9 +35,9 @@ const HouseBuyer = attributes({
   noOfRooms: Number, // 1. Кількість кімнат
   range: {
     type: Number,
-    default: 0,
-    min: 0,
-    max: 2
+    default: 1,
+    min: 1,
+    max: 3
   }, // 2. Межа (місто, до 5 км, від 5 км)
   districtID: Number, // 3. Район (Автовокзал, Чайка, Північний, Центр, Ювілейний, Щасливе, Окраїна, Відін etc)
   maxPrice: Number, // 4. Ціна (max)

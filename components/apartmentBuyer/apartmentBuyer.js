@@ -14,11 +14,20 @@ const ApartmentBuyer = attributes({
   isOnFacebook: Boolean,
   isOnWhatsapp: Boolean,
   authorID: Number,
-  responsibleID: Number,
-  buyerStatus: Number,
+  responsibleID: {
+    type: Number,
+    nullable: true
+  },
+  buyerStatus: {
+    type: Number,
+    default: 1
+  },
   contract: String,
   motivation: String,
-  source: Number,
+  source: {
+    type: Number,
+    nullable: true
+  },
   reasonToBuy: String,
   description: String,
   createdAt: Date,
@@ -30,7 +39,7 @@ const ApartmentBuyer = attributes({
   buildingType: Number, // 5. Тип
   floor: {
     type: Number,
-    default: 0
+    default: 1
   }, // 6. Поверх (вибір між перший, середній, останній)
   isRenovated: Boolean, // 7. Ремонт
   autonomousHeat: Boolean, // 8. Автономне опалення

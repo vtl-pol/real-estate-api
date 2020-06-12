@@ -9,7 +9,10 @@ const House = attributes({
   },
   title: String,
   responsibleID: Number,
-  propertyStatus: Number,
+  propertyStatus: {
+    type: Number,
+    default: 1
+  },
   contract: {
     type: String,
     nullable: true
@@ -18,7 +21,10 @@ const House = attributes({
     type: String,
     nullable: true
   },
-  source: Number,
+  source: {
+    type: Number,
+    nullable: true
+  },
   noOfRooms: Number,
   districtId: Number,
   street: String,
