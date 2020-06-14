@@ -4,4 +4,9 @@ const extract = (attributes, target) => {
   return result
 }
 
-module.exports = { extract }
+const without = (attributes, target) => {
+  const keys = Object.keys(target).filter(k => attributes.indexOf(k) === -1)
+  return extract(keys, target)
+}
+
+module.exports = { extract, without }

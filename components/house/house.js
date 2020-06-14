@@ -1,6 +1,7 @@
 const { attributes } = require('structure')
 
 class PhotosCollection extends Array { }
+class ContactsCollection extends Array { }
 
 const House = attributes({
   id: {
@@ -42,13 +43,6 @@ const House = attributes({
   garage: Boolean,
   builtAt: String,
   description: String,
-  ownerName: String,
-  ownerPhone: Number,
-  ownerBirthday: Date,
-  isOnViber: Boolean,
-  isOnTelegram: Boolean,
-  isOnFacebook: Boolean,
-  isOnWhatsapp: Boolean,
   reasonToSell: String,
   featuredPhotoNo: {
     type: Number,
@@ -89,6 +83,10 @@ const House = attributes({
   photos: {
     type: PhotosCollection,
     itemType: require('../photo/photo')
+  },
+  contacts: {
+    type: ContactsCollection,
+    itemType: require('../contact/contact')
   }
 })(class House { })
 

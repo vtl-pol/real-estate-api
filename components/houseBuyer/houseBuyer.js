@@ -1,4 +1,5 @@
 const { attributes } = require('structure')
+class ContactsCollection extends Array { }
 
 const HouseBuyer = attributes({
   id: {
@@ -7,12 +8,6 @@ const HouseBuyer = attributes({
   },
   lookingFor: String,
   name: String,
-  phone: Number,
-  birthday: Date,
-  isOnViber: Boolean,
-  isOnTelegram: Boolean,
-  isOnFacebook: Boolean,
-  isOnWhatsapp: Boolean,
   authorID: Number,
   responsibleID: {
     type: Number,
@@ -66,7 +61,11 @@ const HouseBuyer = attributes({
   },
 
   /* JOINED PARAMS */
-  authorName: String
+  authorName: String,
+  contacts: {
+    type: ContactsCollection,
+    itemType: require('../contact/contact')
+  }
 })(class HouseBuyer { })
 
 module.exports = HouseBuyer

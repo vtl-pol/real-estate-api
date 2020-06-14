@@ -10,11 +10,16 @@ const formattedErrors = (errs) => {
       case 'any.empty':
         result[err.context.key] = 'Поле обов\'язкове'
         break
+
       case 'string.min':
         result[err.context.key] = `Мінімально ${err.context.limit} символів`
         break
       case 'string.max':
         result[err.context.key] = `Максимально ${err.context.limit} символів`
+        break
+
+      case 'array.min':
+        result[err.context.key] = `Мінімально ${err.context.limit} запис`
         break
       default:
         result[err.context.key] = 'Не вірне значення'

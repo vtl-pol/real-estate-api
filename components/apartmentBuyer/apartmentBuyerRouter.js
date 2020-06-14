@@ -12,6 +12,7 @@ const apartmentService = new BuyerService(apartmentBuyerDAL, apartmentBuyerResou
 const authMiddleware = require('../auth/authMiddleware')
 const apartmentBuyerValidator = require('./apartmentBuyerValidator')
 const buyerValidator = require('../archive/buyer/buyerValidator')
+const contactValidator = require('../contact/contactValidator')
 
 router.get('/', authMiddleware, (req, res) => {
   apartmentService.getBuyers(req, res)
@@ -21,11 +22,11 @@ router.get('/:id', authMiddleware, (req, res) => {
   apartmentService.getBuyer(req, res)
 })
 
-router.post('/', authMiddleware, apartmentBuyerValidator.fields, (req, res) => {
+router.post('/', authMiddleware, apartmentBuyerValidator.fields, contactValidator.exists, (req, res) => {
   apartmentService.createBuyer(req, res)
 })
 
-router.put('/:id', authMiddleware, (req, res) => {
+router.put('/:id', authMiddleware, contactValidator.exists, (req, res) => {
   apartmentService.updateBuyer(req, res)
 })
 

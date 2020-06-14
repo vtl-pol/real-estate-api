@@ -2,6 +2,10 @@ const bcrypt = require('bcrypt')
 const userDAL = require('./userDAL')
 
 class UserService {
+  constructor (userDAL) {
+    this.userDAL = userDAL
+  }
+
   async generateHash (entry) {
     return new Promise((resolve, reject) => {
       bcrypt.hash(entry, 5, (err, hash) => {
@@ -19,7 +23,7 @@ class UserService {
       return err
     }
 
-    return userDAL.create(payload)
+    return this.userDAL.create(payload)
   }
 
   async getCurrentUser (req, res) {
@@ -36,4 +40,4 @@ class UserService {
   }
 }
 
-module.exports = new UserService()
+module.exports = new UserService(userDAL)

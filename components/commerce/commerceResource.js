@@ -1,4 +1,3 @@
-const moment = require('moment')
 const { extract } = require('../../utils/object')
 
 const { photoResource } = require('../photo')
@@ -6,6 +5,7 @@ const { photoResource } = require('../photo')
 const propertyAttributes = [
   'id',
   'title',
+  'authorName',
   'responsibleID',
   'propertyStatus',
   'contract',
@@ -24,19 +24,13 @@ const propertyAttributes = [
   'renovated',
   'autonomousHeat',
   'description',
-  'ownerName',
-  'ownerPhone',
-  'isOnViber',
-  'isOnTelegram',
-  'isOnFacebook',
-  'isOnWhatsapp',
   'reasonToSell',
   'createdAt',
   'updatedAt',
-  'authorName',
+  'author',
   'photos',
-  'ownerBirthday',
-  'featuredPhoto'
+  'featuredPhoto',
+  'contacts'
 ]
 
 const archiveAttributes = [
@@ -50,7 +44,6 @@ const full = (property) => {
   const result = extract(propertyAttributes, property)
 
   result.photos = property.photos.map(p => photoResource.full(p))
-  result.ownerBirthday = moment(property.ownerBirthday).format('DD-MM-YYYY')
 
   return result
 }

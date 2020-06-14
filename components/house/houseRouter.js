@@ -12,6 +12,7 @@ const houseService = new PropertyService(houseDAL, houseResource)
 const authMiddleware = require('../auth/authMiddleware')
 const houseValidator = require('./houseValidator')
 const propertyValidator = require('../archive/property/propertyValidator')
+const contactValidator = require('../contact/contactValidator')
 
 router.get('/', authMiddleware, (req, res) => {
   houseService.getProperties(req, res)
@@ -21,11 +22,11 @@ router.get('/:id', authMiddleware, (req, res) => {
   houseService.getProperty(req, res)
 })
 
-router.post('/', authMiddleware, houseValidator.fields, houseValidator.uniqe, (req, res) => {
+router.post('/', authMiddleware, houseValidator.fields, houseValidator.uniqe, contactValidator.exists, (req, res) => {
   houseService.createProperty(req, res)
 })
 
-router.put('/:id', authMiddleware, houseValidator.uniqe, (req, res) => {
+router.put('/:id', authMiddleware, houseValidator.uniqe, contactValidator.exists, (req, res) => {
   houseService.updateProperty(req, res)
 })
 

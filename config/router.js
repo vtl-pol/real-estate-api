@@ -12,6 +12,8 @@ const { commerceBuyerRouter } = require('../components/commerceBuyer')
 const { constantsRouter } = require('../components/constants')
 const { archiveRouter } = require('../components/archive')
 
+const { contactRouter } = require('../components/contact')
+
 appRouter.use('/', indexRouter)
 appRouter.use('/auth', authRouter)
 appRouter.use('/users', userRouter)
@@ -23,5 +25,6 @@ appRouter.use('/buyers/houses', houseBuyerRouter)
 appRouter.use('/buyers/commerce', commerceBuyerRouter)
 appRouter.use('/constants', constantsRouter)
 appRouter.use('/archive', archiveRouter)
+appRouter.use('/contacts', contactRouter)
 
 module.exports = appRouter

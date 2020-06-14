@@ -2,6 +2,8 @@ const moment = require('moment')
 
 const { db } = require('../../config')
 const { Photo, photoDAL } = require('../photo')
+const objectUtils = require('../../utils/object')
+const { without } = require('../../utils/object')
 
 class PropertyDAL {
   constructor (table, propType, PropertyModel) {
@@ -31,7 +33,9 @@ class PropertyDAL {
     const { data, pagination } = await query.paginate({ perPage, currentPage })
     const photos = await db('photos').where('propertyID', 'IN', data.map(i => i.id))
     const props = data.map(r => Object.assign(r, { photos: photos.filter(p => p.propertyID === r.id) }))
-    const records = props.map(r => new this.PropertyModel(r))
+    const contacts = await this.loadContactsFor(props.map(r => r.id))
+
+    const records = props.map(pr => Object.assign(pr, { contacts: contacts.filter(c => c.contactableID === pr.id) })).map(r => new this.PropertyModel(r))
 
     return { records, pagination }
   }
@@ -46,7 +50,28 @@ class PropertyDAL {
     }
     const photos = await db('photos').where({ propertyID: property.id })
     property.photos = photos.map(ph => new Photo(ph))
+
+    const contacts = await this.loadContactsFor([property.id])
+
+    Object.assign(property, { contacts })
+    console.log(property)
     return new this.PropertyModel(property)
+  }
+
+  async loadContactsFor (propertyIDs) {
+    const contacts = await db('contacts')
+      .join('contacts_relations', 'contacts.id', '=', 'contacts_relations.contactID')
+      .where('contacts_relations.contactableID', 'IN', propertyIDs)
+      .where('contacts_relations.contactableType', this.tableName)
+      .select('contacts.*', 'contacts_relations.contactableID')
+
+    const phones = await db('phones').where('contactID', 'IN', contacts.map(c => c.id))
+
+    contacts.map(r => {
+      return Object.assign(r, { phones: phones.filter(p => p.contactID === r.id) })
+    })
+
+    return contacts
   }
 
   async propertyExists (filter, id = null) {
@@ -57,17 +82,56 @@ class PropertyDAL {
 
   async create (payload) {
     payload.type = this.propType
-    const houseID = await db(this.tableName).insert(payload)
-    const house = await this.find(houseID)
+    const record = objectUtils.without(['contactsIDs'], payload)
+    try {
+      const recordID = await db.transaction(async trx => {
+        const recordID = await db(this.tableName).insert(record)
 
-    return house
+        if (!payload.contactsIDs.length) {
+          return recordID
+        }
+        const result = await this.syncContacts(recordID, payload.contactsIDs, trx)
+
+        if (result) {
+          return recordID
+        }
+      })
+      const property = await this.find(recordID)
+
+      return property
+    } catch (err) {
+      console.log(err)
+      throw err
+    }
   }
 
   async update (id, payload) {
-    if (payload.ownerBirthday) {
-      payload.ownerBirthday = moment(payload.ownerBirthday, 'DD-MM-YYYY').format()
+    const result = await this.table().update(without(['contactsIDs'], payload)).where({ id })
+
+    if (!payload.contactsIDs.length) {
+      return result
     }
-    const result = await this.table().update(payload).where({ id })
+    const contactsOK = await this.syncContacts(id, payload.contactsIDs)
+
+    if (contactsOK) {
+      return result
+    }
+  }
+
+  async syncContacts (recordID, contactsIDs, trx = null) {
+    if (trx === null) { trx = db }
+
+    const contactsPayload = contactsIDs.map(cID => {
+      return {
+        contactableID: recordID,
+        contactableType: this.tableName,
+        contactID: cID
+      }
+    })
+
+    await trx('contacts_relations').where({ contactableID: recordID, contactableType: this.tableName }).del()
+
+    const result = await trx.raw(`${trx('contacts_relations').insert(contactsPayload).toQuery()} ON DUPLICATE KEY UPDATE contactID=contactID`)
     return result
   }
 

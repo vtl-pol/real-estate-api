@@ -12,6 +12,7 @@ const commerceService = new PropertyService(commerceDAL, commerceResource)
 const authMiddleware = require('../auth/authMiddleware')
 const commerceValidator = require('./commerceValidator')
 const propertyValidator = require('../archive/property/propertyValidator')
+const contactValidator = require('../contact/contactValidator')
 
 router.get('/', authMiddleware, (req, res) => {
   commerceService.getProperties(req, res)
@@ -21,11 +22,11 @@ router.get('/:id', authMiddleware, (req, res) => {
   commerceService.getProperty(req, res)
 })
 
-router.post('/', authMiddleware, commerceValidator.fields, commerceValidator.uniqe, (req, res) => {
+router.post('/', authMiddleware, commerceValidator.fields, commerceValidator.uniqe, contactValidator.exists, (req, res) => {
   commerceService.createProperty(req, res)
 })
 
-router.put('/:id', authMiddleware, commerceValidator.uniqe, (req, res) => {
+router.put('/:id', authMiddleware, commerceValidator.uniqe, contactValidator.exists, (req, res) => {
   commerceService.updateProperty(req, res)
 })
 

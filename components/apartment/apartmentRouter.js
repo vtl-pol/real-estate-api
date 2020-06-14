@@ -12,6 +12,7 @@ const apartmentService = new PropertyService(apartmentDAL, apartmentResource)
 const authMiddleware = require('../auth/authMiddleware')
 const apartmentValidator = require('./apartmentValidator')
 const propertyValidator = require('../archive/property/propertyValidator')
+const contactValidator = require('../contact/contactValidator')
 
 router.get('/', authMiddleware, (req, res) => {
   apartmentService.getProperties(req, res)
@@ -21,11 +22,11 @@ router.get('/:id', authMiddleware, (req, res) => {
   apartmentService.getProperty(req, res)
 })
 
-router.post('/', authMiddleware, apartmentValidator.fields, (req, res) => {
+router.post('/', authMiddleware, apartmentValidator.fields, contactValidator.exists, (req, res) => {
   apartmentService.createProperty(req, res)
 })
 
-router.put('/:id', authMiddleware, (req, res) => {
+router.put('/:id', authMiddleware, contactValidator.exists, (req, res) => {
   apartmentService.updateProperty(req, res)
 })
 

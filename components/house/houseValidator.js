@@ -1,5 +1,4 @@
 const Joi = require('joi')
-const moment = require('moment')
 
 const { formattedErrors } = require('../../utils/errors')
 
@@ -29,20 +28,11 @@ const houseSchema = Joi.object().keys({
   contract: Joi.string().only(...propertyConstants.CONTRACTS).allow(null),
   motivation: Joi.string().only(...propertyConstants.MOTIVATIONS).allow(null),
   source: Joi.number().integer().min(1).max(Object.keys(propertyConstants.SOURCES).length - 1).allow(null),
-  ownerName: Joi.string().required(),
-  ownerPhone: Joi.string().required(),
-  ownerBirthday: Joi.date().raw(),
-  isOnViber: Joi.boolean(),
-  isOnTelegram: Joi.boolean(),
-  isOnFacebook: Joi.boolean(),
-  isOnWhatsapp: Joi.boolean(),
-  featuredPhotoNo: Joi.number().integer().min(0)
+  featuredPhotoNo: Joi.number().integer().min(0),
+  contactsIDs: Joi.array().min(1).required().items(Joi.number().integer())
 })
 
 const fields = (req, res, next) => {
-  if (req.body.ownerBirthday) {
-    req.body.ownerBirthday = moment(req.body.ownerBirthday, 'DD-MM-YYYY').format()
-  }
   Joi.validate(req.body, houseSchema, function (err, _value) {
     if (err) {
       const errors = formattedErrors(err.details)

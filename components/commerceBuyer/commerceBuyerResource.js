@@ -4,12 +4,6 @@ const { buyerConstants } = require('../buyer')
 const buyerAttributes = [
   'id',
   'name',
-  'phone',
-  'birthday',
-  'isOnViber',
-  'isOnTelegram',
-  'isOnFacebook',
-  'isOnWhatsapp',
   'authorID',
   'responsibleID',
   'buyerStatus',
@@ -27,7 +21,8 @@ const buyerAttributes = [
   'squareTotal',
   'isRenovated',
   'autonomousHeat',
-  'authorName'
+  'authorName',
+  'contacts'
 ]
 
 const archiveAttributes = [

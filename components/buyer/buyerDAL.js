@@ -1,5 +1,6 @@
 const moment = require('moment')
 const { db } = require('../../config')
+const { without } = require('../../utils/object')
 
 class BuyerDAL {
   constructor (table, propType, BuyerModel) {
@@ -27,7 +28,12 @@ class BuyerDAL {
       .select('buyers.*', 'users.fullName AS authorName')
       .paginate({ perPage, currentPage })
 
-    const records = data.map(r => new this.BuyerModel(r))
+    const contacts = await this.loadContactsFor(data.map(r => r.id))
+
+    const records = data.map(r => {
+      Object.assign(r, { contacts: contacts.filter(c => c.contactableID === r.id) })
+      return new this.BuyerModel(r)
+    })
 
     return { records, pagination }
   }
@@ -37,22 +43,73 @@ class BuyerDAL {
     if (!buyer) {
       return null
     }
+
+    const contacts = await this.loadContactsFor([buyer.id])
+
+    Object.assign(buyer, { contacts: contacts.filter(c => c.contactableID === buyer.id) })
+
     return new this.BuyerModel(buyer)
+  }
+
+  async loadContactsFor (buyerIDs) {
+    const contacts = await db('contacts')
+      .join('contacts_relations', 'contacts.id', '=', 'contacts_relations.contactID')
+      .where('contacts_relations.contactableID', 'IN', buyerIDs)
+      .where('contacts_relations.contactableType', this.tableName)
+      .select('contacts.*', 'contacts_relations.contactableID')
+
+    const phones = await db('phones').where('contactID', 'IN', contacts.map(c => c.id))
+
+    contacts.map(r => {
+      return Object.assign(r, { phones: phones.filter(p => p.contactID === r.id) })
+    })
+
+    return contacts
   }
 
   async create (payload) {
     payload.lookingFor = this.lookingFor
-    const buyerID = await db(this.tableName).insert(payload)
-    const buyer = await this.find(buyerID)
+    try {
+      const buyerID = await db.transaction(async trx => {
+        const buyerID = await trx(this.tableName).insert(without(['contactsIDs'], payload))
+        if (payload.contactsIDs.length) {
+          await this.syncContacts(buyerID, payload.contactsIDs, trx)
+        }
 
-    return buyer
+        return buyerID
+      })
+      const buyer = await this.find(buyerID)
+
+      return buyer
+    } catch (err) {
+      console.log(err)
+      throw err
+    }
   }
 
   async update (id, payload) {
-    if (payload.birthday) {
-      payload.birthday = moment(payload.birthday, 'DD-MM-YYYY').format()
+    const result = await this.table().update(without(['contactsIDs'], payload)).where({ id })
+
+    if (payload.contactsIDs.length) {
+      await this.syncContacts(id, payload.contactsIDs)
     }
-    const result = await this.table().update(payload).where({ id })
+
+    return result
+  }
+
+  async syncContacts (recordID, contactsIDs, trx) {
+    if (trx === undefined) { trx = db }
+
+    const contactsPayload = contactsIDs.map(cID => {
+      return {
+        contactableID: recordID,
+        contactableType: this.tableName,
+        contactID: cID
+      }
+    })
+    await trx('contacts_relations').where({ contactableID: recordID, contactableType: this.tableName }).del()
+
+    const result = await trx.raw(`${trx('contacts_relations').insert(contactsPayload).toQuery()} ON DUPLICATE KEY UPDATE contactID=contactID`)
     return result
   }
 

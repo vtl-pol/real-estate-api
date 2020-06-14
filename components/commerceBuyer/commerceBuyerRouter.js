@@ -12,6 +12,7 @@ const commerceService = new BuyerService(commerceBuyerDAL, commerceBuyerResource
 const authMiddleware = require('../auth/authMiddleware')
 const commerceBuyerValidator = require('./commerceBuyerValidator')
 const buyerValidator = require('../archive/buyer/buyerValidator')
+const contactValidator = require('../contact/contactValidator')
 
 router.get('/', authMiddleware, (req, res) => {
   commerceService.getBuyers(req, res)
@@ -21,11 +22,11 @@ router.get('/:id', authMiddleware, (req, res) => {
   commerceService.getBuyer(req, res)
 })
 
-router.post('/', authMiddleware, commerceBuyerValidator.fields, (req, res) => {
+router.post('/', authMiddleware, commerceBuyerValidator.fields, contactValidator.exists, (req, res) => {
   commerceService.createBuyer(req, res)
 })
 
-router.put('/:id', authMiddleware, (req, res) => {
+router.put('/:id', authMiddleware, contactValidator.exists, (req, res) => {
   commerceService.updateBuyer(req, res)
 })
 

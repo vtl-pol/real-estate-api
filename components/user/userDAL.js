@@ -39,6 +39,11 @@ class UserDAL {
 
     return result
   }
+
+  async first () {
+    const result = await db(this.table).limit(1)
+    return result
+  }
 }
 
 module.exports = new UserDAL('users')

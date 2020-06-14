@@ -34,6 +34,7 @@
     "nodemon": "^2.0.2",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
+    "phone-formatter": "^0.0.2",
     "structure": "^2.0.0-alpha.4"
   },
   "devDependencies": {
