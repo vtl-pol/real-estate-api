@@ -6,7 +6,7 @@ module.exports = [
     birthday: moment('14-05-1990', 'DD-MM-YYYY').format(),
     phones: [
       {
-        phone: '(099) 033 2211',
+        phone: '0990332211',
         isOnViber: false,
         isOnTelegram: true,
         isOnFacebook: false,
@@ -19,21 +19,21 @@ module.exports = [
     birthday: moment('31-12-1980', 'DD-MM-YYYY').format(),
     phones: [
       {
-        phone: '(095) 717 2166',
+        phone: '0957172166',
         isOnViber: false,
         isOnTelegram: false,
         isOnFacebook: false,
         isOnWhatsapp: true
       },
       {
-        phone: '(093) 777 1625',
+        phone: '0937771625',
         isOnViber: true,
         isOnTelegram: false,
         isOnFacebook: false,
         isOnWhatsapp: true
       },
       {
-        phone: '(096) 112 2631',
+        phone: '0961122631',
         isOnViber: false,
         isOnTelegram: false,
         isOnFacebook: false,
@@ -46,7 +46,7 @@ module.exports = [
     birthday: moment('14-05-1987', 'DD-MM-YYYY').format(),
     phones: [
       {
-        phone: '(095) 222 2222',
+        phone: '0952222222',
         isOnViber: true,
         isOnTelegram: true,
         isOnFacebook: true,
@@ -59,7 +59,7 @@ module.exports = [
     birthday: moment('14-05-1987', 'DD-MM-YYYY').format(),
     phones: [
       {
-        phone: '(093) 333 3333',
+        phone: '0933333333',
         isOnViber: true,
         isOnTelegram: true,
         isOnFacebook: true,
@@ -72,7 +72,7 @@ module.exports = [
     birthday: moment('14-05-1976', 'DD-MM-YYYY').format(),
     phones: [
       {
-        phone: '(954) 444 4444',
+        phone: '9544444444',
         isOnViber: true,
         isOnTelegram: true,
         isOnFacebook: false,
@@ -85,7 +85,7 @@ module.exports = [
     birthday: moment('14-05-1976', 'DD-MM-YYYY').format(),
     phones: [
       {
-        phone: '(095) 550 5050',
+        phone: '0955505050',
         isOnViber: false,
         isOnTelegram: false,
         isOnFacebook: true,
@@ -98,7 +98,7 @@ module.exports = [
     birthday: moment('14-05-1976', 'DD-MM-YYYY').format(),
     phones: [
       {
-        phone: '(093) 551 5050',
+        phone: '0935515050',
         isOnViber: false,
         isOnTelegram: false,
         isOnFacebook: true,
@@ -111,21 +111,21 @@ module.exports = [
     birthday: moment('14-05-1976', 'DD-MM-YYYY').format(),
     phones: [
       {
-        phone: '(093) 551 5050',
+        phone: '0935515050',
         isOnViber: false,
         isOnTelegram: false,
         isOnFacebook: false,
         isOnWhatsapp: false
       },
       {
-        phone: '(095) 711 5050',
+        phone: '0957115050',
         isOnViber: false,
         isOnTelegram: true,
         isOnFacebook: true,
         isOnWhatsapp: false
       },
       {
-        phone: '(093) 000 5050',
+        phone: '0930005050',
         isOnViber: false,
         isOnTelegram: true,
         isOnFacebook: true,
