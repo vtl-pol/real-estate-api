@@ -32,7 +32,11 @@ const CommerceBuyer = attributes({
     min: 1,
     max: 6
   },
-  districtID: Number,
+  districtID: {
+    type: Number,
+    nullable: true
+  },
+  settlement: String,
   maxPrice: Number,
   buildingType: Number,
   squareTotal: Number,
@@ -58,6 +62,7 @@ const CommerceBuyer = attributes({
 
   /* JOINED PARAMS */
   authorName: String,
+  districtName: String,
   contacts: {
     type: ContactsCollection,
     itemType: require('../contact/contact')

@@ -34,7 +34,11 @@ const HouseBuyer = attributes({
     min: 1,
     max: 3
   }, // 2. Межа (місто, до 5 км, від 5 км)
-  districtID: Number, // 3. Район (Автовокзал, Чайка, Північний, Центр, Ювілейний, Щасливе, Окраїна, Відін etc)
+  districtID: {
+    type: Number,
+    nullable: true
+  }, // 3. Район (Автовокзал, Чайка, Північний, Центр, Ювілейний, Щасливе, Окраїна, Відін etc)
+  settlement: String,
   maxPrice: Number, // 4. Ціна (max)
   material: Number, // 5. Вид
   buildingType: Number, // 6. Тип
@@ -62,6 +66,7 @@ const HouseBuyer = attributes({
 
   /* JOINED PARAMS */
   authorName: String,
+  districtName: String,
   contacts: {
     type: ContactsCollection,
     itemType: require('../contact/contact')

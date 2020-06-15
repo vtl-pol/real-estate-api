@@ -13,6 +13,7 @@ const { constantsRouter } = require('../components/constants')
 const { archiveRouter } = require('../components/archive')
 
 const { contactRouter } = require('../components/contact')
+const { settlementRouter } = require('../components/settlement')
 
 appRouter.use('/', indexRouter)
 appRouter.use('/auth', authRouter)
@@ -26,5 +27,6 @@ appRouter.use('/buyers/commerce', commerceBuyerRouter)
 appRouter.use('/constants', constantsRouter)
 appRouter.use('/archive', archiveRouter)
 appRouter.use('/contacts', contactRouter)
+appRouter.use('/settlements', settlementRouter)
 
 module.exports = appRouter

@@ -9,7 +9,8 @@ const { propertyConstants } = require('../property')
 const commerceSchema = Joi.object().keys({
   title: Joi.string().required(),
   noOfRooms: Joi.number().integer().required().min(1).max(5),
-  districtId: Joi.number().integer().required(),
+  districtID: Joi.number().integer().required(),
+  settlement: Joi.string().required(),
   street: Joi.string().required(),
   houseNo: Joi.string().max(4).required(),
   price: Joi.number().integer().max(9999999).required(),

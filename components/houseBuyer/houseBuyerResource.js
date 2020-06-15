@@ -17,6 +17,8 @@ const buyerAttributes = [
   'noOfRooms',
   'range',
   'districtID',
+  'districtName',
+  'settlement',
   'maxPrice',
   'material',
   'buildingType',

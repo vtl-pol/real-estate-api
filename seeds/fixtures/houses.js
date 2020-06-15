@@ -2,7 +2,6 @@ module.exports = [
   {
     title: 'Двоповерховий Будинок по вул. Шевченка',
     noOfRooms: 5,
-    districtId: '4',
     street: 'Шевченка',
     houseNo: '18',
     price: '180000',
@@ -24,7 +23,6 @@ module.exports = [
   {
     title: 'Townhouse на Соборній',
     noOfRooms: 1,
-    districtId: 2,
     street: 'Соборна',
     houseNo: '1а',
     price: 40000,
@@ -45,7 +43,6 @@ module.exports = [
   {
     title: 'Продаю 2-поверхову хату',
     noOfRooms: 2,
-    districtId: 4,
     street: 'Марченка',
     houseNo: '8',
     price: 15000,

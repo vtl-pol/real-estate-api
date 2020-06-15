@@ -2,7 +2,6 @@ module.exports = [
   {
     title: 'Двоповерховий Cклад по вул. Шевченка',
     noOfRooms: 5,
-    districtId: '4',
     street: 'Шевченка',
     houseNo: '28a',
     price: '180000',
@@ -20,7 +19,6 @@ module.exports = [
   {
     title: 'МАФ в центрі міста',
     noOfRooms: 5,
-    districtId: '4',
     street: 'Кобилянської',
     houseNo: '2б',
     price: '9000',

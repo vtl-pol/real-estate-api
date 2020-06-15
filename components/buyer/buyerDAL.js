@@ -25,7 +25,8 @@ class BuyerDAL {
   async filterAndLoad ({ currentPage, perPage }) {
     const { data, pagination } = await this.table()
       .leftJoin('users', 'buyers.authorID', '=', 'users.id')
-      .select('buyers.*', 'users.fullName AS authorName')
+      .leftJoin('districts', 'districts.id', '=', 'buyers.districtID')
+      .select('buyers.*', 'users.fullName AS authorName', 'districts.name AS districtName')
       .paginate({ perPage, currentPage })
 
     const contacts = await this.loadContactsFor(data.map(r => r.id))

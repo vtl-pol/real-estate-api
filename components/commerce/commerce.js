@@ -27,7 +27,11 @@ const Commerce = attributes({
     nullable: true
   },
   noOfRooms: Number,
-  districtId: Number,
+  districtID: {
+    type: Number,
+    nullable: true
+  },
+  settlement: String,
   street: String,
   houseNo: String,
   price: Number,
@@ -70,6 +74,7 @@ const Commerce = attributes({
 
   /* JOINED PARAMS */
   authorName: String,
+  districtName: String,
   featuredPhoto: {
     type: String,
     default: (inst) => inst.photos.length ? inst.photos[inst.featuredPhotoNo].fileURL : ''

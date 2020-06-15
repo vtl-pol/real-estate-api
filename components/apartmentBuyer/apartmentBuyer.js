@@ -29,7 +29,11 @@ const ApartmentBuyer = attributes({
   createdAt: Date,
   updatedAt: Date,
   noOfRooms: Number, // 1. Кількість кімнат
-  districtID: Number, // 2. Район
+  districtID: {
+    type: Number,
+    nullable: true
+  }, // 2. Район
+  settlement: String,
   maxPrice: Number, // 3. Ціна (max)
   material: Number, // 4. Вид
   buildingType: Number, // 5. Тип
@@ -59,6 +63,7 @@ const ApartmentBuyer = attributes({
 
   /* JOINED PARAMS */
   authorName: String,
+  districtName: String,
   contacts: {
     type: ContactsCollection,
     itemType: require('../contact/contact')

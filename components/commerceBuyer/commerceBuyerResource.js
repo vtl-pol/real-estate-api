@@ -16,6 +16,8 @@ const buyerAttributes = [
   'updatedAt',
   'noOfRooms',
   'districtID',
+  'districtName',
+  'settlement',
   'maxPrice',
   'buildingType',
   'squareTotal',

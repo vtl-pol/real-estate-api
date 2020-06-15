@@ -3,7 +3,6 @@ const moment = require('moment')
 const { db } = require('../../config')
 const { Photo, photoDAL } = require('../photo')
 const objectUtils = require('../../utils/object')
-const { without } = require('../../utils/object')
 
 class PropertyDAL {
   constructor (table, propType, PropertyModel) {
@@ -28,7 +27,8 @@ class PropertyDAL {
   async filterAndLoad ({ filter, currentPage, perPage }) {
     const query = this.table()
       .leftJoin('users', 'properties.authorID', '=', 'users.id')
-      .select('properties.*', 'users.fullName AS authorName')
+      .leftJoin('districts', 'districts.id', '=', 'properties.districtID')
+      .select('properties.*', 'users.fullName AS authorName', 'districts.name AS districtName')
 
     const { data, pagination } = await query.paginate({ perPage, currentPage })
     const photos = await db('photos').where('propertyID', 'IN', data.map(i => i.id))
@@ -106,7 +106,7 @@ class PropertyDAL {
   }
 
   async update (id, payload) {
-    const result = await this.table().update(without(['contactsIDs'], payload)).where({ id })
+    const result = await this.table().update(objectUtils.without(['contactsIDs'], payload)).where({ id })
 
     if (!payload.contactsIDs.length) {
       return result

@@ -27,7 +27,11 @@ const Apartment = attributes({
     nullable: true
   },
   noOfRooms: Number,
-  districtId: Number,
+  districtID: {
+    type: Number,
+    nullable: true
+  },
+  settlement: String,
   street: String,
   houseNo: String,
   aptNo: String,
@@ -73,6 +77,7 @@ const Apartment = attributes({
 
   /* JOINED PARAMS */
   authorName: String,
+  districtName: String,
   featuredPhoto: {
     type: String,
     default: (inst) => (inst.photos && inst.photos.length) ? inst.photos[inst.featuredPhotoNo].fileURL : ''

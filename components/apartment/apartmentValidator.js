@@ -8,7 +8,8 @@ const allowedSources = Object.keys(propertyConstants.SOURCES).map(Number)
 const apartmentSchema = Joi.object().keys({
   title: Joi.string().required(),
   noOfRooms: Joi.number().integer().required().min(1).max(5),
-  districtId: Joi.number().integer().required(),
+  settlement: Joi.string().required(),
+  districtID: Joi.number().integer().allow(null),
   street: Joi.string().required(),
   houseNo: Joi.string().max(4).required(),
   aptNo: Joi.number().integer(),

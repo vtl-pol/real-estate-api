@@ -1,4 +1,5 @@
 const fixtures = require('./fixtures')
+const { arrayRandom } = require('../utils/array')
 
 const seed = async function (knex) {
   await knex('properties').del()
@@ -8,15 +9,44 @@ const seed = async function (knex) {
 
   const contactsIDs = (await knex('contacts').select('id')).map(c => c.id)
 
-  await knex('properties').insert(fixtures.apartments.map(r => Object.assign(r, { authorID, type: 'apartment' })))
-  await knex('properties').insert(fixtures.houses.map(r => Object.assign(r, { authorID, type: 'house' })))
-  await knex('properties').insert(fixtures.commerce.map(r => Object.assign(r, { authorID, type: 'commerce' })))
+  const settlements = await knex('settlements')
+  const districts = await knex('districts')
+
+  const apartmentsPayload = fixtures.apartments.map(record => {
+    const dist = arrayRandom(districts)
+    return Object.assign(record, {
+      authorID,
+      type: 'apartment',
+      districtID: dist.id,
+      settlement: dist.settlement
+    })
+  })
+  const housesPayload = fixtures.houses.map(record => {
+    const settlement = arrayRandom(settlements).name
+    return Object.assign(record, {
+      authorID,
+      type: 'house',
+      settlement: settlement
+    })
+  })
+  const commercePayload = fixtures.commerce.map(record => {
+    const settlement = arrayRandom(settlements).name
+    return Object.assign(record, {
+      authorID,
+      type: 'commerce',
+      settlement: settlement
+    })
+  })
+
+  await knex('properties').insert(apartmentsPayload)
+  await knex('properties').insert(housesPayload)
+  await knex('properties').insert(commercePayload)
 
   const properties = (await knex('properties').select('id')).map(p => {
     return {
       contactableID: p.id,
       contactableType: 'properties',
-      contactID: contactsIDs[Math.floor(Math.random() * contactsIDs.length)]
+      contactID: arrayRandom(contactsIDs)
     }
   })
 
