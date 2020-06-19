@@ -11,6 +11,7 @@ class PropertyService {
       const filter = req.query.filter || {}
       const currentPage = req.query.page || 1
       const perPage = req.query.perPage || 16
+
       const { records, pagination } = await this.propertyDAL.filterAndLoad({ filter, currentPage, perPage })
 
       res.send({ success: true, properties: records.map(h => this.propertyResource.full(h)), pagination })

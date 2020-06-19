@@ -14,7 +14,7 @@ const apartmentValidator = require('./apartmentValidator')
 const propertyValidator = require('../archive/property/propertyValidator')
 const contactValidator = require('../contact/contactValidator')
 
-router.get('/', authMiddleware, (req, res) => {
+router.get('/', authMiddleware, apartmentValidator.filters, (req, res) => {
   apartmentService.getProperties(req, res)
 })
 

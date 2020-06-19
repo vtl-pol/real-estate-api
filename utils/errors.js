@@ -5,24 +5,29 @@ const formattedErrors = (errs) => {
     console.error(err)
     switch (err.type) {
       case 'any.required':
-        result[err.context.key] = 'Поле обов\'язкове'
+        result[err.path.join('.')] = 'Поле обов\'язкове'
         break
       case 'any.empty':
-        result[err.context.key] = 'Поле обов\'язкове'
+        result[err.path.join('.')] = 'Поле обов\'язкове'
         break
 
       case 'string.min':
-        result[err.context.key] = `Мінімально ${err.context.limit} символів`
+        result[err.path.join('.')] = `Мінімально ${err.context.limit} символів`
         break
       case 'string.max':
-        result[err.context.key] = `Максимально ${err.context.limit} символів`
+        result[err.path.join('.')] = `Максимально ${err.context.limit} символів`
         break
 
       case 'array.min':
-        result[err.context.key] = `Мінімально ${err.context.limit} запис`
+        result[err.path.join('.')] = `Мінімально ${err.context.limit} запис`
         break
+
+      case 'array.base':
+        result[err.path.join('.')] = 'Поле має бути масивом'
+        break
+
       default:
-        result[err.context.key] = 'Не вірне значення'
+        result[err.path.join('.')] = 'Не вірне значення'
         break
     }
   })

@@ -3,6 +3,7 @@ const moment = require('moment')
 const { db } = require('../../config')
 const { Photo, photoDAL } = require('../photo')
 const objectUtils = require('../../utils/object')
+const propertyFilters = require('./propertyFilters')
 
 class PropertyDAL {
   constructor (table, propType, PropertyModel) {
@@ -30,7 +31,9 @@ class PropertyDAL {
       .leftJoin('districts', 'districts.id', '=', 'properties.districtID')
       .select('properties.*', 'users.fullName AS authorName', 'districts.name AS districtName')
 
-    const { data, pagination } = await query.paginate({ perPage, currentPage })
+    const filteredQuery = this.applyFilters(query, filter)
+
+    const { data, pagination } = await filteredQuery.paginate({ perPage, currentPage })
     const photos = await db('photos').where('propertyID', 'IN', data.map(i => i.id))
     const props = data.map(r => Object.assign(r, { photos: photos.filter(p => p.propertyID === r.id) }))
     const contacts = await this.loadContactsFor(props.map(r => r.id))
@@ -38,6 +41,18 @@ class PropertyDAL {
     const records = props.map(pr => Object.assign(pr, { contacts: contacts.filter(c => c.contactableID === pr.id) })).map(r => new this.PropertyModel(r))
 
     return { records, pagination }
+  }
+
+  applyFilters (query, filter) {
+    if (Object.keys(filter).length === 0) {
+      return query
+    }
+
+    propertyFilters.forEach(f => {
+      if (!filter[f.field]) return
+      query = f.exec(query, filter[f.field])
+    })
+    return query
   }
 
   async find (id) {

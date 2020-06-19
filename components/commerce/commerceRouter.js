@@ -14,7 +14,7 @@ const commerceValidator = require('./commerceValidator')
 const propertyValidator = require('../archive/property/propertyValidator')
 const contactValidator = require('../contact/contactValidator')
 
-router.get('/', authMiddleware, (req, res) => {
+router.get('/', authMiddleware, commerceValidator.filters, (req, res) => {
   commerceService.getProperties(req, res)
 })
 

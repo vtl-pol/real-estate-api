@@ -14,7 +14,8 @@ module.exports = {
     },
     seeds: {
       directory: './seeds'
-    }
+    },
+    debug: true
   },
   staging: {
     client: 'mysql',

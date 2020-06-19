@@ -33,6 +33,48 @@ const houseSchema = Joi.object().keys({
   contactsIDs: Joi.array().min(1).required().items(Joi.number().integer())
 })
 
+const filtersSchema = Joi.object().keys({
+  id: Joi.number().integer(),
+  responsibleID: Joi.array().items(Joi.number().integer()),
+  phone: Joi.string(),
+  settlement: Joi.array().items(Joi.string()),
+  districtID: Joi.array().items(Joi.number().integer()),
+  street: Joi.array().items(Joi.string()),
+  createdAt: Joi.object().keys({
+    from: Joi.string().regex(/^\d{2}-\d{2}-\d{4}$/),
+    till: Joi.string().regex(/^\d{2}-\d{2}-\d{4}$/)
+  }),
+  price: Joi.object().keys({
+    from: Joi.number().integer(),
+    till: Joi.number().integer()
+  }),
+  propertyStatus: Joi.array().items(Joi.number().integer()),
+  contract: Joi.array().items(Joi.string().only(...propertyConstants.CONTRACTS).allow(null)),
+  motivation: Joi.array().items(Joi.string().only(...propertyConstants.MOTIVATIONS).allow(null)),
+  buildingType: Joi.array().items(Joi.number().integer()),
+  material: Joi.array().items(Joi.number().integer()),
+  noOfRooms: Joi.array().items(Joi.number().integer()),
+  autonomousHeat: Joi.boolean(),
+  squareTotal: Joi.object().keys({
+    from: Joi.number().integer(),
+    till: Joi.number().integer()
+  }),
+  squareLiving: Joi.object().keys({
+    from: Joi.number().integer(),
+    till: Joi.number().integer()
+  }),
+  squareKitchen: Joi.object().keys({
+    from: Joi.number().integer(),
+    till: Joi.number().integer()
+  }),
+  squareLand: Joi.object().keys({
+    from: Joi.number().integer(),
+    till: Joi.number().integer()
+  }),
+  garage: Joi.boolean(),
+  renovated: Joi.boolean()
+})
+
 const fields = (req, res, next) => {
   Joi.validate(req.body, houseSchema, function (err, _value) {
     if (err) {
@@ -57,4 +99,15 @@ const uniqe = async (req, res, next) => {
   }
   return next()
 }
-module.exports = { fields, uniqe }
+
+const filters = (req, res, next) => {
+  Joi.validate(req.query.filter, filtersSchema, function (err, _value) {
+    if (err) {
+      const errors = formattedErrors(err.details)
+      return res.status(422).json({ errors })
+    }
+    return next()
+  })
+}
+
+module.exports = { fields, uniqe, filters }
