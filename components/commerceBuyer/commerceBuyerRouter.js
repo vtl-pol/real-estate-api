@@ -14,7 +14,7 @@ const commerceBuyerValidator = require('./commerceBuyerValidator')
 const buyerValidator = require('../archive/buyer/buyerValidator')
 const contactValidator = require('../contact/contactValidator')
 
-router.get('/', authMiddleware, (req, res) => {
+router.get('/', authMiddleware, commerceBuyerValidator.filters, (req, res) => {
   commerceService.getBuyers(req, res)
 })
 

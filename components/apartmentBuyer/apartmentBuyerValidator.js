@@ -32,6 +32,32 @@ const apartmentSchema = Joi.object().keys({
   contactsIDs: Joi.array().min(1).required().items(Joi.number().integer())
 })
 
+const filterSchema = Joi.object().keys({
+  id: Joi.number().integer(),
+  name: Joi.string(),
+  phone: Joi.string(),
+  responsibleID: Joi.array().items(Joi.number().integer()),
+  settlement: Joi.array().items(Joi.string()),
+  districtID: Joi.array().items(Joi.number().integer()),
+  createdAt: Joi.object().keys({
+    from: Joi.string().regex(/^\d{2}-\d{2}-\d{4}$/),
+    till: Joi.string().regex(/^\d{2}-\d{2}-\d{4}$/)
+  }),
+  noOfRooms: Joi.array().items(Joi.number().integer()),
+  maxPrice: Joi.object().keys({
+    from: Joi.number().integer(),
+    till: Joi.number().integer()
+  }),
+  buyerStatus: Joi.array().items(Joi.number().integer()),
+  contract: Joi.array().items(Joi.string().only(...propertyConstants.CONTRACTS).allow(null)),
+  motivation: Joi.array().items(Joi.string().only(...propertyConstants.MOTIVATIONS).allow(null)),
+  buildingType: Joi.array().items(Joi.number().integer().only(...allowedBuildingTypes)),
+  material: Joi.array().items(Joi.number().integer().only(...allowedMaterials)),
+  floor: Joi.array().items(Joi.number().integer().only(...aptFloorTypes)),
+  isRenovated: Joi.boolean(),
+  autonomousHeat: Joi.boolean()
+})
+
 const fields = (req, res, next) => {
   Joi.validate(req.body, apartmentSchema, function (err, _value) {
     if (err) {
@@ -42,4 +68,14 @@ const fields = (req, res, next) => {
   })
 }
 
-module.exports = { fields }
+const filters = (req, res, next) => {
+  Joi.validate(req.query.filter, filterSchema, function (err, _value) {
+    if (err) {
+      const errors = formattedErrors(err.details)
+      return res.status(422).json({ errors })
+    }
+    return next()
+  })
+}
+
+module.exports = { fields, filters }

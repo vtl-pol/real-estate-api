@@ -132,5 +132,31 @@ module.exports = [
         isOnWhatsapp: false
       }
     ]
+  },
+  {
+    name: 'Жаботюк Юрій Іванович',
+    birthday: moment('01-04-1957', 'DD-MM-YYYY').format(),
+    phones: [
+      {
+        phone: '0961141957',
+        isOnViber: true,
+        isOnTelegram: true,
+        isOnFacebook: true,
+        isOnWhatsapp: false
+      }
+    ]
+  },
+  {
+    name: 'Безос Джеф Мігельович',
+    birthday: moment('12-01-1964', 'DD-MM-YYYY').format(),
+    phones: [
+      {
+        phone: '0931919191',
+        isOnViber: true,
+        isOnTelegram: true,
+        isOnFacebook: true,
+        isOnWhatsapp: false
+      }
+    ]
   }
 ]

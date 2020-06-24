@@ -14,7 +14,7 @@ const apartmentBuyerValidator = require('./apartmentBuyerValidator')
 const buyerValidator = require('../archive/buyer/buyerValidator')
 const contactValidator = require('../contact/contactValidator')
 
-router.get('/', authMiddleware, (req, res) => {
+router.get('/', authMiddleware, apartmentBuyerValidator.filters, (req, res) => {
   apartmentService.getBuyers(req, res)
 })
 

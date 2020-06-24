@@ -9,7 +9,8 @@ class BuyerService {
     try {
       const currentPage = req.query.page || 1
       const perPage = 10
-      const { records, pagination } = await this.buyerDAL.filterAndLoad({ currentPage, perPage })
+      const filter = req.query.filter || {}
+      const { records, pagination } = await this.buyerDAL.filterAndLoad({ filter, currentPage, perPage })
 
       res.send({ success: true, buyers: records.map(b => this.buyerResource.full(b)), pagination })
     } catch (error) {

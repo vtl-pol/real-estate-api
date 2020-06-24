@@ -1,6 +1,7 @@
 const moment = require('moment')
 const { db } = require('../../config')
 const { without } = require('../../utils/object')
+const buyerFilters = require('./buyerFilter')
 
 class BuyerDAL {
   constructor (table, propType, BuyerModel) {
@@ -22,12 +23,16 @@ class BuyerDAL {
     return db(this.tableName).where({ lookingFor: this.lookingFor, archivedAt: null })
   }
 
-  async filterAndLoad ({ currentPage, perPage }) {
-    const { data, pagination } = await this.table()
+  async filterAndLoad ({ filter, currentPage, perPage }) {
+    const query = this.table()
       .leftJoin('users', 'buyers.authorID', '=', 'users.id')
       .leftJoin('districts', 'districts.id', '=', 'buyers.districtID')
-      .select('buyers.*', 'users.fullName AS authorName', 'districts.name AS districtName')
-      .paginate({ perPage, currentPage })
+      .select('users.fullName AS authorName', 'districts.name AS districtName')
+      .distinct('buyers.*')
+
+    const filteredQuery = this.applyFilters(query, filter)
+
+    const { data, pagination } = await filteredQuery.paginate({ perPage, currentPage })
 
     const contacts = await this.loadContactsFor(data.map(r => r.id))
 
@@ -37,6 +42,18 @@ class BuyerDAL {
     })
 
     return { records, pagination }
+  }
+
+  applyFilters (query, filter) {
+    if (Object.keys(filter).length === 0) {
+      return query
+    }
+
+    buyerFilters.forEach(f => {
+      if (!filter[f.field]) return
+      query = f.exec(query, filter[f.field])
+    })
+    return query
   }
 
   async find (id) {

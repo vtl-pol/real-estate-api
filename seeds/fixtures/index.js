@@ -3,5 +3,6 @@ module.exports = {
   houses: require('./houses'),
   commerce: require('./commerce'),
   contacts: require('./contacts'),
-  settlements: require('./settlements')
+  settlements: require('./settlements'),
+  buyers: require('./buyers')
 }
