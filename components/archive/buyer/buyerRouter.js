@@ -6,19 +6,21 @@ const authMiddleware = require('../../auth/authMiddleware')
 const { BuyerDAL } = require('../../buyer')
 const ArchiveService = require('../archiveService')
 
-const { apartmentBuyer, apartmentBuyerResource } = require('../../apartmentBuyer')
+const { apartmentBuyer, apartmentBuyerResource, apartmentBuyerValidator } = require('../../apartmentBuyer')
 const apartmentDAL = new BuyerDAL('buyers', 'apartment', apartmentBuyer)
 const aptBuyerArchive = new ArchiveService(apartmentDAL, apartmentBuyerResource)
 
-const { houseBuyer, houseBuyerResource } = require('../../houseBuyer')
+const { houseBuyer, houseBuyerResource, houseBuyerValidator } = require('../../houseBuyer')
 const houseDAL = new BuyerDAL('buyers', 'house', houseBuyer)
 const houseBuyerArchive = new ArchiveService(houseDAL, houseBuyerResource)
 
-const { commerceBuyer, commerceBuyerResource } = require('../../commerceBuyer')
+const { commerceBuyer, commerceBuyerResource, commerceBuyerValidator } = require('../../commerceBuyer')
 const commerceDAL = new BuyerDAL('buyers', 'commerce', commerceBuyer)
 const commerceBuyerArchive = new ArchiveService(commerceDAL, commerceBuyerResource)
 
-router.get('/apartments', authMiddleware, (req, res) => {
+const archiveValidator = require('./buyerValidator')
+
+router.get('/apartments', authMiddleware, apartmentBuyerValidator.filters, archiveValidator.filters, (req, res) => {
   aptBuyerArchive.archivedList(req, res)
 })
 router.get('/apartments/:id', authMiddleware, (req, res) => {
@@ -31,7 +33,7 @@ router.delete('/apartments/:id', authMiddleware, (req, res) => {
   aptBuyerArchive.deleteItem(req, res)
 })
 
-router.get('/houses', authMiddleware, (req, res) => {
+router.get('/houses', authMiddleware, houseBuyerValidator.filters, archiveValidator.filters, (req, res) => {
   houseBuyerArchive.archivedList(req, res)
 })
 router.get('/houses/:id', authMiddleware, (req, res) => {
@@ -44,7 +46,7 @@ router.delete('/houses/:id', authMiddleware, (req, res) => {
   houseBuyerArchive.deleteItem(req, res)
 })
 
-router.get('/commerce', authMiddleware, (req, res) => {
+router.get('/commerce', authMiddleware, commerceBuyerValidator.filters, archiveValidator.filters, (req, res) => {
   commerceBuyerArchive.archivedList(req, res)
 })
 router.get('/commerce/:id', authMiddleware, (req, res) => {

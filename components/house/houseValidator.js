@@ -73,7 +73,7 @@ const filtersSchema = Joi.object().keys({
   }),
   garage: Joi.boolean(),
   renovated: Joi.boolean()
-})
+}).unknown()
 
 const fields = (req, res, next) => {
   Joi.validate(req.body, houseSchema, function (err, _value) {

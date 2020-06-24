@@ -20,6 +20,18 @@ const archiveSchema = Joi.object().keys({
   })
 })
 
+const filterSchema = Joi.object().keys({
+  archivedReason: Joi.array().items(Joi.number().integer().only(...allowedArcReasons)),
+  archivedTill: Joi.object().keys({
+    from: Joi.string().regex(/^\d{2}-\d{2}-\d{4}$/),
+    till: Joi.string().regex(/^\d{2}-\d{2}-\d{4}$/)
+  }),
+  archivedAt: Joi.object().keys({
+    from: Joi.string().regex(/^\d{2}-\d{2}-\d{4}$/),
+    till: Joi.string().regex(/^\d{2}-\d{2}-\d{4}$/)
+  })
+}).unknown()
+
 const archive = (req, res, next) => {
   if (req.body.archivedTill) {
     req.body.archivedTill = moment(req.body.archivedTill, 'DD-MM-YYYY').format()
@@ -34,4 +46,14 @@ const archive = (req, res, next) => {
   })
 }
 
-module.exports = { archive }
+const filters = (req, res, next) => {
+  Joi.validate(req.query.filter, filterSchema, function (err, _value) {
+    if (err) {
+      const errors = formattedErrors(err.details)
+      return res.status(422).json({ errors })
+    }
+    return next()
+  })
+}
+
+module.exports = { archive, filters }

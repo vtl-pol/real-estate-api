@@ -66,7 +66,7 @@ const filterSchema = Joi.object().keys({
   }),
   hasGarage: Joi.boolean(),
   isRenovated: Joi.boolean()
-})
+}).unknown()
 
 const fields = (req, res, next) => {
   Joi.validate(req.body, apartmentSchema, function (err, _value) {

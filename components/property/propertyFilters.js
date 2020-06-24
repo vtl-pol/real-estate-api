@@ -174,5 +174,38 @@ module.exports = [
   {
     field: 'garage',
     exec: (q, value) => q.where('properties.garage', value)
+  },
+  /** Archive Filters **/
+  {
+    field: 'archivedAt',
+    exec: (q, archivedAt) => {
+      if (archivedAt.from !== undefined && archivedAt.till !== undefined) {
+        return q.whereBetween('archivedAt', [moment(archivedAt.from, 'DD-MM-YYYY').startOf('day').format(), moment(archivedAt.till, 'DD-MM-YYYY').endOf('day').format()])
+      } else if (archivedAt.from !== undefined) {
+        return q.where('archivedAt', '>=', moment(archivedAt.from, 'DD-MM-YYYY').startOf('day').format())
+      } else if (archivedAt.till !== undefined) {
+        return q.where('archivedAt', '<=', moment(archivedAt.till, 'DD-MM-YYYY').endOf('day').format())
+      } else {
+        return q
+      }
+    }
+  },
+  {
+    field: 'archivedTill',
+    exec: (q, archivedTill) => {
+      if (archivedTill.from !== undefined && archivedTill.till !== undefined) {
+        return q.whereBetween('archivedTill', [moment(archivedTill.from, 'DD-MM-YYYY').startOf('day').format(), moment(archivedTill.till, 'DD-MM-YYYY').endOf('day').format()])
+      } else if (archivedTill.from !== undefined) {
+        return q.where('archivedTill', '>=', moment(archivedTill.from, 'DD-MM-YYYY').startOf('day').format())
+      } else if (archivedTill.till !== undefined) {
+        return q.where('archivedTill', '<=', moment(archivedTill.till, 'DD-MM-YYYY').endOf('day').format())
+      } else {
+        return q
+      }
+    }
+  },
+  {
+    field: 'archivedReason',
+    exec: (q, values) => q.whereIn('archivedReason', values)
   }
 ]
