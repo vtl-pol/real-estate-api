@@ -9,7 +9,7 @@ const houseBuyerResource = require('./houseBuyerResource')
 const houseBuyerDAL = new BuyerDAL('buyers', 'house', Buyer)
 const houseService = new BuyerService(houseBuyerDAL, houseBuyerResource)
 
-const authMiddleware = require('../auth/authMiddleware')
+const { authMiddleware } = require('../auth/authMiddleware')
 const houseBuyerValidator = require('./houseBuyerValidator')
 const buyerValidator = require('../archive/buyer/buyerValidator')
 const contactValidator = require('../contact/contactValidator')

@@ -9,7 +9,7 @@ const commerceBuyerResource = require('./commerceBuyerResource')
 const commerceBuyerDAL = new BuyerDAL('buyers', 'commerce', Buyer)
 const commerceService = new BuyerService(commerceBuyerDAL, commerceBuyerResource)
 
-const authMiddleware = require('../auth/authMiddleware')
+const { authMiddleware } = require('../auth/authMiddleware')
 const commerceBuyerValidator = require('./commerceBuyerValidator')
 const buyerValidator = require('../archive/buyer/buyerValidator')
 const contactValidator = require('../contact/contactValidator')

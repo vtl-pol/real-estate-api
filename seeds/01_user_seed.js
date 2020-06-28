@@ -12,15 +12,39 @@ const seed = async function (knex) {
     })
   })
 
-  return knex('users').insert({
+  await knex('users').insert({
     fullName: 'Адміністратор',
     rank: 3,
-    role: 0,
+    role: 3,
     isOnContract: true,
     isOfficial: true,
     attachmentId: null,
     phone: null,
     email: 'admin@admin.com',
+    password: hashedPassword
+  })
+
+  await knex('users').insert({
+    fullName: 'Агент',
+    rank: 1,
+    role: 1,
+    isOnContract: true,
+    isOfficial: true,
+    attachmentId: null,
+    phone: null,
+    email: 'agent@agent.com',
+    password: hashedPassword
+  })
+
+  await knex('users').insert({
+    fullName: 'Офіс-Менеджер',
+    rank: 2,
+    role: 2,
+    isOnContract: true,
+    isOfficial: true,
+    attachmentId: null,
+    phone: null,
+    email: 'manager@agent.com',
     password: hashedPassword
   })
 }

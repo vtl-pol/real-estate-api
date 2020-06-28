@@ -7,14 +7,14 @@ const ContactService = require('./contactService')
 const contactDAL = new ContactDAL('contacts')
 const contactService = new ContactService(contactDAL)
 
-const authMiddleware = require('../auth/authMiddleware')
+const { authMiddleware, adminMiddleware } = require('../auth/authMiddleware')
 const contactValidator = require('./contactValidator')
 
-router.get('/', authMiddleware, (req, res) => {
+router.get('/', authMiddleware, adminMiddleware, (req, res) => {
   contactService.list(req, res)
 })
 
-router.post('/', authMiddleware, contactValidator.fields, (req, res) => {
+router.post('/', authMiddleware, adminMiddleware, contactValidator.fields, (req, res) => {
   contactService.create(req, res)
 })
 
@@ -22,7 +22,7 @@ router.get('/search', authMiddleware, (req, res) => {
   contactService.search(req, res)
 })
 
-router.put('/:id', authMiddleware, contactValidator.fields, (req, res) => {
+router.put('/:id', authMiddleware, adminMiddleware, contactValidator.fields, (req, res) => {
   contactService.update(req, res)
 })
 

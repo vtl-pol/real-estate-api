@@ -18,7 +18,7 @@ module.exports = [
     builtAt: '2011 Q2',
     description: 'Двоповерховий Будинок по вул. Шевченка. Євро-вікна, нова італійська сан.техніка, Гараж на 2 автомобілі, й затишний дворик. Електро-опалення й сонячні панелі',
     motivation: 'A',
-    source: 1
+    source: 2
   },
   {
     title: 'Townhouse на Соборній',
@@ -57,7 +57,7 @@ module.exports = [
     description: 'Стара хата без ремонту',
     motivation: 'А',
     contract: 'НЕД',
-    source: 1,
+    source: 5,
     autonomousHeat: true
   }
 ]

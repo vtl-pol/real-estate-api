@@ -9,16 +9,16 @@ const commerceResource = require('./commerceResource')
 const commerceDAL = new PropertyDAL('properties', 'commerce', Commerce)
 const commerceService = new PropertyService(commerceDAL, commerceResource)
 
-const authMiddleware = require('../auth/authMiddleware')
+const { authMiddleware, softAuthMiddleware } = require('../auth/authMiddleware')
 const commerceValidator = require('./commerceValidator')
 const propertyValidator = require('../archive/property/propertyValidator')
 const contactValidator = require('../contact/contactValidator')
 
-router.get('/', authMiddleware, commerceValidator.filters, (req, res) => {
+router.get('/', softAuthMiddleware, commerceValidator.filters, (req, res) => {
   commerceService.getProperties(req, res)
 })
 
-router.get('/:id', authMiddleware, (req, res) => {
+router.get('/:id', softAuthMiddleware, (req, res) => {
   commerceService.getProperty(req, res)
 })
 

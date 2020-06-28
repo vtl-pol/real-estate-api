@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const authMiddleware = require('../../auth/authMiddleware')
+const { authMiddleware, adminMiddleware } = require('../../auth/authMiddleware')
 
 const { PropertyDAL } = require('../../property')
 const ArchiveService = require('../archiveService')
@@ -26,10 +26,10 @@ router.get('/apartments', authMiddleware, apartmentValidator.filters, archiveVal
 router.get('/apartments/:id', authMiddleware, (req, res) => {
   aptArchive.archivedItem(req, res)
 })
-router.patch('/apartments/:id/restore', authMiddleware, (req, res) => {
+router.patch('/apartments/:id/restore', authMiddleware, adminMiddleware, (req, res) => {
   aptArchive.restoreItem(req, res)
 })
-router.delete('/apartments/:id', authMiddleware, (req, res) => {
+router.delete('/apartments/:id', authMiddleware, adminMiddleware, (req, res) => {
   aptArchive.deleteItem(req, res)
 })
 
@@ -39,10 +39,10 @@ router.get('/houses', authMiddleware, houseValidator.filters, archiveValidator.f
 router.get('/houses/:id', authMiddleware, (req, res) => {
   houseArchive.archivedItem(req, res)
 })
-router.patch('/houses/:id/restore', authMiddleware, (req, res) => {
+router.patch('/houses/:id/restore', authMiddleware, adminMiddleware, (req, res) => {
   houseArchive.restoreItem(req, res)
 })
-router.delete('/houses/:id', authMiddleware, (req, res) => {
+router.delete('/houses/:id', authMiddleware, adminMiddleware, (req, res) => {
   houseArchive.deleteItem(req, res)
 })
 
@@ -52,10 +52,10 @@ router.get('/commerce', authMiddleware, commerceValidator.filters, archiveValida
 router.get('/commerce/:id', authMiddleware, (req, res) => {
   commerceArchive.archivedItem(req, res)
 })
-router.patch('/commerce/:id/restore', authMiddleware, (req, res) => {
+router.patch('/commerce/:id/restore', authMiddleware, adminMiddleware, (req, res) => {
   commerceArchive.restoreItem(req, res)
 })
-router.delete('/commerce/:id', authMiddleware, (req, res) => {
+router.delete('/commerce/:id', authMiddleware, adminMiddleware, (req, res) => {
   commerceArchive.deleteItem(req, res)
 })
 

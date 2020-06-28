@@ -9,7 +9,8 @@ const User = attributes({
   fullName: String,
   rank: {
     type: Number,
-    default: null
+    default: null,
+    nullable: true
   },
   role: {
     type: Number,
@@ -41,13 +42,29 @@ const User = attributes({
     type: Date,
     required: true
   }
-})(class User { })
+})(class User {
+  isAdmin () {
+    return this.role === User.ROLE_ADMIN
+  }
+
+  isManager () {
+    return this.isAdmin() || (this.role === User.ROLE_MANAGER)
+  }
+
+  isAgent () {
+    return this.isAdmin() || (this.role === User.ROLE_AGENT)
+  }
+
+  isGuest () {
+    return this.role === User.ROLE_GUEST
+  }
+})
 
 User.RANK_NONE = null
-User.RANK_INTERN = 0
-User.RANK_NEWBIE = 1
-User.RANK_AGENT = 2
-User.RANK_PROFESSIONAL = 3
+User.RANK_INTERN = 1
+User.RANK_NEWBIE = 2
+User.RANK_AGENT = 3
+User.RANK_PROFESSIONAL = 4
 
 User.ROLE_GUEST = 0
 User.ROLE_AGENT = 1

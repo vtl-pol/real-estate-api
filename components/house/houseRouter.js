@@ -9,16 +9,16 @@ const houseResource = require('./houseResource')
 const houseDAL = new PropertyDAL('properties', 'house', House)
 const houseService = new PropertyService(houseDAL, houseResource)
 
-const authMiddleware = require('../auth/authMiddleware')
+const { authMiddleware, softAuthMiddleware } = require('../auth/authMiddleware')
 const houseValidator = require('./houseValidator')
 const propertyValidator = require('../archive/property/propertyValidator')
 const contactValidator = require('../contact/contactValidator')
 
-router.get('/', authMiddleware, houseValidator.filters, (req, res) => {
+router.get('/', softAuthMiddleware, houseValidator.filters, (req, res) => {
   houseService.getProperties(req, res)
 })
 
-router.get('/:id', authMiddleware, (req, res) => {
+router.get('/:id', softAuthMiddleware, (req, res) => {
   houseService.getProperty(req, res)
 })
 

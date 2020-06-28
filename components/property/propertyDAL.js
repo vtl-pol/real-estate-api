@@ -69,7 +69,15 @@ class PropertyDAL {
     const contacts = await this.loadContactsFor([property.id])
 
     Object.assign(property, { contacts })
-    console.log(property)
+
+    return new this.PropertyModel(property)
+  }
+
+  async findBasic (id) {
+    const property = await this.table().where({ id }).select('id', 'responsibleID', 'source').first()
+    if (!property) {
+      return null
+    }
     return new this.PropertyModel(property)
   }
 
@@ -123,7 +131,7 @@ class PropertyDAL {
   async update (id, payload) {
     const result = await this.table().update(objectUtils.without(['contactsIDs'], payload)).where({ id })
 
-    if (!payload.contactsIDs.length) {
+    if (!payload.contactsIDs || payload.contactsIDs.length) {
       return result
     }
     const contactsOK = await this.syncContacts(id, payload.contactsIDs)
@@ -148,6 +156,10 @@ class PropertyDAL {
 
     const result = await trx.raw(`${trx('contacts_relations').insert(contactsPayload).toQuery()} ON DUPLICATE KEY UPDATE contactID=contactID`)
     return result
+  }
+
+  async assignResponsible (id, responsibleID = null) {
+    return this.table().where({ id }).update({ responsibleID })
   }
 
   async archive (id, payload) {

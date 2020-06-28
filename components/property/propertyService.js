@@ -14,7 +14,14 @@ class PropertyService {
 
       const { records, pagination } = await this.propertyDAL.filterAndLoad({ filter, currentPage, perPage })
 
-      res.send({ success: true, properties: records.map(h => this.propertyResource.full(h)), pagination })
+      res.send({
+        success: true,
+        properties: records.map(h => {
+          h.restrictFor(req.user)
+          return this.propertyResource.full(h)
+        }),
+        pagination
+      })
     } catch (error) {
       console.error(error)
       res.status(500).json({ success: false, error: error.message })
@@ -25,8 +32,9 @@ class PropertyService {
     try {
       const property = await this.propertyDAL.find(req.params.id)
       if (property === null) {
-        res.status(404).send({ success: false, error: 'Об`єкту не існує' })
+        return res.status(404).send({ success: false, error: 'Об`єкту не існує' })
       }
+      property.restrictFor(req.user)
       res.send({ success: true, property: this.propertyResource.full(property) })
     } catch (error) {
       console.error(error)
@@ -38,6 +46,7 @@ class PropertyService {
     try {
       const payload = req.body
       payload.authorID = req.user.id
+      payload.responsibleID = req.user.id
 
       const newProperty = await this.propertyDAL.create(payload)
       if (req.body.photos && req.body.photos.length) {
@@ -61,10 +70,18 @@ class PropertyService {
     try {
       const id = req.params.id
       const payload = req.body
+      const property = await this.propertyDAL.findBasic(id)
 
-      const updated = await this.propertyDAL.update(id, payload)
-      if (updated) {
+      if (property) {
+        if (!property.editableBy(req.user)) {
+          res.status(403).send({ message: 'У вас немає доступу до цієї сторінки' })
+          return
+        }
+
+        await this.propertyDAL.update(id, payload)
         const newProperty = await this.propertyDAL.find(id)
+        newProperty.restrictFor(req.user)
+
         res.send({ success: true, property: this.propertyResource.full(newProperty) })
       } else {
         // No such record
@@ -77,37 +94,63 @@ class PropertyService {
   }
 
   async uploadPhotos (req, res) {
-    photoService.uploadPhotos(req, res, (result) => {
-      res.status(result.error ? 422 : 200).send(result)
-    })
+    const property = await this.propertyDAL.findBasic(req.params.id)
+
+    if (property) {
+      if (!property.editableBy(req.user)) {
+        res.status(403).send({ message: 'У вас немає доступу до цієї сторінки' })
+        return
+      }
+      photoService.uploadPhotos(req, res, (result) => {
+        res.status(result.error ? 422 : 200).send(result)
+      })
+    } else {
+      res.status(404).send({ success: false, error: `Запису #${req.params.id} не існує` })
+    }
   }
 
   async deletePhoto (req, res) {
     const id = req.params.id
     const propertyID = req.params.propertyID
-    const photo = await photoDAL.findBy({ id, propertyID })
-    if (photo.id !== undefined) {
-      await photoDAL.delete(photo.id)
-      res.send({
-        success: true,
-        photo
-      })
-    } else {
-      res.status(404).send({
-        error: 'Фото не знайдено'
-      })
+    const property = await this.propertyDAL.findBasic(id)
+
+    if (property) {
+      if (!property.editableBy(req.user)) {
+        res.status(403).send({ message: 'У вас немає доступу до цієї сторінки' })
+        return
+      }
+
+      const photo = await photoDAL.findBy({ id, propertyID })
+      if (photo.id !== undefined) {
+        await photoDAL.delete(photo.id)
+        res.send({
+          success: true,
+          photo
+        })
+      } else {
+        res.status(404).send({
+          error: 'Фото не знайдено'
+        })
+      }
     }
   }
 
   async archiveProperty (req, res) {
     try {
+      const id = req.params.id
       const payload = req.body
-      const result = await this.propertyDAL.archive(req.params.id, payload)
-      if (result) {
+
+      const property = await this.propertyDAL.findBasic(id)
+      if (property) {
+        if (!property.editableBy(req.user)) {
+          res.status(403).send({ message: 'У вас немає доступу до цієї сторінки' })
+          return
+        }
+        await this.propertyDAL.archive(id, payload)
         res.send({ success: true })
       } else {
         // No record
-        res.status(404).send({ success: false, error: `Запису #${req.params.id} не існує` })
+        res.status(404).send({ success: false, error: `Запису #${id} не існує` })
       }
     } catch (error) {
       console.error(error)

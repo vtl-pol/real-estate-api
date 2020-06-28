@@ -44,6 +44,13 @@ class UserDAL {
     const result = await db(this.table).limit(1)
     return result
   }
+
+  generateGuest () {
+    return new User({
+      fullName: 'Гість',
+      role: 0
+    })
+  }
 }
 
 module.exports = new UserDAL('users')

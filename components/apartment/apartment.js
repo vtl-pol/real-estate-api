@@ -1,4 +1,5 @@
 const { attributes } = require('structure')
+const { Property } = require('../property')
 
 class PhotosCollection extends Array { }
 class ContactsCollection extends Array { }
@@ -92,7 +93,7 @@ const Apartment = attributes({
     type: ContactsCollection,
     itemType: require('../contact/contact')
   }
-})(class Apartment { })
+})(class Apartment extends Property { })
 
 Apartment.MATERIALS = {
   1: 'Цегла',

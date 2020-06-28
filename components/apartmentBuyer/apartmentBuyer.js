@@ -1,4 +1,5 @@
 const { attributes } = require('structure')
+const { Buyer } = require('../buyer')
 
 class ContactsCollection extends Array { }
 
@@ -68,6 +69,6 @@ const ApartmentBuyer = attributes({
     type: ContactsCollection,
     itemType: require('../contact/contact')
   }
-})(class ApartmentBuyer { })
+})(class ApartmentBuyer extends Buyer { })
 
 module.exports = ApartmentBuyer

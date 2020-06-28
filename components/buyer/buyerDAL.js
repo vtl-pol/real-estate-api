@@ -44,6 +44,14 @@ class BuyerDAL {
     return { records, pagination }
   }
 
+  async findBasic (id) {
+    const buyer = await this.table().where({ id }).select('id', 'responsibleID', 'source').first()
+    if (!buyer) {
+      return null
+    }
+    return new this.BuyerModel(buyer)
+  }
+
   applyFilters (query, filter) {
     if (Object.keys(filter).length === 0) {
       return query
@@ -108,7 +116,7 @@ class BuyerDAL {
   async update (id, payload) {
     const result = await this.table().update(without(['contactsIDs'], payload)).where({ id })
 
-    if (payload.contactsIDs.length) {
+    if (payload.contactsIDs && payload.contactsIDs.length) {
       await this.syncContacts(id, payload.contactsIDs)
     }
 

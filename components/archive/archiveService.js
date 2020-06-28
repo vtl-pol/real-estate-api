@@ -12,7 +12,14 @@ class ArchiveService {
       const perPage = 10
       const { records, pagination } = await this.archiveDAL.filterAndLoad({ filter, currentPage, perPage })
 
-      res.send({ success: true, properties: records.map(h => this.archiveResource.archive(h)), pagination })
+      res.send({
+        success: true,
+        properties: records.map(h => {
+          h.restrictFor(req.user)
+          return this.archiveResource.archive(h)
+        }),
+        pagination
+      })
     } catch (error) {
       console.error(error)
       res.status(500).send({
@@ -26,8 +33,9 @@ class ArchiveService {
     try {
       const item = await this.archiveDAL.find(req.params.id)
       if (item === null) {
-        res.status(404).send({ success: false, error: 'Об`єкту не існує' })
+        return res.status(404).send({ success: false, error: 'Об`єкту не існує' })
       }
+      item.restrictFor(req.user)
       res.send({ success: true, item: this.archiveResource.archive(item) })
     } catch (error) {
       console.error(error)

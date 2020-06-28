@@ -1,4 +1,3 @@
-
 class BuyerService {
   constructor (buyerDAL, buyerResource) {
     this.buyerDAL = buyerDAL
@@ -12,7 +11,14 @@ class BuyerService {
       const filter = req.query.filter || {}
       const { records, pagination } = await this.buyerDAL.filterAndLoad({ filter, currentPage, perPage })
 
-      res.send({ success: true, buyers: records.map(b => this.buyerResource.full(b)), pagination })
+      res.send({
+        success: true,
+        buyers: records.map(b => {
+          b.restrictFor(req.user)
+          return this.buyerResource.full(b)
+        }),
+        pagination
+      })
     } catch (error) {
       console.error(error)
       res.status(500).send({ success: false, error })
@@ -23,8 +29,9 @@ class BuyerService {
     try {
       const buyer = await this.buyerDAL.find(req.params.id)
       if (buyer === null) {
-        res.status(404).send({ success: false, error: 'Покупця не існує' })
+        return res.status(404).send({ success: false, error: 'Покупця не існує' })
       }
+      buyer.restrictFor(req.user)
       res.send({ success: true, buyer: this.buyerResource.full(buyer) })
     } catch (error) {
       console.error(error)
@@ -36,6 +43,7 @@ class BuyerService {
     try {
       const payload = req.body
       payload.authorID = req.user.id
+      payload.responsibleID = req.user.id
 
       const newBuyer = await this.buyerDAL.create(payload)
       res.send({ success: true, buyer: this.buyerResource.full(newBuyer) })
@@ -49,11 +57,17 @@ class BuyerService {
     try {
       const id = req.params.id
       const payload = req.body
+      const buyer = await this.buyerDAL.findBasic(id)
 
-      const updated = await this.buyerDAL.update(id, payload)
-      if (updated) {
-        const buyer = await this.buyerDAL.find(id)
-        res.send({ success: true, buyer: this.buyerResource.full(buyer) })
+      if (buyer) {
+        if (!buyer.editableBy(req.user)) {
+          return res.status(403).send({ message: 'У вас немає доступу до цієї сторінки' })
+        }
+
+        await this.buyerDAL.update(id, payload)
+        const updatedBuyer = await this.buyerDAL.find(id)
+        updatedBuyer.restrictFor(req.user)
+        res.send({ success: true, buyer: this.buyerResource.full(updatedBuyer) })
       } else {
         // No such record
         res.status(404).send({ success: false, error: `Запису #${id} не існує` })
@@ -66,9 +80,16 @@ class BuyerService {
 
   async archiveBuyer (req, res) {
     try {
+      const id = req.params.id
       const payload = req.body
-      const result = await this.buyerDAL.archive(req.params.id, payload)
-      if (result > 0) {
+      const buyer = await this.buyerDAL.findBasic(id)
+
+      if (buyer) {
+        if (!buyer.editableBy(req.user)) {
+          return res.status(403).send({ message: 'У вас немає доступу до цієї сторінки' })
+        }
+
+        await this.buyerDAL.archive(req.params.id, payload)
         res.send({ success: true })
       } else {
         res.status(404).send({ success: false, error: `Запису #${req.params.id} не існує` })
