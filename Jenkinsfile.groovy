@@ -1,0 +1,3 @@
+deployNodeBackend{
+    npmVersion = '12'
+}
