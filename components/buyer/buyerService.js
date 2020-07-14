@@ -99,6 +99,32 @@ class BuyerService {
       res.status(500).json({ success: false, error: error.message })
     }
   }
+
+  async saveToFavorites (req, res) {
+    const propertyID = req.params.id
+    const userID = req.user.id
+
+    try {
+      await this.buyerDAL.saveToFavorites(propertyID, userID)
+      res.send({ success: true })
+    } catch (error) {
+      console.error(error)
+      res.status(500).send({ success: false, error: error.message })
+    }
+  }
+
+  async removeFromFavorites (req, res) {
+    const propertyID = req.params.id
+    const userID = req.user.id
+
+    try {
+      await this.buyerDAL.removeFromFavorites(propertyID, userID)
+      res.send({ success: true })
+    } catch (error) {
+      console.error(error)
+      res.status(500).send({ success: false, error: error.message })
+    }
+  }
 }
 
 module.exports = BuyerService

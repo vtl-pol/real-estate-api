@@ -189,6 +189,14 @@ class PropertyDAL {
     }
     return this.table().where({ id }).del()
   }
+
+  async saveToFavorites (propertyID, userID) {
+    return db.raw(`${db('favorite_properties').insert({ propertyID, userID })} ON DUPLICATE KEY UPDATE userID=userID`)
+  }
+
+  async removeFromFavorites (propertyID, userID) {
+    return db('favorite_properties').where({ propertyID, userID }).del()
+  }
 }
 
 module.exports = PropertyDAL

@@ -42,4 +42,12 @@ router.delete('/:propertyID/photos/:id', authMiddleware, (req, res) => {
   commerceService.deletePhoto(req, res)
 })
 
+router.patch('/:id/favorites', authMiddleware, notGuestMiddleware, (req, res) => {
+  commerceService.saveToFavorites(req, res)
+})
+
+router.delete('/:id/favorites', authMiddleware, notGuestMiddleware, (req, res) => {
+  commerceService.removeFromFavorites(req, res)
+})
+
 module.exports = router

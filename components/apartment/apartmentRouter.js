@@ -42,4 +42,12 @@ router.delete('/:propertyID/photos/:id', authMiddleware, (req, res) => {
   apartmentService.deletePhoto(req, res)
 })
 
+router.patch('/:id/favorites', authMiddleware, notGuestMiddleware, (req, res) => {
+  apartmentService.saveToFavorites(req, res)
+})
+
+router.delete('/:id/favorites', authMiddleware, notGuestMiddleware, (req, res) => {
+  apartmentService.removeFromFavorites(req, res)
+})
+
 module.exports = router

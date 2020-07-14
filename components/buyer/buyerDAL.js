@@ -160,6 +160,14 @@ class BuyerDAL {
   async delete (id) {
     return this.table().where({ id, lookingFor: this.lookingFor }).del()
   }
+
+  async saveToFavorites (buyerID, userID) {
+    return db.raw(`${db('favorite_buyers').insert({ buyerID, userID })} ON DUPLICATE KEY UPDATE userID=userID`)
+  }
+
+  async removeFromFavorites (buyerID, userID) {
+    return db('favorite_buyers').where({ buyerID, userID }).del()
+  }
 }
 
 module.exports = BuyerDAL

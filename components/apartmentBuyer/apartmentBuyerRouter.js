@@ -34,4 +34,12 @@ router.delete('/:id/archive', authMiddleware, buyerValidator.archive, (req, res)
   apartmentService.archiveBuyer(req, res)
 })
 
+router.patch('/:id/favorites', authMiddleware, notGuestMiddleware, (req, res) => {
+  apartmentService.saveToFavorites(req, res)
+})
+
+router.delete('/:id/favorites', authMiddleware, notGuestMiddleware, (req, res) => {
+  apartmentService.removeFromFavorites(req, res)
+})
+
 module.exports = router

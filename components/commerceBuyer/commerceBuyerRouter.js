@@ -34,4 +34,12 @@ router.delete('/:id/archive', authMiddleware, buyerValidator.archive, (req, res)
   commerceService.archiveBuyer(req, res)
 })
 
+router.patch('/:id/favorites', authMiddleware, notGuestMiddleware, (req, res) => {
+  commerceService.saveToFavorites(req, res)
+})
+
+router.delete('/:id/favorites', authMiddleware, notGuestMiddleware, (req, res) => {
+  commerceService.removeFromFavorites(req, res)
+})
+
 module.exports = router
