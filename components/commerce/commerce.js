@@ -78,7 +78,7 @@ const Commerce = attributes({
   districtName: String,
   featuredPhoto: {
     type: String,
-    default: (inst) => inst.photos.length ? inst.photos[inst.featuredPhotoNo].fileURL : ''
+    default: (inst) => (inst.photos && inst.photos.length) ? inst.photos[inst.featuredPhotoNo].fileURL : ''
   },
 
   /* RELATIONS */
