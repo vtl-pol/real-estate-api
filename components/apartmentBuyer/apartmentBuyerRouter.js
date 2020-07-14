@@ -9,7 +9,7 @@ const apartmentBuyerResource = require('./apartmentBuyerResource')
 const apartmentBuyerDAL = new BuyerDAL('buyers', 'apartment', Buyer)
 const apartmentService = new BuyerService(apartmentBuyerDAL, apartmentBuyerResource)
 
-const { authMiddleware } = require('../auth/authMiddleware')
+const { authMiddleware, notGuestMiddleware } = require('../auth/authMiddleware')
 const apartmentBuyerValidator = require('./apartmentBuyerValidator')
 const buyerValidator = require('../archive/buyer/buyerValidator')
 const contactValidator = require('../contact/contactValidator')
@@ -22,7 +22,7 @@ router.get('/:id', authMiddleware, (req, res) => {
   apartmentService.getBuyer(req, res)
 })
 
-router.post('/', authMiddleware, apartmentBuyerValidator.fields, contactValidator.exists, (req, res) => {
+router.post('/', authMiddleware, notGuestMiddleware, apartmentBuyerValidator.fields, contactValidator.exists, (req, res) => {
   apartmentService.createBuyer(req, res)
 })
 

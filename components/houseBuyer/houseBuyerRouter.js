@@ -9,7 +9,7 @@ const houseBuyerResource = require('./houseBuyerResource')
 const houseBuyerDAL = new BuyerDAL('buyers', 'house', Buyer)
 const houseService = new BuyerService(houseBuyerDAL, houseBuyerResource)
 
-const { authMiddleware } = require('../auth/authMiddleware')
+const { authMiddleware, notGuestMiddleware } = require('../auth/authMiddleware')
 const houseBuyerValidator = require('./houseBuyerValidator')
 const buyerValidator = require('../archive/buyer/buyerValidator')
 const contactValidator = require('../contact/contactValidator')
@@ -22,7 +22,7 @@ router.get('/:id', authMiddleware, (req, res) => {
   houseService.getBuyer(req, res)
 })
 
-router.post('/', authMiddleware, houseBuyerValidator.fields, contactValidator.exists, (req, res) => {
+router.post('/', authMiddleware, notGuestMiddleware, houseBuyerValidator.fields, contactValidator.exists, (req, res) => {
   houseService.createBuyer(req, res)
 })
 

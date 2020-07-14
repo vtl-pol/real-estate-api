@@ -20,7 +20,7 @@ const seed = async function (knex) {
     isOfficial: true,
     attachmentId: null,
     phone: null,
-    email: 'admin@admin.com',
+    email: 'admin@example.com',
     password: hashedPassword
   })
 
@@ -32,7 +32,7 @@ const seed = async function (knex) {
     isOfficial: true,
     attachmentId: null,
     phone: null,
-    email: 'agent@agent.com',
+    email: 'agent@example.com',
     password: hashedPassword
   })
 
@@ -44,7 +44,19 @@ const seed = async function (knex) {
     isOfficial: true,
     attachmentId: null,
     phone: null,
-    email: 'manager@agent.com',
+    email: 'manager@example.com',
+    password: hashedPassword
+  })
+
+  await knex('users').insert({
+    fullName: 'Гість',
+    rank: null,
+    role: 0,
+    isOfficial: false,
+    isOnContract: false,
+    attachmentId: null,
+    phone: null,
+    email: 'guest@example.com',
     password: hashedPassword
   })
 }

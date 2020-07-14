@@ -9,20 +9,20 @@ const apartmentResource = require('./apartmentResource')
 const apartmentDAL = new PropertyDAL('properties', 'apartment', Apartment)
 const apartmentService = new PropertyService(apartmentDAL, apartmentResource)
 
-const { authMiddleware, softAuthMiddleware } = require('../auth/authMiddleware')
+const { authMiddleware, notGuestMiddleware } = require('../auth/authMiddleware')
 const apartmentValidator = require('./apartmentValidator')
 const propertyValidator = require('../archive/property/propertyValidator')
 const contactValidator = require('../contact/contactValidator')
 
-router.get('/', softAuthMiddleware, apartmentValidator.filters, (req, res) => {
+router.get('/', authMiddleware, apartmentValidator.filters, (req, res) => {
   apartmentService.getProperties(req, res)
 })
 
-router.get('/:id', softAuthMiddleware, (req, res) => {
+router.get('/:id', authMiddleware, (req, res) => {
   apartmentService.getProperty(req, res)
 })
 
-router.post('/', authMiddleware, apartmentValidator.fields, contactValidator.exists, (req, res) => {
+router.post('/', authMiddleware, notGuestMiddleware, apartmentValidator.fields, contactValidator.exists, (req, res) => {
   apartmentService.createProperty(req, res)
 })
 

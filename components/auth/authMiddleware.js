@@ -27,16 +27,12 @@ passport.use(new JwtStrategy(options, authenticateWithToken))
 
 const authMiddleware = passport.authenticate('jwt', { session: false })
 
-const softAuthMiddleware = (req, res, next) => passport.authenticate('jwt', { session: false }, (err, user, _info) => {
-  if (err !== null) {
-    return res.status(500).send({ error: err })
+const notGuestMiddleware = (req, res, next) => {
+  if (req.user.isGuest()) {
+    return res.status(403).send({ message: 'У вас немає доступу до цієї сторінки' })
   }
-  if (user === false) {
-    user = userDAL.generateGuest()
-  }
-  req.user = user
-  return next()
-})(req, res, next)
+  return req.next()
+}
 
 const adminMiddleware = (req, res, next) => {
   if (req.user.isAdmin()) {
@@ -56,4 +52,4 @@ const managerMiddleware = (req, res, next) => {
   })
 }
 
-module.exports = { authMiddleware, softAuthMiddleware, adminMiddleware, managerMiddleware }
+module.exports = { authMiddleware, notGuestMiddleware, adminMiddleware, managerMiddleware }
