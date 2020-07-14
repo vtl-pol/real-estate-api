@@ -31,7 +31,7 @@ const notGuestMiddleware = (req, res, next) => {
   if (req.user.isGuest()) {
     return res.status(403).send({ message: 'У вас немає доступу до цієї сторінки' })
   }
-  return req.next()
+  return next()
 }
 
 const adminMiddleware = (req, res, next) => {
