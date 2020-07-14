@@ -5,6 +5,7 @@ class BuyerService {
   }
 
   async getBuyers (req, res) {
+    this.buyerDAL.setCurrentUser(req.user.id)
     try {
       const currentPage = req.query.page || 1
       const perPage = 10
@@ -26,6 +27,7 @@ class BuyerService {
   }
 
   async getBuyer (req, res) {
+    this.buyerDAL.setCurrentUser(req.user.id)
     try {
       const buyer = await this.buyerDAL.find(req.params.id)
       if (buyer === null) {
@@ -54,6 +56,7 @@ class BuyerService {
   }
 
   async updateBuyer (req, res) {
+    this.buyerDAL.setCurrentUser(req.user.id)
     try {
       const id = req.params.id
       const payload = req.body

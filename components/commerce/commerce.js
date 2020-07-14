@@ -80,6 +80,10 @@ const Commerce = attributes({
     type: String,
     default: (inst) => (inst.photos && inst.photos.length) ? inst.photos[inst.featuredPhotoNo].fileURL : ''
   },
+  isSaved: {
+    type: Boolean,
+    default: false
+  },
 
   /* RELATIONS */
   photos: {

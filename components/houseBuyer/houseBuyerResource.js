@@ -27,6 +27,7 @@ const buyerAttributes = [
   'isRenovated',
   'hasGarage',
   'authorName',
+  'isSaved',
   'contacts'
 ]
 

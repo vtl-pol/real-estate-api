@@ -7,6 +7,7 @@ class PropertyService {
   }
 
   async getProperties (req, res) {
+    this.propertyDAL.setCurrentUser(req.user.id)
     try {
       const filter = req.query.filter || {}
       const currentPage = req.query.page || 1
@@ -29,8 +30,9 @@ class PropertyService {
   }
 
   async getProperty (req, res) {
+    this.propertyDAL.setCurrentUser(req.user.id)
     try {
-      const property = await this.propertyDAL.find(req.params.id)
+      const property = await this.propertyDAL.find(req.params.id, req.user.id)
       if (property === null) {
         return res.status(404).send({ success: false, error: 'Об`єкту не існує' })
       }
@@ -67,6 +69,7 @@ class PropertyService {
   }
 
   async updateProperty (req, res) {
+    this.propertyDAL.setCurrentUser(req.user.id)
     try {
       const id = req.params.id
       const payload = req.body

@@ -69,6 +69,10 @@ const HouseBuyer = attributes({
   /* JOINED PARAMS */
   authorName: String,
   districtName: String,
+  isSaved: {
+    type: Boolean,
+    default: false
+  },
   contacts: {
     type: ContactsCollection,
     itemType: require('../contact/contact')

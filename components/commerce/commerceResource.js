@@ -32,6 +32,7 @@ const propertyAttributes = [
   'author',
   'photos',
   'featuredPhoto',
+  'isSaved',
   'contacts'
 ]
 

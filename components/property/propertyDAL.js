@@ -11,10 +11,15 @@ class PropertyDAL {
     this.propType = propType
     this.PropertyModel = PropertyModel
     this.archiveMode = false
+    this.currentUserID = 0
   }
 
   setArchiveMode () {
     this.archiveMode = true
+  }
+
+  setCurrentUser (userID) {
+    this.currentUserID = userID
   }
 
   table () {
@@ -26,10 +31,16 @@ class PropertyDAL {
   }
 
   async filterAndLoad ({ filter, currentPage, perPage }) {
+    const userID = this.currentUserID
     const query = this.table()
       .leftJoin('users', 'properties.authorID', '=', 'users.id')
       .leftJoin('districts', 'districts.id', '=', 'properties.districtID')
-      .select('properties.*', 'users.fullName AS authorName', 'districts.name AS districtName')
+      .leftJoin('favorite_properties', function () {
+        this
+          .on('favorite_properties.propertyID', 'properties.id')
+          .on('favorite_properties.userID', userID)
+      })
+      .select('properties.*', 'users.fullName AS authorName', 'districts.name AS districtName', db.raw('(favorite_properties.userID <> 0) AS `isSaved`'))
 
     const filteredQuery = this.applyFilters(query, filter)
 
@@ -56,10 +67,18 @@ class PropertyDAL {
   }
 
   async find (id) {
+    const userID = this.currentUserID
+
     const property = await this.table().where({ 'properties.id': id })
       .leftJoin('users', 'properties.authorID', '=', 'users.id')
-      .select('properties.*', 'users.fullName AS authorName')
+      .leftJoin('favorite_properties', function () {
+        this
+          .on('favorite_properties.propertyID', 'properties.id')
+          .on('favorite_properties.userID', userID)
+      })
+      .select('properties.*', 'users.fullName AS authorName', db.raw('(favorite_properties.userID <> 0) AS `isSaved`'))
       .first()
+
     if (!property) {
       return null
     }

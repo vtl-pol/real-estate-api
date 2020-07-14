@@ -37,6 +37,7 @@ const propertyAttributes = [
   'source',
   'reasonToSell',
   'featuredPhoto',
+  'isSaved',
   'contacts'
 ]
 

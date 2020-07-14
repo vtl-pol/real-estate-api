@@ -9,10 +9,15 @@ class BuyerDAL {
     this.lookingFor = propType
     this.BuyerModel = BuyerModel
     this.archiveMode = false
+    this.currentUserID = 0
   }
 
   setArchiveMode () {
     this.archiveMode = true
+  }
+
+  setCurrentUser (userID) {
+    this.currentUserID = userID
   }
 
   table () {
@@ -24,10 +29,17 @@ class BuyerDAL {
   }
 
   async filterAndLoad ({ filter, currentPage, perPage }) {
+    const userID = this.currentUserID
+
     const query = this.table()
       .leftJoin('users', 'buyers.authorID', '=', 'users.id')
       .leftJoin('districts', 'districts.id', '=', 'buyers.districtID')
-      .select('users.fullName AS authorName', 'districts.name AS districtName')
+      .leftJoin('favorite_buyers', function () {
+        this
+          .on('favorite_buyers.buyerID', 'buyers.id')
+          .on('favorite_buyers.userID', userID)
+      })
+      .select('users.fullName AS authorName', 'districts.name AS districtName', db.raw('(favorite_buyers.userID <> 0) AS `isSaved`'))
       .distinct('buyers.*')
 
     const filteredQuery = this.applyFilters(query, filter)
@@ -65,7 +77,19 @@ class BuyerDAL {
   }
 
   async find (id) {
-    const buyer = await this.table().where({ id, lookingFor: this.lookingFor }).first()
+    const userID = this.currentUserID
+
+    const buyer = await this.table().where('buyers.id', id)
+      .leftJoin('users', 'buyers.authorID', '=', 'users.id')
+      .leftJoin('districts', 'districts.id', '=', 'buyers.districtID')
+      .leftJoin('favorite_buyers', function () {
+        this
+          .on('favorite_buyers.buyerID', 'buyers.id')
+          .on('favorite_buyers.userID', userID)
+      })
+      .select('buyers.*', 'users.fullName AS authorName', 'districts.name AS districtName', db.raw('(favorite_buyers.userID <> 0) AS `isSaved`'))
+      .first()
+
     if (!buyer) {
       return null
     }
