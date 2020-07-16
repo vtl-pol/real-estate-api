@@ -10,7 +10,9 @@ class BuyerService {
       const currentPage = req.query.page || 1
       const perPage = 10
       const filter = req.query.filter || {}
-      const { records, pagination } = await this.buyerDAL.filterAndLoad({ filter, currentPage, perPage })
+      const sortBy = req.query.sortBy
+
+      const { records, pagination } = await this.buyerDAL.filterAndLoad({ filter, currentPage, perPage, sortBy })
 
       res.send({
         success: true,

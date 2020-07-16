@@ -30,8 +30,10 @@ class PropertyDAL {
     return db(this.tableName).where({ type: this.propType, archivedAt: null })
   }
 
-  async filterAndLoad ({ filter, currentPage, perPage }) {
+  async filterAndLoad ({ filter, currentPage, perPage, sortBy }) {
     const userID = this.currentUserID
+    const orderDirection = (sortBy === 'oldToNew') ? 'ASC' : 'DESC'
+
     const query = this.table()
       .leftJoin('users', 'properties.authorID', '=', 'users.id')
       .leftJoin('districts', 'districts.id', '=', 'properties.districtID')
@@ -40,6 +42,7 @@ class PropertyDAL {
           .on('favorite_properties.propertyID', 'properties.id')
           .on('favorite_properties.userID', userID)
       })
+      .orderBy('createdAt', orderDirection)
       .select('properties.*', 'users.fullName AS authorName', 'districts.name AS districtName', db.raw('(favorite_properties.userID <> 0) AS `isSaved`'))
 
     const filteredQuery = this.applyFilters(query, filter)

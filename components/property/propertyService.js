@@ -12,8 +12,9 @@ class PropertyService {
       const filter = req.query.filter || {}
       const currentPage = req.query.page || 1
       const perPage = req.query.perPage || 16
+      const sortBy = req.query.sortBy
 
-      const { records, pagination } = await this.propertyDAL.filterAndLoad({ filter, currentPage, perPage })
+      const { records, pagination } = await this.propertyDAL.filterAndLoad({ filter, currentPage, perPage, sortBy })
 
       res.send({
         success: true,

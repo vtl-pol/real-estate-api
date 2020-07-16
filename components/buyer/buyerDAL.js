@@ -28,8 +28,9 @@ class BuyerDAL {
     return db(this.tableName).where({ lookingFor: this.lookingFor, archivedAt: null })
   }
 
-  async filterAndLoad ({ filter, currentPage, perPage }) {
+  async filterAndLoad ({ filter, currentPage, perPage, sortBy }) {
     const userID = this.currentUserID
+    const orderDirection = (sortBy === 'oldToNew') ? 'ASC' : 'DESC'
 
     const query = this.table()
       .leftJoin('users', 'buyers.authorID', '=', 'users.id')
@@ -39,6 +40,7 @@ class BuyerDAL {
           .on('favorite_buyers.buyerID', 'buyers.id')
           .on('favorite_buyers.userID', userID)
       })
+      .orderBy('createdAt', orderDirection)
       .select('users.fullName AS authorName', 'districts.name AS districtName', db.raw('(favorite_buyers.userID <> 0) AS `isSaved`'))
       .distinct('buyers.*')
 
