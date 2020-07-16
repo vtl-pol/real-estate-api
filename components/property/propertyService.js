@@ -186,6 +186,20 @@ class PropertyService {
       res.status(500).send({ success: false, error: error.message })
     }
   }
+
+  async getFavorites (req, res) {
+    const userID = req.user.id
+    const currentPage = req.query.page || 1
+    const perPage = req.query.perPage || 16
+
+    try {
+      const { records, pagination } = await this.propertyDAL.getFavorites(userID, currentPage, perPage)
+      res.send({ favorites: records, pagination })
+    } catch (error) {
+      console.error(error)
+      res.status(500).send({ success: false, error: error.message })
+    }
+  }
 }
 
 module.exports = PropertyService

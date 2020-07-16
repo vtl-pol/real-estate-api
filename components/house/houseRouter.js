@@ -18,6 +18,10 @@ router.get('/', authMiddleware, houseValidator.filters, (req, res) => {
   houseService.getProperties(req, res)
 })
 
+router.get('/favorites', authMiddleware, notGuestMiddleware, (req, res) => {
+  houseService.getFavorites(req, res)
+})
+
 router.get('/:id', authMiddleware, (req, res) => {
   houseService.getProperty(req, res)
 })

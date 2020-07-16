@@ -18,6 +18,10 @@ router.get('/', authMiddleware, apartmentBuyerValidator.filters, (req, res) => {
   apartmentService.getBuyers(req, res)
 })
 
+router.get('/favorites', authMiddleware, notGuestMiddleware, (req, res) => {
+  apartmentService.getFavorites(req, res)
+})
+
 router.get('/:id', authMiddleware, (req, res) => {
   apartmentService.getBuyer(req, res)
 })

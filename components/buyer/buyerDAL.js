@@ -192,6 +192,30 @@ class BuyerDAL {
   async removeFromFavorites (buyerID, userID) {
     return db('favorite_buyers').where({ buyerID, userID }).del()
   }
+
+  async getFavorites (userID, currentPage, perPage) {
+    const query = this.table()
+      .leftJoin('users', 'buyers.authorID', '=', 'users.id')
+      .leftJoin('districts', 'districts.id', '=', 'buyers.districtID')
+      .leftJoin('favorite_buyers', function () {
+        this
+          .on('favorite_buyers.buyerID', 'buyers.id')
+          .on('favorite_buyers.userID', userID)
+      })
+      .where('favorite_buyers.userID', userID)
+      .select('users.fullName AS authorName', 'districts.name AS districtName', db.raw('(favorite_buyers.userID <> 0) AS `isSaved`'))
+      .distinct('buyers.*')
+
+    const { data, pagination } = await query.paginate({ perPage, currentPage })
+
+    const contacts = await this.loadContactsFor(data.map(r => r.id))
+    const records = data.map(r => {
+      Object.assign(r, { contacts: contacts.filter(c => c.contactableID === r.id) })
+      return new this.BuyerModel(r)
+    })
+
+    return { records, pagination }
+  }
 }
 
 module.exports = BuyerDAL

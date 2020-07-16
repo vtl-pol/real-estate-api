@@ -216,6 +216,28 @@ class PropertyDAL {
   async removeFromFavorites (propertyID, userID) {
     return db('favorite_properties').where({ propertyID, userID }).del()
   }
+
+  async getFavorites (userID, currentPage, perPage) {
+    const query = this.table()
+      .leftJoin('users', 'properties.authorID', '=', 'users.id')
+      .leftJoin('districts', 'districts.id', '=', 'properties.districtID')
+      .leftJoin('favorite_properties', function () {
+        this
+          .on('favorite_properties.propertyID', 'properties.id')
+          .on('favorite_properties.userID', userID)
+      })
+      .where('favorite_properties.userID', userID)
+      .select('properties.*', 'users.fullName AS authorName', 'districts.name AS districtName', db.raw('(favorite_properties.userID <> 0) AS `isSaved`'))
+
+    const { data, pagination } = await query.paginate({ perPage, currentPage })
+    const photos = await db('photos').where('propertyID', 'IN', data.map(i => i.id))
+    const props = data.map(r => Object.assign(r, { photos: photos.filter(p => p.propertyID === r.id) }))
+    const contacts = await this.loadContactsFor(props.map(r => r.id))
+
+    const records = props.map(pr => Object.assign(pr, { contacts: contacts.filter(c => c.contactableID === pr.id) })).map(r => new this.PropertyModel(r))
+
+    return { records, pagination }
+  }
 }
 
 module.exports = PropertyDAL

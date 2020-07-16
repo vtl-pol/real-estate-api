@@ -18,6 +18,10 @@ router.get('/', authMiddleware, commerceValidator.filters, (req, res) => {
   commerceService.getProperties(req, res)
 })
 
+router.get('/favorites', authMiddleware, notGuestMiddleware, (req, res) => {
+  commerceService.getFavorites(req, res)
+})
+
 router.get('/:id', authMiddleware, (req, res) => {
   commerceService.getProperty(req, res)
 })

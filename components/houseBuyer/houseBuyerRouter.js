@@ -18,6 +18,10 @@ router.get('/', authMiddleware, (req, res) => {
   houseService.getBuyers(req, res)
 })
 
+router.get('/favorites', authMiddleware, notGuestMiddleware, (req, res) => {
+  houseService.getFavorites(req, res)
+})
+
 router.get('/:id', authMiddleware, (req, res) => {
   houseService.getBuyer(req, res)
 })
