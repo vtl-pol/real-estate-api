@@ -15,7 +15,7 @@ class UserDAL {
   async findByEmail (email) {
     const user = await db(this.table).where({ email }).first()
 
-    return new User(user)
+    return user
   }
 
   async findByAccessToken (accessToken) {
