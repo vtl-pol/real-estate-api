@@ -28,6 +28,7 @@ class UserDAL {
   }
 
   async create (userPayload) {
+    userPayload.email = userPayload.email.toLowerCase()
     const [resultID] = await db(this.table).insert(userPayload)
     const user = await this.findByID(resultID)
 
@@ -45,11 +46,25 @@ class UserDAL {
     return result
   }
 
-  generateGuest () {
-    return new User({
-      fullName: 'Гість',
-      role: 0
-    })
+  async searchUsers (query = '', currentPage = 1, perPage = 5) {
+    const capitalizedQuery = query.charAt(0).toUpperCase() + query.slice(1)
+    const lowercasedQuery = query.toLowerCase()
+    const phoneQuery = query.replace(/\D/g, '')
+    const { data, pagination } = await db(this.table)
+      .where('fullName', 'like', `%${query}%`)
+      .orWhere('fullName', 'like', `%${lowercasedQuery}%`)
+      .orWhere('fullName', 'like', `%${capitalizedQuery}%`)
+      .orWhere('email', 'like', `%${lowercasedQuery}%`)
+      .orWhere('phone', 'like', `%${(phoneQuery !== '') ? phoneQuery : '--'}%`)
+      .paginate({ perPage, currentPage })
+
+    return { users: data.map(r => new User(r)), pagination }
+  }
+
+  async checkExists (filter, id = null) {
+    const result = await db(this.table).whereNot('id', id).where(filter).count('id AS count').first()
+
+    return result.count > 0
   }
 }
 

@@ -3,6 +3,7 @@ const { House } = require('../house')
 const { Commerce } = require('../commerce')
 const { propertyConstants } = require('../property')
 const { buyerConstants } = require('../buyer')
+const User = require('../user/user')
 
 class ConstantsService {
   get (_req, res) {
@@ -21,6 +22,8 @@ class ConstantsService {
     const BUYER_APT_FLOORS = buyerConstants.APT_FLOORS
     const BUYER_HOUSE_RANGES = buyerConstants.HOUSE_RANGES
     const SOLD_BYS = buyerConstants.SOLD_BYS
+    const USER_ROLES = Object.fromEntries(Object.values(User.ROLES).map((r) => [r.key, r.name]))
+    const USER_RANKS = Object.fromEntries(Object.values(User.RANKS).map((r) => [r.key, r.name]))
 
     return res.send({
       APARTMENT_MATERIALS,
@@ -36,7 +39,9 @@ class ConstantsService {
       BUYER_APT_FLOORS,
       BUYER_HOUSE_RANGES,
       ARCHIVED_REASONS,
-      SOLD_BYS
+      SOLD_BYS,
+      USER_ROLES,
+      USER_RANKS
     })
   }
 }

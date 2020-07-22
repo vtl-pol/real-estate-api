@@ -1,4 +1,5 @@
 const { attributes } = require('structure')
+const phoneFormatter = require('phone-formatter')
 
 const User = attributes({
   id: {
@@ -25,12 +26,8 @@ const User = attributes({
     default: false
   },
   attachmentId: Number,
-  phone: Number,
+  phone: String,
   email: {
-    type: String,
-    required: true
-  },
-  password: {
     type: String,
     required: true
   },
@@ -44,31 +41,51 @@ const User = attributes({
   }
 })(class User {
   isAdmin () {
-    return this.role === User.ROLE_ADMIN
+    return this.role === User.ROLES.ADMIN.key
   }
 
   isManager () {
-    return this.isAdmin() || (this.role === User.ROLE_MANAGER)
+    return this.isAdmin() || (this.role === User.ROLES.MANAGER.key)
   }
 
   isAgent () {
-    return this.isAdmin() || (this.role === User.ROLE_AGENT)
+    return this.isAdmin() || (this.role === User.ROLES.AGENT.key)
   }
 
   isGuest () {
-    return this.role === User.ROLE_GUEST
+    return this.role === User.ROLES.GUEST.key
+  }
+
+  get phone () {
+    if (this.get('phone') !== '') {
+      return phoneFormatter.format(this.get('phone').toString(), '(NNN) NNN NNNN')
+    } else {
+      return ''
+    }
+  }
+
+  set phone (newPhone) {
+    if (newPhone !== null && newPhone !== undefined) {
+      return this.set('phone', phoneFormatter.normalize(newPhone.toString()))
+    } else {
+      return this.set('phone', null)
+    }
   }
 })
 
-User.RANK_NONE = null
-User.RANK_INTERN = 1
-User.RANK_NEWBIE = 2
-User.RANK_AGENT = 3
-User.RANK_PROFESSIONAL = 4
+User.RANKS = {
+  NONE: { key: null, name: 'Немає' },
+  INTERN: { key: 1, name: 'Стажер' },
+  NEWBIE: { key: 2, name: 'Новачок' },
+  AGENT: { key: 3, name: 'Агент' },
+  PROFESSIONAL: { key: 4, name: 'Професіонал' }
+}
 
-User.ROLE_GUEST = 0
-User.ROLE_AGENT = 1
-User.ROLE_MANAGER = 2
-User.ROLE_ADMIN = 3
+User.ROLES = {
+  GUEST: { key: 1, name: 'Гість' },
+  AGENT: { key: 2, name: 'Агент' },
+  MANAGER: { key: 3, name: 'Офіс-Менеджер' },
+  ADMIN: { key: 4, name: 'Адміністратор' }
+}
 
 module.exports = User

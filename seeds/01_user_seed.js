@@ -1,6 +1,7 @@
 require('dotenv').config()
 
 const bcrypt = require('bcrypt')
+const User = require('../components/user/user')
 
 const seed = async function (knex) {
   await knex('users').del()
@@ -14,36 +15,36 @@ const seed = async function (knex) {
 
   await knex('users').insert({
     fullName: 'Адміністратор',
-    rank: 3,
-    role: 3,
+    rank: User.RANKS.PROFESSIONAL.key,
+    role: User.ROLES.ADMIN.key,
     isOnContract: true,
     isOfficial: true,
     attachmentId: null,
-    phone: null,
+    phone: '0931111111',
     email: 'admin@example.com',
     password: hashedPassword
   })
 
   await knex('users').insert({
     fullName: 'Агент',
-    rank: 1,
-    role: 1,
+    rank: User.RANKS.AGENT.key,
+    role: User.ROLES.AGENT.key,
     isOnContract: true,
     isOfficial: true,
     attachmentId: null,
-    phone: null,
+    phone: '0932222222',
     email: 'agent@example.com',
     password: hashedPassword
   })
 
   await knex('users').insert({
     fullName: 'Офіс-Менеджер',
-    rank: 2,
-    role: 2,
+    rank: User.RANKS.AGENT.key,
+    role: User.ROLES.MANAGER.key,
     isOnContract: true,
     isOfficial: true,
     attachmentId: null,
-    phone: null,
+    phone: '0973333333',
     email: 'manager@example.com',
     password: hashedPassword
   })
@@ -51,11 +52,11 @@ const seed = async function (knex) {
   await knex('users').insert({
     fullName: 'Гість',
     rank: null,
-    role: 0,
+    role: User.ROLES.GUEST.key,
     isOfficial: false,
     isOnContract: false,
     attachmentId: null,
-    phone: null,
+    phone: '0505555555',
     email: 'guest@example.com',
     password: hashedPassword
   })
