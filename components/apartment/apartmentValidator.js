@@ -28,7 +28,8 @@ const apartmentSchema = Joi.object().keys({
   motivation: Joi.string().only(...propertyConstants.MOTIVATIONS).allow(null),
   source: Joi.number().integer().only(allowedSources).allow(null),
   featuredPhotoNo: Joi.number().integer().min(0),
-  contactsIDs: Joi.array().min(1).required().items(Joi.number().integer())
+  contactsIDs: Joi.array().min(1).required().items(Joi.number().integer()),
+  reasonToSell: Joi.string()
 })
 
 const filtersSchema = Joi.object().keys({
