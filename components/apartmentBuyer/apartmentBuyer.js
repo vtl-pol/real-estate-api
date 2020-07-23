@@ -10,7 +10,10 @@ const ApartmentBuyer = attributes({
   },
   lookingFor: String,
   name: String,
-  authorID: Number,
+  authorID: {
+    type: Number,
+    nullable: true
+  },
   responsibleID: {
     type: Number,
     nullable: true
@@ -64,6 +67,7 @@ const ApartmentBuyer = attributes({
 
   /* JOINED PARAMS */
   authorName: String,
+  responsibleName: String,
   districtName: String,
   isSaved: {
     type: Boolean,

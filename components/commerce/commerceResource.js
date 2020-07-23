@@ -6,6 +6,7 @@ const propertyAttributes = [
   'id',
   'title',
   'authorName',
+  'responsibleName',
   'responsibleID',
   'propertyStatus',
   'contract',

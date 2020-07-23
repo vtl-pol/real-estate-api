@@ -36,6 +36,7 @@ class PropertyDAL {
 
     const query = this.table()
       .leftJoin('users', 'properties.authorID', '=', 'users.id')
+      .leftJoin('users AS responsibles', 'properties.responsibleID', '=', 'responsibles.id')
       .leftJoin('districts', 'districts.id', '=', 'properties.districtID')
       .leftJoin('favorite_properties', function () {
         this
@@ -43,7 +44,7 @@ class PropertyDAL {
           .on('favorite_properties.userID', userID)
       })
       .orderBy('createdAt', orderDirection)
-      .select('properties.*', 'users.fullName AS authorName', 'districts.name AS districtName', db.raw('(favorite_properties.userID <> 0) AS `isSaved`'))
+      .select('properties.*', 'users.fullName AS authorName', 'responsibles.fullName as responsibleName', 'districts.name AS districtName', db.raw('(favorite_properties.userID <> 0) AS `isSaved`'))
 
     const filteredQuery = this.applyFilters(query, filter)
 
@@ -74,12 +75,13 @@ class PropertyDAL {
 
     const property = await this.table().where({ 'properties.id': id })
       .leftJoin('users', 'properties.authorID', '=', 'users.id')
+      .leftJoin('users AS responsibles', 'properties.responsibleID', '=', 'responsibles.id')
       .leftJoin('favorite_properties', function () {
         this
           .on('favorite_properties.propertyID', 'properties.id')
           .on('favorite_properties.userID', userID)
       })
-      .select('properties.*', 'users.fullName AS authorName', db.raw('(favorite_properties.userID <> 0) AS `isSaved`'))
+      .select('properties.*', 'users.fullName AS authorName', 'responsibles.fullName as responsibleName', db.raw('(favorite_properties.userID <> 0) AS `isSaved`'))
       .first()
 
     if (!property) {

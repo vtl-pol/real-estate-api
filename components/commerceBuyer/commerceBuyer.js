@@ -9,7 +9,10 @@ const CommerceBuyer = attributes({
   },
   lookingFor: String,
   name: String,
-  authorID: Number,
+  authorID: {
+    type: Number,
+    nullable: true
+  },
   responsibleID: {
     type: Number,
     nullable: true
@@ -63,6 +66,7 @@ const CommerceBuyer = attributes({
 
   /* JOINED PARAMS */
   authorName: String,
+  responsibleName: String,
   districtName: String,
   isSaved: {
     type: Boolean,

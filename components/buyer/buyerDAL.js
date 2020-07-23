@@ -34,6 +34,7 @@ class BuyerDAL {
 
     const query = this.table()
       .leftJoin('users', 'buyers.authorID', '=', 'users.id')
+      .leftJoin('users AS responsibles', 'buyers.responsibleID', '=', 'responsibles.id')
       .leftJoin('districts', 'districts.id', '=', 'buyers.districtID')
       .leftJoin('favorite_buyers', function () {
         this
@@ -41,7 +42,7 @@ class BuyerDAL {
           .on('favorite_buyers.userID', userID)
       })
       .orderBy('createdAt', orderDirection)
-      .select('users.fullName AS authorName', 'districts.name AS districtName', db.raw('(favorite_buyers.userID <> 0) AS `isSaved`'))
+      .select('users.fullName AS authorName', 'responsibles.fullName as responsibleName', 'districts.name AS districtName', db.raw('(favorite_buyers.userID <> 0) AS `isSaved`'))
       .distinct('buyers.*')
 
     const filteredQuery = this.applyFilters(query, filter)
@@ -83,13 +84,14 @@ class BuyerDAL {
 
     const buyer = await this.table().where('buyers.id', id)
       .leftJoin('users', 'buyers.authorID', '=', 'users.id')
+      .leftJoin('users AS responsibles', 'buyers.responsibleID', '=', 'responsibles.id')
       .leftJoin('districts', 'districts.id', '=', 'buyers.districtID')
       .leftJoin('favorite_buyers', function () {
         this
           .on('favorite_buyers.buyerID', 'buyers.id')
           .on('favorite_buyers.userID', userID)
       })
-      .select('buyers.*', 'users.fullName AS authorName', 'districts.name AS districtName', db.raw('(favorite_buyers.userID <> 0) AS `isSaved`'))
+      .select('buyers.*', 'users.fullName AS authorName', 'responsibles.fullName as responsibleName', 'districts.name AS districtName', db.raw('(favorite_buyers.userID <> 0) AS `isSaved`'))
       .first()
 
     if (!buyer) {
@@ -121,6 +123,9 @@ class BuyerDAL {
 
   async create (payload) {
     payload.lookingFor = this.lookingFor
+    payload.authorID = this.currentUserID
+    payload.responsibleID = this.currentUserID
+
     try {
       const buyerID = await db.transaction(async trx => {
         const buyerID = await trx(this.tableName).insert(without(['contactsIDs'], payload))

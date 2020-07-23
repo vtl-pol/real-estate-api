@@ -44,6 +44,7 @@ class BuyerService {
   }
 
   async createBuyer (req, res) {
+    this.buyerDAL.setCurrentUser(req.user.id)
     try {
       const payload = req.body
       payload.authorID = req.user.id

@@ -10,7 +10,10 @@ const Apartment = attributes({
     default: null
   },
   title: String,
-  responsibleID: Number,
+  responsibleID: {
+    type: Number,
+    nullable: true
+  },
   propertyStatus: {
     type: Number,
     default: 1
@@ -78,6 +81,7 @@ const Apartment = attributes({
 
   /* JOINED PARAMS */
   authorName: String,
+  responsibleName: String,
   districtName: String,
   featuredPhoto: {
     type: String,

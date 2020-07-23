@@ -25,6 +25,7 @@ const buyerAttributes = [
   'isRenovated',
   'autonomousHeat',
   'authorName',
+  'responsibleName',
   'isSaved',
   'contacts'
 ]

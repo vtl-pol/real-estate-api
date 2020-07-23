@@ -5,6 +5,7 @@ const { photoResource } = require('../photo')
 const propertyAttributes = [
   'id',
   'authorName',
+  'responsibleName',
   'responsibleID',
   'title',
   'noOfRooms',
