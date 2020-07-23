@@ -34,7 +34,7 @@ class PropertyDAL {
     return db(this.tableName).where({ type: this.propType, archivedAt: null })
   }
 
-  async filterAndLoad ({ filter, currentPage, perPage, sortBy = null }) {
+  async filterAndLoad ({ filter, currentPage, perPage, sortBy }) {
     const userID = this.currentUserID
 
     const query = this.table()
@@ -73,7 +73,7 @@ class PropertyDAL {
     return query
   }
 
-  applySorting (query, sortBy = 'createdAt-desc') {
+  applySorting (query, sortBy = '') {
     const [sortAttr, direction] = sortBy.split('-', 2)
     if (!direction) {
       return this.applySorting(query, 'createdAt-desc')
