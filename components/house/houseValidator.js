@@ -26,8 +26,8 @@ const houseSchema = Joi.object().keys({
   garage: Joi.boolean().required(),
   builtAt: Joi.string().regex(/^\d{4} Q\d{1}$/).required(), // 2019 Q2
   description: Joi.string().required(),
-  contract: Joi.string().only(...propertyConstants.CONTRACTS).allow(null),
-  motivation: Joi.string().only(...propertyConstants.MOTIVATIONS).allow(null),
+  contract: Joi.string().only(...propertyConstants.CONTRACTS),
+  motivation: Joi.string().only(...propertyConstants.MOTIVATIONS),
   source: Joi.number().integer().min(1).max(Object.keys(propertyConstants.SOURCES).length - 1).allow(null),
   featuredPhotoNo: Joi.number().integer().min(0),
   contactsIDs: Joi.array().min(1).required().items(Joi.number().integer()),

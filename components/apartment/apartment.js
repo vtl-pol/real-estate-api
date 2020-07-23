@@ -20,7 +20,7 @@ const Apartment = attributes({
   },
   contract: {
     type: String,
-    nullable: true
+    default: 'Немає'
   },
   motivation: {
     type: String,

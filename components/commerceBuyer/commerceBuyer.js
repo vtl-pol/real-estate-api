@@ -21,7 +21,10 @@ const CommerceBuyer = attributes({
     type: Number,
     default: 1
   },
-  contract: String,
+  contract: {
+    type: String,
+    default: 'Немає'
+  },
   motivation: String,
   source: {
     type: Number,

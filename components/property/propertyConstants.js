@@ -4,7 +4,7 @@ const STATUSES = {
   3: 'В Рекламі'
 }
 
-const CONTRACTS = ['НЕД', 'ЕД']
+const CONTRACTS = ['НЕД', 'ЕД', 'Немає']
 const MOTIVATIONS = ['A', 'B', 'C', 'AA']
 
 const SOURCES = {
