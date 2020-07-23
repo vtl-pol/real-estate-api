@@ -14,6 +14,10 @@ class PropertyDAL {
     this.currentUserID = 0
   }
 
+  supportedSortBys () {
+    return ['createdAt', 'price', 'squareTotal']
+  }
+
   setArchiveMode () {
     this.archiveMode = true
   }
@@ -30,9 +34,8 @@ class PropertyDAL {
     return db(this.tableName).where({ type: this.propType, archivedAt: null })
   }
 
-  async filterAndLoad ({ filter, currentPage, perPage, sortBy }) {
+  async filterAndLoad ({ filter, currentPage, perPage, sortBy = null }) {
     const userID = this.currentUserID
-    const orderDirection = (sortBy === 'oldToNew') ? 'ASC' : 'DESC'
 
     const query = this.table()
       .leftJoin('users', 'properties.authorID', '=', 'users.id')
@@ -43,10 +46,10 @@ class PropertyDAL {
           .on('favorite_properties.propertyID', 'properties.id')
           .on('favorite_properties.userID', userID)
       })
-      .orderBy('createdAt', orderDirection)
       .select('properties.*', 'users.fullName AS authorName', 'responsibles.fullName as responsibleName', 'districts.name AS districtName', db.raw('(favorite_properties.userID <> 0) AS `isSaved`'))
 
-    const filteredQuery = this.applyFilters(query, filter)
+    const sortedQuery = this.applySorting(query, sortBy)
+    const filteredQuery = this.applyFilters(sortedQuery, filter)
 
     const { data, pagination } = await filteredQuery.paginate({ perPage, currentPage })
     const photos = await db('photos').where('propertyID', 'IN', data.map(i => i.id))
@@ -68,6 +71,20 @@ class PropertyDAL {
       query = f.exec(query, filter[f.field])
     })
     return query
+  }
+
+  applySorting (query, sortBy = 'createdAt-desc') {
+    const [sortAttr, direction] = sortBy.split('-', 2)
+    if (!direction) {
+      return this.applySorting(query, 'createdAt-desc')
+    }
+
+    const notSupported = this.supportedSortBys().indexOf(sortAttr) === -1
+    const invalidDirection = ['asc', 'desc'].indexOf(direction.toLowerCase()) === -1
+    if (notSupported || invalidDirection) {
+      return this.applySorting(query, 'createdAt-desc')
+    }
+    return query.orderBy(`properties.${sortAttr}`, direction)
   }
 
   async find (id) {
