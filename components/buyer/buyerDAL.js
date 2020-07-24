@@ -60,7 +60,7 @@ class BuyerDAL {
   }
 
   async findBasic (id) {
-    const buyer = await this.table().where({ id }).select('id', 'responsibleID', 'source').first()
+    const buyer = await this.table().where({ id }).select('id', 'responsibleID', 'source', 'motivation').first()
     if (!buyer) {
       return null
     }

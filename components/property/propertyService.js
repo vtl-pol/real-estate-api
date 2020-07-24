@@ -1,3 +1,4 @@
+const moment = require('moment')
 const { photoService, photoDAL } = require('../photo')
 
 class PropertyService {
@@ -50,6 +51,7 @@ class PropertyService {
       const payload = req.body
       payload.authorID = req.user.id
       payload.responsibleID = req.user.id
+      payload.expiresAt = this.calculateExpiration(payload.motivation)
 
       const newProperty = await this.propertyDAL.create(payload)
       if (req.body.photos && req.body.photos.length) {
@@ -82,6 +84,9 @@ class PropertyService {
           return
         }
 
+        if (payload.motivation && payload.motivation !== property.motivation) {
+          payload.expiresAt = this.calculateExpiration(payload.motivation)
+        }
         await this.propertyDAL.update(id, payload)
         const newProperty = await this.propertyDAL.find(id)
         newProperty.restrictFor(req.user)
@@ -199,6 +204,24 @@ class PropertyService {
     } catch (error) {
       console.error(error)
       res.status(500).send({ success: false, error: error.message })
+    }
+  }
+
+  calculateExpiration (motivation) {
+    if (motivation === 'C') {
+      return moment().add(3, 'months').format()
+    }
+
+    if (motivation === 'B') {
+      return moment().add(2, 'months').format()
+    }
+
+    if (motivation === 'A') {
+      return moment().add(1, 'months').format()
+    }
+
+    if (motivation === 'AA') {
+      return moment().format()
     }
   }
 }

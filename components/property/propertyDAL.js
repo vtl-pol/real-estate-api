@@ -115,7 +115,7 @@ class PropertyDAL {
   }
 
   async findBasic (id) {
-    const property = await this.table().where({ id }).select('id', 'responsibleID', 'source').first()
+    const property = await this.table().where({ id }).select('id', 'responsibleID', 'source', 'motivation').first()
     if (!property) {
       return null
     }
