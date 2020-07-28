@@ -9,7 +9,7 @@
     "rollback": "knex migrate:rollback",
     "make:migration": "knex migrate:make",
     "seed": "knex seed:run",
-    "prod": "nodemon ./bin/www --exec 'yarn lint && yarn migrate && node'"
+    "prod": "nodemon ./bin/www --exec 'yarn migrate && node'"
   },
   "engines": {
     "node": ">=12.18.2"
