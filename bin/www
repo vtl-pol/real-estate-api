@@ -28,6 +28,7 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+console.log(`Started HTTP server on port ${port}`)
 
 /**
  * Start jobs processor

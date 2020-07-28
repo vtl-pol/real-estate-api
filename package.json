@@ -5,11 +5,11 @@
   "scripts": {
     "start": "nodemon ./bin/www --exec 'yarn lint && node'",
     "lint": "eslint ./",
-    "console": "node bin/console",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
     "make:migration": "knex migrate:make",
-    "seed": "knex seed:run"
+    "seed": "knex seed:run",
+    "prod": "nodemon ./bin/www --exec 'yarn lint && yarn migrate && node'"
   },
   "engines": {
     "node": ">=12.18.2"
