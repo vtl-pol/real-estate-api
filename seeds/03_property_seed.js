@@ -36,6 +36,7 @@ const seed = async function (knex) {
 
   const settlements = await knex('settlements')
   const districts = await knex('districts')
+  const streets = (await knex('streets')).map(s => s.name)
 
   const apartmentsPayload = fixtures.apartments.map(record => {
     const dist = arrayRandom(districts)
@@ -44,6 +45,7 @@ const seed = async function (knex) {
       type: 'apartment',
       districtID: dist.id,
       settlement: dist.settlement,
+      street: arrayRandom(streets),
       expiresAt: calcMotivation(record.motivation)
     })
   })
@@ -53,6 +55,7 @@ const seed = async function (knex) {
       authorID,
       type: 'house',
       settlement: settlement,
+      street: arrayRandom(streets),
       expiresAt: calcMotivation(record.motivation)
     })
   })
@@ -62,6 +65,7 @@ const seed = async function (knex) {
       authorID,
       type: 'commerce',
       settlement: settlement,
+      street: arrayRandom(streets),
       expiresAt: calcMotivation(record.motivation)
     })
   })

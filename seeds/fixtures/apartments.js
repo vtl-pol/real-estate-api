@@ -2,7 +2,6 @@ module.exports = [
   {
     title: 'Студіо в самому центрі міста. СОНЯЧНІ ПАНЕЛІ!!!',
     noOfRooms: 3,
-    street: 'Незалежності',
     houseNo: 1,
     price: 90000,
     material: 1,
@@ -22,7 +21,6 @@ module.exports = [
   {
     title: '1-шка на Соборній',
     noOfRooms: 1,
-    street: 'Соборна',
     houseNo: '1а',
     price: 40000,
     material: 1,
@@ -42,7 +40,6 @@ module.exports = [
   {
     title: 'Продаю 2-кімнатну квартиру',
     noOfRooms: 2,
-    street: 'Марченка',
     houseNo: '8',
     price: 35000,
     material: 2,

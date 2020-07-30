@@ -61,7 +61,13 @@ const filtersSchema = Joi.object().keys({
   renovated: Joi.boolean()
 }).unknown()
 
-const fields = (req, res, next) => {
+const fields = async (req, res, next) => {
+  if (req.body.street) {
+    const exists = await commerceDAL.streetExist(req.body.street)
+    if (exists) {
+      return res.status(422).send({ success: false, error: 'Такої вулиці немає в базі' })
+    }
+  }
   Joi.validate(req.body, commerceSchema, function (err, _value) {
     if (err) {
       const errors = formattedErrors(err.details)
@@ -69,21 +75,6 @@ const fields = (req, res, next) => {
     }
     return next()
   })
-}
-
-const uniqe = async (req, res, next) => {
-  if (!req.body.registrationNo) {
-    return next()
-  }
-  const params = { registrationNo: req.body.registrationNo }
-  const id = req.params.id
-
-  const exists = await commerceDAL.propertyExists(params, id)
-
-  if (exists) {
-    return res.status(422).send({ success: false, error: 'Такий Кадастровий номер вже є в базі' })
-  }
-  return next()
 }
 
 const filters = (req, res, next) => {
@@ -96,4 +87,4 @@ const filters = (req, res, next) => {
   })
 }
 
-module.exports = { fields, uniqe, filters }
+module.exports = { fields, filters }

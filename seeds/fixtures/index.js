@@ -4,5 +4,6 @@ module.exports = {
   commerce: require('./commerce'),
   contacts: require('./contacts'),
   settlements: require('./settlements'),
-  buyers: require('./buyers')
+  buyers: require('./buyers'),
+  streets: require('./streets')
 }

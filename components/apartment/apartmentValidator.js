@@ -1,5 +1,7 @@
 const Joi = require('joi')
 
+const PropertyDAL = require('../property/propertyDAL')
+const apartmentDAL = new PropertyDAL('properties', 'apartment')
 const { propertyConstants } = require('../property')
 const { formattedErrors } = require('../../utils/errors')
 
@@ -74,7 +76,13 @@ const filtersSchema = Joi.object().keys({
   renovated: Joi.boolean()
 }).unknown()
 
-const fields = (req, res, next) => {
+const fields = async (req, res, next) => {
+  if (req.body.street) {
+    const exists = await apartmentDAL.streetExist(req.body.street)
+    if (exists) {
+      return res.status(422).send({ success: false, error: 'Такої вулиці немає в базі' })
+    }
+  }
   Joi.validate(req.body, apartmentSchema, function (err, _value) {
     if (err) {
       const errors = formattedErrors(err.details)

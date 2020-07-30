@@ -1,9 +1,11 @@
 require('dotenv').config()
 
-const { settlements } = require('./fixtures')
+const { settlements, streets } = require('./fixtures')
 
 const seed = async function (knex) {
   await knex('settlements').del()
+  await knex('districts').del()
+  await knex('streets').del()
 
   for (const settlement of settlements) {
     const name = settlement.name
@@ -15,6 +17,9 @@ const seed = async function (knex) {
       }))
     }
   }
+  const strPayload = streets.map(s => Object({ name: s }))
+
+  await knex('streets').insert(strPayload)
 }
 
 module.exports = { seed }

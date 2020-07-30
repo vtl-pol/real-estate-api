@@ -260,6 +260,11 @@ class PropertyDAL {
 
     return { records, pagination }
   }
+
+  async streetExist (name) {
+    const result = await db('streets').where({ name }).limit(1).select('name').first()
+    return (result !== undefined)
+  }
 }
 
 module.exports = PropertyDAL

@@ -26,11 +26,11 @@ router.get('/:id', authMiddleware, (req, res) => {
   commerceService.getProperty(req, res)
 })
 
-router.post('/', authMiddleware, notGuestMiddleware, commerceValidator.fields, commerceValidator.uniqe, contactValidator.exists, (req, res) => {
+router.post('/', authMiddleware, notGuestMiddleware, commerceValidator.fields, contactValidator.exists, (req, res) => {
   commerceService.createProperty(req, res)
 })
 
-router.put('/:id', authMiddleware, commerceValidator.uniqe, contactValidator.exists, (req, res) => {
+router.put('/:id', authMiddleware, contactValidator.exists, (req, res) => {
   commerceService.updateProperty(req, res)
 })
 

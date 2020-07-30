@@ -76,7 +76,13 @@ const filtersSchema = Joi.object().keys({
   renovated: Joi.boolean()
 }).unknown()
 
-const fields = (req, res, next) => {
+const fields = async (req, res, next) => {
+  if (req.body.street) {
+    const exists = await houseDAL.streetExist(req.body.street)
+    if (!exists) {
+      return res.status(422).send({ success: false, error: 'Такої вулиці немає в базі' })
+    }
+  }
   Joi.validate(req.body, houseSchema, function (err, _value) {
     if (err) {
       const errors = formattedErrors(err.details)
