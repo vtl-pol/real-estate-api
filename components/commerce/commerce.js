@@ -54,6 +54,10 @@ const Commerce = attributes({
   },
   createdAt: Date,
   updatedAt: Date,
+  expiresAt: {
+    type: Date,
+    nullable: true
+  },
   archivedAt: {
     type: Date,
     nullable: true

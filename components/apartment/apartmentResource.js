@@ -35,6 +35,7 @@ const propertyAttributes = [
   'propertyStatus',
   'contract',
   'motivation',
+  'expiresAt',
   'source',
   'reasonToSell',
   'featuredPhoto',

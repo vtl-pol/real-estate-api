@@ -1,7 +1,13 @@
+require('dotenv').config()
+
 const fixtures = require('./fixtures')
 const { without } = require('../utils/object')
 
 const seed = async function (knex) {
+  if (process.env.NODE_ENV !== 'development') {
+    return
+  }
+
   await knex('contacts').del()
 
   for (const contact of fixtures.contacts) {

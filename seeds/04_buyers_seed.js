@@ -2,6 +2,10 @@ const fixtures = require('./fixtures')
 const { arrayRandom } = require('../utils/array')
 
 const seed = async function (knex) {
+  if (process.env.NODE_ENV !== 'development') {
+    return
+  }
+
   await knex('buyers').del()
 
   const user = await knex('users').limit(1)

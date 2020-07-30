@@ -7,6 +7,19 @@ module.exports = [
     exec: (q, id) => q.where('buyers.id', id)
   },
   {
+    field: 'phoneOrID',
+    exec: (q, phoneOrID) => {
+      phoneOrID = phoneFormatter.normalize(phoneOrID)
+      return q.leftJoin('contacts_relations', 'contacts_relations.contactableID', '=', 'buyers.id', 'contacts_relations.contactableType', '=', 'buyers')
+        .leftJoin('contacts', 'contacts_relations.contactID', '=', 'contacts.id')
+        .leftJoin('phones', 'phones.contactID', '=', 'contacts.id')
+        .where(function () {
+          return this.where('phones.phone', 'LIKE', `%${phoneOrID}%`)
+            .orWhere('buyers.id', 'LIKE', `%${phoneOrID}%`)
+        })
+    }
+  },
+  {
     field: 'name',
     exec: (q, name) => {
       return q.leftJoin('contacts_relations', 'contacts_relations.contactableID', '=', 'buyers.id', 'contacts_relations.contactableType', '=', 'buyers')

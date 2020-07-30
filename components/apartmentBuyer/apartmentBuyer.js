@@ -35,6 +35,10 @@ const ApartmentBuyer = attributes({
   description: String,
   createdAt: Date,
   updatedAt: Date,
+  expiresAt: {
+    type: Date,
+    nullable: true
+  },
   noOfRooms: Number, // 1. Кількість кімнат
   districtID: {
     type: Number,

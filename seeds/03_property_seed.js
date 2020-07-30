@@ -1,7 +1,32 @@
+require('dotenv').config()
+
+const moment = require('moment')
 const fixtures = require('./fixtures')
 const { arrayRandom } = require('../utils/array')
 
+const calcMotivation = (motivation) => {
+  if (motivation === 'C') {
+    return moment().add(3, 'months').format()
+  }
+
+  if (motivation === 'B') {
+    return moment().add(2, 'months').format()
+  }
+
+  if (motivation === 'A') {
+    return moment().add(1, 'months').format()
+  }
+
+  if (motivation === 'AA') {
+    return moment().format()
+  }
+}
+
 const seed = async function (knex) {
+  if (process.env.NODE_ENV !== 'development') {
+    return
+  }
+
   await knex('properties').del()
 
   const user = await knex('users').limit(1)
@@ -18,7 +43,8 @@ const seed = async function (knex) {
       authorID,
       type: 'apartment',
       districtID: dist.id,
-      settlement: dist.settlement
+      settlement: dist.settlement,
+      expiresAt: calcMotivation(record.motivation)
     })
   })
   const housesPayload = fixtures.houses.map(record => {
@@ -26,7 +52,8 @@ const seed = async function (knex) {
     return Object.assign(record, {
       authorID,
       type: 'house',
-      settlement: settlement
+      settlement: settlement,
+      expiresAt: calcMotivation(record.motivation)
     })
   })
   const commercePayload = fixtures.commerce.map(record => {
@@ -34,7 +61,8 @@ const seed = async function (knex) {
     return Object.assign(record, {
       authorID,
       type: 'commerce',
-      settlement: settlement
+      settlement: settlement,
+      expiresAt: calcMotivation(record.motivation)
     })
   })
 

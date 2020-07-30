@@ -9,6 +9,7 @@ const buyerAttributes = [
   'buyerStatus',
   'contract',
   'motivation',
+  'expiresAt',
   'source',
   'reasonToBuy',
   'description',

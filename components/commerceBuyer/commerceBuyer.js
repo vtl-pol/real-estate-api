@@ -34,6 +34,10 @@ const CommerceBuyer = attributes({
   description: String,
   createdAt: Date,
   updatedAt: Date,
+  expiresAt: {
+    type: Date,
+    nullable: true
+  },
   noOfRooms: {
     type: Number,
     min: 1,

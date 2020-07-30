@@ -1,4 +1,5 @@
 require('dotenv').config()
+
 const { settlements } = require('./fixtures')
 
 const seed = async function (knex) {

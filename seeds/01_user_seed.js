@@ -4,7 +4,9 @@ const bcrypt = require('bcrypt')
 const User = require('../components/user/user')
 
 const seed = async function (knex) {
-  await knex('users').del()
+  if (process.env.NODE_ENV === 'development') {
+    await knex('users').del()
+  }
 
   const hashedPassword = await new Promise((resolve, reject) => {
     bcrypt.hash(process.env.ADMIN_PASSWORD, 5, function (err, hash) {
@@ -24,6 +26,10 @@ const seed = async function (knex) {
     email: 'admin@example.com',
     password: hashedPassword
   })
+
+  if (process.env.NODE_ENV !== 'development') {
+    return
+  }
 
   await knex('users').insert({
     fullName: 'Агент',

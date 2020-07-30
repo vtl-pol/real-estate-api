@@ -11,6 +11,7 @@ const propertyAttributes = [
   'propertyStatus',
   'contract',
   'motivation',
+  'expiresAt',
   'source',
   'noOfRooms',
   'districtID',
