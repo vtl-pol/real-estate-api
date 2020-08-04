@@ -1,2 +1,2 @@
-# halden-backend
-CRM for real estate agency
+# Real estate API
+CRM for real estate agency (API)
